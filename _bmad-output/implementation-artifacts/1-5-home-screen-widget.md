@@ -382,6 +382,35 @@ claude-sonnet-4-6
 
 ### Debug Log References
 
+None — no runtime errors encountered during implementation.
+
 ### Completion Notes List
 
+- Task 4 (WidgetDisplayState.kt) and supporting models completed first as foundations for other tasks.
+- DataStoreProvider.kt created to share a single `preferencesDataStore` delegate between Hilt (AppModule) and non-Hilt (WeatherWidget) contexts — required because Glance widgets cannot use Hilt injection.
+- DataStoreExtensions.kt updated with new WidgetDisplayState structure and `inferWeatherState()` helper.
+- WidgetStateReader.kt is a separate extension in the `ui.widget` package (per AC-10 separation of concerns) — functionally equivalent to DataStoreExtensions but explicitly scoped to widget use.
+- WeatherWidgetContent.kt uses only `androidx.glance.*` composables — no `androidx.compose.material3` or standard Compose UI in the widget rendering path (anti-pattern per Dev Notes #10).
+- `cornerRadius()` uses `Dp` overload (`16.dp`) not `Int` (which would be treated as a resource ID).
+- `dynamicColor = false` enforced in AdaptiveSkyTheme — Material You never activates.
+- All 4 WeatherState × light/dark combinations defined (8 total token sets).
+- ForecastRefreshWorker updated to call `WeatherWidget.update(applicationContext)` after DataStore write (Task 10).
+- EXTRA_OPEN_HOURLY already present in MainActivity from earlier story setup.
+
 ### File List
+
+- `app/src/main/java/com/weatherapp/ui/theme/WeatherDesignTokens.kt` — NEW
+- `app/src/main/java/com/weatherapp/ui/theme/AdaptiveSkyTheme.kt` — NEW
+- `app/src/main/java/com/weatherapp/ui/widget/WidgetStateReader.kt` — NEW
+- `app/src/main/java/com/weatherapp/ui/widget/WeatherWidgetContent.kt` — NEW
+- `app/src/main/java/com/weatherapp/ui/widget/WeatherWidget.kt` — NEW
+- `app/src/main/java/com/weatherapp/ui/widget/WeatherWidgetReceiver.kt` — NEW
+- `app/src/main/res/xml/weather_widget_info.xml` — NEW
+- `app/src/main/res/values/strings.xml` — MODIFIED (added widget_description)
+- `app/src/main/AndroidManifest.xml` — MODIFIED (WeatherWidgetReceiver registered)
+- `app/src/main/java/com/weatherapp/worker/ForecastRefreshWorker.kt` — MODIFIED (WeatherWidget.update() call)
+- `app/src/main/java/com/weatherapp/data/datastore/DataStoreProvider.kt` — NEW (prior session)
+- `app/src/main/java/com/weatherapp/data/datastore/DataStoreExtensions.kt` — MODIFIED (prior session)
+- `app/src/main/java/com/weatherapp/model/WeatherState.kt` — NEW (prior session)
+- `app/src/main/java/com/weatherapp/model/WidgetDisplayState.kt` — MODIFIED (prior session)
+- `app/src/main/java/com/weatherapp/di/AppModule.kt` — MODIFIED (prior session)

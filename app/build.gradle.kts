@@ -17,6 +17,9 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        // Cloudflare Worker base URL — replace with deployed URL before release
+        buildConfigField("String", "CLOUDFLARE_WORKER_BASE_URL", "\"https://weatherapp-worker.matthemodest.workers.dev/\"")
     }
 
     buildTypes {
@@ -39,8 +42,11 @@ android {
         buildConfig = true
     }
 
-    kotlinOptions {
-        jvmTarget = "17"
+}
+
+kotlin {
+    compilerOptions {
+        jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17
     }
 }
 
@@ -66,6 +72,8 @@ dependencies {
     // WorkManager
     implementation(libs.work.runtime.ktx)
     implementation(libs.hilt.work)
+    implementation(libs.navigation.compose)
+    implementation(libs.hilt.navigation.compose)
 
     // Hilt (DI)
     implementation(libs.hilt.android)
@@ -99,7 +107,12 @@ dependencies {
     // Testing
     testImplementation(libs.junit)
     testImplementation(libs.work.testing)
+    testImplementation(libs.mockk)
+    testImplementation(libs.coroutines.test)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(libs.compose.ui.test.junit4)
+    androidTestImplementation(libs.room.testing)
+    androidTestImplementation(libs.mockk.android)
+    androidTestImplementation(libs.coroutines.test)
 }

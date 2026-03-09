@@ -1,0 +1,22 @@
+package com.weatherapp.data.datastore
+
+import androidx.datastore.preferences.core.booleanPreferencesKey
+import androidx.datastore.preferences.core.longPreferencesKey
+import androidx.datastore.preferences.core.stringPreferencesKey
+
+object PreferenceKeys {
+    val KEY_WIDGET_VERDICT = stringPreferencesKey("widget_verdict")
+    val KEY_BRING_LIST = stringPreferencesKey("bring_list")
+    val KEY_BEST_WINDOW = stringPreferencesKey("best_window")
+    val KEY_ALL_CLEAR = booleanPreferencesKey("all_clear")
+    val KEY_MOOD_LINE = stringPreferencesKey("mood_line")
+    val KEY_LAST_UPDATE_EPOCH = longPreferencesKey("last_update_epoch")
+    val KEY_STALENESS_FLAG = booleanPreferencesKey("staleness_flag")
+    val KEY_HAS_COMPLETED_ONBOARDING = booleanPreferencesKey("has_completed_onboarding")
+    val KEY_IS_PREMIUM = booleanPreferencesKey("is_premium")
+    val KEY_LAST_BILLING_CHECK = longPreferencesKey("last_billing_check")
+    val KEY_TEMP_UNIT = stringPreferencesKey("temp_unit")
+    val KEY_MANUAL_LOCATION = stringPreferencesKey("manual_location")
+    val KEY_SHOULD_REQUEST_NOTIFICATIONS = booleanPreferencesKey("should_request_notifications")
+    val KEY_NOTIFICATIONS_ENABLED = booleanPreferencesKey("notifications_enabled")
+}
