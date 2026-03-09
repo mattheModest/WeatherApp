@@ -27,6 +27,9 @@ jobs:
 
       - uses: gradle/actions/setup-gradle@v3
 
+      - name: Make gradlew executable
+        run: chmod +x ./gradlew
+
       - name: Run tests
         run: ./gradlew test
 
