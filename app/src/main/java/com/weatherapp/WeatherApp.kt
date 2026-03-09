@@ -3,6 +3,7 @@ package com.weatherapp
 import android.app.Application
 import androidx.hilt.work.HiltWorkerFactory
 import androidx.work.Configuration
+import com.weatherapp.util.NotificationChannels
 import dagger.hilt.android.HiltAndroidApp
 import timber.log.Timber
 import javax.inject.Inject
@@ -23,5 +24,6 @@ class WeatherApp : Application(), Configuration.Provider {
         if (BuildConfig.DEBUG) {
             Timber.plant(Timber.DebugTree())
         }
+        NotificationChannels.ensureWeatherAlertsChannel(this)
     }
 }

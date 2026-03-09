@@ -8,6 +8,7 @@ import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.work.ListenableWorker.Result
 import androidx.work.WorkerParameters
+import androidx.work.WorkManager
 import com.weatherapp.data.datastore.PreferenceKeys
 import com.weatherapp.data.db.dao.ForecastDao
 import com.weatherapp.data.weather.WeatherRepository
@@ -29,6 +30,7 @@ class ForecastRefreshWorkerTest {
     private lateinit var weatherRepository: WeatherRepository
     private lateinit var forecastDao: ForecastDao
     private lateinit var dataStore: DataStore<Preferences>
+    private lateinit var workManager: WorkManager
     private lateinit var mutablePrefs: MutablePreferences
 
     // Ordered list of (key, value) writes — preserves sequence
@@ -40,6 +42,7 @@ class ForecastRefreshWorkerTest {
         weatherRepository = mockk()
         forecastDao = mockk(relaxed = true)
         dataStore = mockk()
+        workManager = mockk(relaxed = true)
         mutablePrefs = mockk(relaxed = true)
 
         every { mutablePrefs.set(any<Preferences.Key<Boolean>>(), any()) } answers {
@@ -64,7 +67,7 @@ class ForecastRefreshWorkerTest {
         val params: WorkerParameters = mockk(relaxed = true) {
             every { this@mockk.runAttemptCount } returns runAttemptCount
         }
-        return ForecastRefreshWorker(context, params, weatherRepository, forecastDao, dataStore)
+        return ForecastRefreshWorker(context, params, weatherRepository, forecastDao, dataStore, workManager)
     }
 
     @Test

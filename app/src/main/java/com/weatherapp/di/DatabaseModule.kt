@@ -3,6 +3,7 @@ package com.weatherapp.di
 import android.content.Context
 import androidx.room.Room
 import com.weatherapp.data.db.AppDatabase
+import com.weatherapp.data.db.dao.AlertStateDao
 import com.weatherapp.data.db.dao.ForecastDao
 import dagger.Module
 import dagger.Provides
@@ -22,8 +23,13 @@ object DatabaseModule {
             context.applicationContext,
             AppDatabase::class.java,
             "weather_app_db"
-        ).build()
+        )
+        .addMigrations(AppDatabase.MIGRATION_1_2)
+        .build()
 
     @Provides
     fun provideForecastDao(db: AppDatabase): ForecastDao = db.forecastDao()
+
+    @Provides
+    fun provideAlertStateDao(db: AppDatabase): AlertStateDao = db.alertStateDao()
 }

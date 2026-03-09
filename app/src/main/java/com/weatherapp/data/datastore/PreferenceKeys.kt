@@ -18,5 +18,6 @@ object PreferenceKeys {
     val KEY_TEMP_UNIT = stringPreferencesKey("temp_unit")
     val KEY_MANUAL_LOCATION = stringPreferencesKey("manual_location")
     val KEY_SHOULD_REQUEST_NOTIFICATIONS = booleanPreferencesKey("should_request_notifications")
+    val KEY_NOTIFICATIONS_PERMISSION_REQUESTED = booleanPreferencesKey("notifications_permission_requested")
     val KEY_NOTIFICATIONS_ENABLED = booleanPreferencesKey("notifications_enabled")
 }

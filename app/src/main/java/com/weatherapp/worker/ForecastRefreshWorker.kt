@@ -9,6 +9,8 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.hilt.work.HiltWorker
 import androidx.work.CoroutineWorker
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
 import androidx.work.WorkerParameters
 import com.weatherapp.data.datastore.PreferenceKeys
 import com.weatherapp.data.db.dao.ForecastDao
@@ -27,7 +29,8 @@ class ForecastRefreshWorker @AssistedInject constructor(
     @Assisted workerParams: WorkerParameters,
     private val weatherRepository: WeatherRepository,
     private val forecastDao: ForecastDao,
-    private val dataStore: DataStore<Preferences>
+    private val dataStore: DataStore<Preferences>,
+    private val workManager: WorkManager
 ) : CoroutineWorker(appContext, workerParams) {
 
     private val verdictGenerator = VerdictGenerator()
@@ -51,21 +54,21 @@ class ForecastRefreshWorker @AssistedInject constructor(
             val fetchResult = weatherRepository.fetchForecast()
             if (fetchResult.isSuccess) {
                 // Query today's hours for verdict generation
-                val nowSeconds = System.currentTimeMillis() / 1000L
-                val startOfDay = nowSeconds - (nowSeconds % 86400L)
-                val endOfDay = startOfDay + 86400L
-                val todayHours = forecastDao.queryByTimeWindow(startOfDay, endOfDay).first()
+                val nowSeconds   = System.currentTimeMillis() / 1000L
+                val startOfDay   = nowSeconds - (nowSeconds % 86400L)
+                val endOfDay     = startOfDay + 86400L
+                val todayHours   = forecastDao.queryByTimeWindow(startOfDay, endOfDay).first()
 
                 val verdictResult = verdictGenerator.generateVerdict(todayHours)
 
                 // Atomic write — all content keys first, KEY_LAST_UPDATE_EPOCH LAST
                 dataStore.edit { prefs ->
-                    prefs[PreferenceKeys.KEY_WIDGET_VERDICT] = verdictResult.verdictText
-                    prefs[PreferenceKeys.KEY_BRING_LIST] = verdictResult.bringList.joinToString("|")
-                    prefs[PreferenceKeys.KEY_BEST_WINDOW] = verdictResult.bestWindow ?: ""
-                    prefs[PreferenceKeys.KEY_ALL_CLEAR] = verdictResult.isAllClear
-                    prefs[PreferenceKeys.KEY_MOOD_LINE] = verdictResult.moodLine
-                    prefs[PreferenceKeys.KEY_STALENESS_FLAG] = false
+                    prefs[PreferenceKeys.KEY_WIDGET_VERDICT]  = verdictResult.verdictText
+                    prefs[PreferenceKeys.KEY_BRING_LIST]      = verdictResult.bringList.joinToString("|")
+                    prefs[PreferenceKeys.KEY_BEST_WINDOW]     = verdictResult.bestWindow ?: ""
+                    prefs[PreferenceKeys.KEY_ALL_CLEAR]       = verdictResult.isAllClear
+                    prefs[PreferenceKeys.KEY_MOOD_LINE]       = verdictResult.moodLine
+                    prefs[PreferenceKeys.KEY_STALENESS_FLAG]  = false
                     // LAST — widget reads this to detect fresh data
                     prefs[PreferenceKeys.KEY_LAST_UPDATE_EPOCH] = System.currentTimeMillis() / 1000L
                 }
@@ -73,14 +76,20 @@ class ForecastRefreshWorker @AssistedInject constructor(
                 Timber.d("ForecastRefreshWorker: verdict written — allClear=${verdictResult.isAllClear}")
                 WeatherWidget.update(applicationContext)
 
-                // Trigger notification permission prompt after first successful widget render
-                val alreadyTriggered = dataStore.data.first()[PreferenceKeys.KEY_SHOULD_REQUEST_NOTIFICATIONS]
-                if (alreadyTriggered == null) {
+                // Queue notification permission request after first successful widget render
+                // Only trigger once: guard on KEY_NOTIFICATIONS_PERMISSION_REQUESTED
+                val alreadyRequested = dataStore.data.first()[PreferenceKeys.KEY_NOTIFICATIONS_PERMISSION_REQUESTED]
+                if (alreadyRequested != true) {
                     dataStore.edit { prefs ->
                         prefs[PreferenceKeys.KEY_SHOULD_REQUEST_NOTIFICATIONS] = true
                     }
                     Timber.d("ForecastRefreshWorker: notification permission prompt queued")
                 }
+
+                // Chain AlertEvaluationWorker to run immediately after
+                val alertWork = OneTimeWorkRequestBuilder<AlertEvaluationWorker>().build()
+                workManager.enqueue(alertWork)
+                Timber.d("ForecastRefreshWorker: AlertEvaluationWorker enqueued")
 
                 Result.success()
             } else {

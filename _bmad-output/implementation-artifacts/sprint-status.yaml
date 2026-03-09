@@ -51,10 +51,10 @@ development_status:
   1-8-settings-screen-mood-card-sharing: done
   epic-1-retrospective: optional
 
-  epic-2: in-progress
-  2-1-alert-state-machine-room-schema: ready-for-dev
-  2-2-alert-evaluation-worker-free-tier: ready-for-dev
-  2-3-notification-delivery-permission-flow: ready-for-dev
+  epic-2: done
+  2-1-alert-state-machine-room-schema: done
+  2-2-alert-evaluation-worker-free-tier: done
+  2-3-notification-delivery-permission-flow: done
   epic-2-retrospective: optional
 
   epic-3: in-progress
