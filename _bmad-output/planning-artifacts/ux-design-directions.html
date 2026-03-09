@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WeatherApp — Design Direction Showcase</title>
+<style>
+  :root {
+    --font: 'Segoe UI', system-ui, sans-serif;
+    --page-bg: #F0F0F0;
+    --page-text: #1A1A1A;
+    --card-bg: #FFFFFF;
+    --card-border: #E0E0E0;
+    --label-bg: #1A1A1A;
+    --label-text: #FFFFFF;
+  }
+  body.dark-page {
+    --page-bg: #121212;
+    --page-text: #E8E8E8;
+    --card-bg: #1E1E1E;
+    --card-border: #333;
+    --label-bg: #E8E8E8;
+    --label-text: #121212;
+  }
+
+  /* Weather state tokens */
+  .clear    { --surf: #FFF9F0; --on-surf: #1C1810; --accent: #8C6D1F; --surf-var: #F2EAD8; --on-surf-var: #4A3F28; }
+  .overcast { --surf: #EEF2F5; --on-surf: #0F1A1F; --accent: #3D6B7A; --surf-var: #DAE4E9; --on-surf-var: #2A4550; }
+  .rain     { --surf: #E8EDF1; --on-surf: #0C1317; --accent: #2E4E5A; --surf-var: #D0DAE0; --on-surf-var: #233740; --alert: #9B5E10; }
+  .clear.dark    { --surf: #24201A; --on-surf: #EDE0C8; --accent: #D4A84B; --surf-var: #2E2920; --on-surf-var: #C9B98A; }
+  .overcast.dark { --surf: #161D21; --on-surf: #D5E4EA; --accent: #7DAFC0; --surf-var: #1E2D33; --on-surf-var: #9DC0CC; }
+  .rain.dark     { --surf: #111619; --on-surf: #CDD8DE; --accent: #6A9BAA; --surf-var: #192028; --on-surf-var: #8DB0BD; --alert: #D4892A; }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: var(--font);
+    background: var(--page-bg);
+    color: var(--page-text);
+    transition: background 0.3s, color 0.3s;
+    min-height: 100vh;
+  }
+
+  header {
+    padding: 24px 32px 16px;
+    border-bottom: 1px solid var(--card-border);
+    background: var(--card-bg);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  header h1 { font-size: 18px; font-weight: 600; }
+  header p { font-size: 13px; opacity: 0.6; margin-top: 2px; }
+
+  .controls {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  button {
+    font-family: var(--font);
+    font-size: 13px;
+    font-weight: 500;
+    padding: 6px 14px;
+    border-radius: 20px;
+    border: 1.5px solid var(--card-border);
+    background: var(--card-bg);
+    color: var(--page-text);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  button.active, button:hover { background: var(--page-text); color: var(--page-bg); border-color: var(--page-text); }
+
+  main { padding: 32px; max-width: 1400px; margin: 0 auto; }
+
+  .direction-section {
+    margin-bottom: 56px;
+  }
+  .direction-header {
+    margin-bottom: 20px;
+  }
+  .direction-header h2 {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+  .direction-header p {
+    font-size: 14px;
+    opacity: 0.65;
+    max-width: 600px;
+    line-height: 1.5;
+  }
+  .direction-label {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    background: var(--label-bg);
+    color: var(--label-text);
+    padding: 3px 10px;
+    border-radius: 4px;
+    margin-bottom: 8px;
+  }
+
+  .states-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+  }
+
+  .state-card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 16px;
+    overflow: hidden;
+  }
+  .state-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    opacity: 0.5;
+    padding: 12px 16px 8px;
+  }
+
+  /* ── WIDGET SHELLS ── */
+  .widget {
+    margin: 0 16px 16px;
+    border-radius: 20px;
+    overflow: hidden;
+    background: var(--surf);
+    padding: 16px;
+    transition: background 0.3s;
+    min-height: 120px;
+  }
+  .widget * { transition: color 0.3s, background 0.3s; }
+
+  /* ── DIRECTION 1: Minimal Voice ── */
+  .d1 .widget {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .d1 .verdict {
+    font-size: 22px;
+    font-weight: 500;
+    color: var(--on-surf);
+    line-height: 1.2;
+  }
+  .d1 .bring {
+    font-size: 14px;
+    color: var(--on-surf-var);
+    font-weight: 400;
+  }
+  .d1 .mood {
+    font-size: 12px;
+    color: var(--on-surf-var);
+    font-style: italic;
+    margin-top: 2px;
+    opacity: 0.8;
+  }
+  .d1 .meta {
+    font-size: 10px;
+    color: var(--accent);
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    margin-top: 4px;
+    opacity: 0.7;
+  }
+
+  /* ── DIRECTION 2: Ambient Card ── */
+  .d2 .widget {
+    padding: 0;
+  }
+  .d2 .widget-top {
+    background: var(--surf-var);
+    padding: 16px 16px 12px;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .d2 .weather-icon {
+    font-size: 32px;
+    line-height: 1;
+    flex-shrink: 0;
+  }
+  .d2 .verdict-block { flex: 1; }
+  .d2 .verdict {
+    font-size: 18px;
+    font-weight: 500;
+    color: var(--on-surf);
+    line-height: 1.25;
+  }
+  .d2 .event-line {
+    font-size: 13px;
+    color: var(--accent);
+    font-weight: 500;
+    margin-top: 4px;
+  }
+  .d2 .widget-bottom {
+    padding: 10px 16px 14px;
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  .d2 .chip {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--on-surf-var);
+    background: var(--surf-var);
+    border-radius: 20px;
+    padding: 4px 10px;
+  }
+  .d2 .chip.alert { color: var(--alert, var(--accent)); background: var(--surf); border: 1px solid var(--alert, var(--accent)); }
+  .d2 .mood {
+    font-size: 12px;
+    color: var(--on-surf-var);
+    font-style: italic;
+    padding: 0 16px 14px;
+    margin-top: -4px;
+    opacity: 0.8;
+  }
+
+  /* ── DIRECTION 3: Verdict Bold ── */
+  .d3 .widget {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 140px;
+    padding: 20px 18px 16px;
+  }
+  .d3 .verdict {
+    font-size: 28px;
+    font-weight: 500;
+    color: var(--on-surf);
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+  }
+  .d3 .bottom-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-top: 12px;
+  }
+  .d3 .sub {
+    font-size: 12px;
+    color: var(--on-surf-var);
+    line-height: 1.4;
+  }
+  .d3 .accent-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--accent);
+    flex-shrink: 0;
+    align-self: center;
+  }
+  .d3 .alert-dot { background: var(--alert, var(--accent)); }
+
+  /* ── DIRECTION 4: Layered Zones ── */
+  .d4 .widget {
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+  }
+  .d4 .zone-verdict {
+    padding: 16px 16px 12px;
+    border-bottom: 1px solid var(--surf-var);
+  }
+  .d4 .verdict {
+    font-size: 19px;
+    font-weight: 500;
+    color: var(--on-surf);
+    line-height: 1.2;
+  }
+  .d4 .zone-details {
+    padding: 10px 16px;
+    display: flex;
+    gap: 16px;
+    border-bottom: 1px solid var(--surf-var);
+  }
+  .d4 .detail-item {
+    font-size: 12px;
+    color: var(--on-surf-var);
+    line-height: 1.4;
+  }
+  .d4 .detail-item strong {
+    display: block;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--accent);
+    margin-bottom: 1px;
+  }
+  .d4 .zone-mood {
+    padding: 8px 16px 12px;
+  }
+  .d4 .mood {
+    font-size: 12px;
+    color: var(--on-surf-var);
+    font-style: italic;
+    opacity: 0.85;
+  }
+
+  /* ── PREMIUM WIDGET CALLOUT ── */
+  .d-premium .widget {
+    position: relative;
+    padding-bottom: 20px;
+  }
+  .premium-badge {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    color: var(--accent);
+    opacity: 0.7;
+    text-transform: uppercase;
+  }
+
+  /* ── NOTIFICATION EXAMPLE ── */
+  .notif-example {
+    margin: 0 16px 16px;
+    border-radius: 14px;
+    background: var(--surf-var);
+    padding: 12px 14px;
+  }
+  .notif-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 4px;
+  }
+  .notif-icon { font-size: 14px; }
+  .notif-app { font-size: 11px; font-weight: 600; color: var(--on-surf-var); opacity: 0.7; text-transform: uppercase; letter-spacing: 0.05em; }
+  .notif-time { font-size: 11px; color: var(--on-surf-var); opacity: 0.5; margin-left: auto; }
+  .notif-title { font-size: 14px; font-weight: 500; color: var(--on-surf); line-height: 1.3; }
+  .notif-body { font-size: 13px; color: var(--on-surf-var); line-height: 1.3; margin-top: 2px; }
+
+  /* ── ONBOARDING SCREEN ── */
+  .onboard-screen {
+    margin: 0 16px 16px;
+    border-radius: 20px;
+    background: var(--surf);
+    padding: 28px 20px 24px;
+    min-height: 200px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .onboard-icon { font-size: 36px; }
+  .onboard-title { font-size: 22px; font-weight: 600; color: var(--on-surf); line-height: 1.2; }
+  .onboard-body { font-size: 14px; color: var(--on-surf-var); line-height: 1.5; }
+  .onboard-btn {
+    margin-top: 8px;
+    background: var(--accent);
+    color: var(--surf);
+    border: none;
+    border-radius: 12px;
+    padding: 14px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    text-align: center;
+  }
+  .onboard-skip { font-size: 13px; color: var(--on-surf-var); text-align: center; opacity: 0.6; }
+
+  /* ── ALLCLEAR STATE ── */
+  .allclear .widget {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    min-height: 100px;
+    gap: 4px;
+  }
+  .allclear .verdict {
+    font-size: 20px;
+    font-weight: 400;
+    color: var(--on-surf);
+    line-height: 1.3;
+  }
+  .allclear .meta { font-size: 11px; color: var(--accent); font-weight: 500; letter-spacing: 0.03em; opacity: 0.6; }
+
+  /* ── STALENESS STATE ── */
+  .stale-banner {
+    margin: 4px 16px 0;
+    border-radius: 8px;
+    background: var(--surf-var);
+    padding: 6px 12px;
+    font-size: 11px;
+    color: var(--on-surf-var);
+    font-weight: 500;
+    opacity: 0.8;
+  }
+
+  .divider { height: 1px; background: var(--card-border); margin: 32px 0; }
+
+  footer {
+    text-align: center;
+    padding: 24px;
+    font-size: 12px;
+    opacity: 0.4;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <h1>WeatherApp — Design Direction Showcase</h1>
+    <p>Explore widget layouts, weather states, and notification patterns</p>
+  </div>
+  <div class="controls">
+    <span style="font-size:12px;opacity:0.5;margin-right:4px;">WEATHER STATE</span>
+    <button id="btn-clear" class="active" onclick="setWeather('clear')">Clear</button>
+    <button id="btn-overcast" onclick="setWeather('overcast')">Overcast</button>
+    <button id="btn-rain" onclick="setWeather('rain')">Rain / Alert</button>
+    <span style="font-size:12px;opacity:0.5;margin: 0 4px;">|</span>
+    <button id="btn-dark" onclick="toggleDark()">Dark Mode</button>
+  </div>
+</header>
+
+<main>
+
+  <!-- ── DIRECTION 1 ── -->
+  <div class="direction-section d1">
+    <div class="direction-header">
+      <span class="direction-label">Direction 1</span>
+      <h2>Minimal Voice</h2>
+      <p>Text-only. The words carry everything. No icons, no chrome — just the verdict in clean typography. Maximum silence; maximum trust in copy. The mood line earns its place as the only non-functional element.</p>
+    </div>
+    <div class="states-grid">
+      <div class="state-card">
+        <div class="state-label">Standard state</div>
+        <div class="widget weather-target">
+          <div class="verdict">Light jacket weather.</div>
+          <div class="bring">· Bring an umbrella — rain 4–6pm</div>
+          <div class="mood">Nicer than it looks. Get outside if you can.</div>
+          <div class="meta">UPDATED 8 MIN AGO</div>
+        </div>
+      </div>
+      <div class="state-card allclear">
+        <div class="state-label">All-clear state</div>
+        <div class="widget weather-target">
+          <div class="verdict">You're good. Go live your day.</div>
+          <div class="meta">UPDATED 14 MIN AGO</div>
+        </div>
+      </div>
+      <div class="state-card">
+        <div class="state-label">Premium — calendar shift</div>
+        <div class="widget weather-target d-premium">
+          <span class="premium-badge">Calendar</span>
+          <div class="verdict">Your Run (6:30am) is clear.</div>
+          <div class="bring">Best window: 6–9am</div>
+          <div class="mood">Go get it.</div>
+          <div class="meta">UPDATED 3 MIN AGO</div>
+        </div>
+      </div>
+    </div>
+    <!-- Staleness -->
+    <div style="margin-top:12px;" class="state-card">
+      <div class="state-label">Staleness signal</div>
+      <div class="widget weather-target">
+        <div class="verdict">Light jacket weather.</div>
+        <div class="meta">LAST UPDATED 2H AGO · CHECK CONNECTION</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ── DIRECTION 2 ── -->
+  <div class="direction-section d2">
+    <div class="direction-header">
+      <span class="direction-label">Direction 2</span>
+      <h2>Ambient Card</h2>
+      <p>Two visual zones: a tinted header with icon + verdict, and a lower row of chips for bring list and context. Richer visual hierarchy; the icon reinforces state at a glance. Slightly more "weather app" in feel — but differentiated by verdict-first language and absence of raw data.</p>
+    </div>
+    <div class="states-grid">
+      <div class="state-card">
+        <div class="state-label">Standard state</div>
+        <div class="widget weather-target">
+          <div class="widget-top">
+            <div class="weather-icon" id="icon-std">🌦</div>
+            <div class="verdict-block">
+              <div class="verdict">Light jacket weather.</div>
+              <div class="event-line">Best window: 11am–2pm</div>
+            </div>
+          </div>
+          <div class="mood weather-target">Nicer than it looks. Get outside if you can.</div>
+          <div class="widget-bottom">
+            <span class="chip">☂ Umbrella · rain 4–6pm</span>
+          </div>
+        </div>
+      </div>
+      <div class="state-card">
+        <div class="state-label">All-clear state</div>
+        <div class="widget weather-target">
+          <div class="widget-top">
+            <div class="weather-icon">✨</div>
+            <div class="verdict-block">
+              <div class="verdict">You're good. Go live your day.</div>
+            </div>
+          </div>
+          <div class="mood weather-target">Honestly lovely today. Eat lunch outside.</div>
+        </div>
+      </div>
+      <div class="state-card">
+        <div class="state-label">Premium — change alert</div>
+        <div class="widget weather-target">
+          <div class="widget-top">
+            <div class="weather-icon">⚠️</div>
+            <div class="verdict-block">
+              <div class="verdict">Your BBQ (12pm) — forecast changed.</div>
+              <div class="event-line" style="color: var(--alert, var(--accent))">Rain now likely 11:30am–1pm</div>
+            </div>
+          </div>
+          <div class="widget-bottom">
+            <span class="chip alert">Plan ahead</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ── DIRECTION 3 ── -->
+  <div class="direction-section d3">
+    <div class="direction-header">
+      <span class="direction-label">Direction 3</span>
+      <h2>Verdict Bold</h2>
+      <p>The verdict takes 28sp display weight — the full visual weight of the widget. Secondary info recedes to the bottom row in small text. A single accent dot signals weather state / alert status without words. Maximum verdict prominence; minimal distraction.</p>
+    </div>
+    <div class="states-grid">
+      <div class="state-card">
+        <div class="state-label">Standard state</div>
+        <div class="widget weather-target">
+          <div class="verdict">Light jacket weather.</div>
+          <div class="bottom-row">
+            <div class="sub">☂ Umbrella · rain 4–6pm<br>Best window: 11am–2pm</div>
+            <div class="accent-dot weather-target-dot"></div>
+          </div>
+        </div>
+      </div>
+      <div class="state-card">
+        <div class="state-label">All-clear state</div>
+        <div class="widget weather-target">
+          <div class="verdict">You're good.<br>Go live your day.</div>
+          <div class="bottom-row">
+            <div class="sub">All clear · 8 min ago</div>
+            <div class="accent-dot weather-target-dot"></div>
+          </div>
+        </div>
+      </div>
+      <div class="state-card">
+        <div class="state-label">Premium — calendar shift</div>
+        <div class="widget weather-target d-premium">
+          <span class="premium-badge">Calendar</span>
+          <div class="verdict">Your BBQ starts in 2h. You're clear.</div>
+          <div class="bottom-row">
+            <div class="sub">Monitoring until 3pm</div>
+            <div class="accent-dot weather-target-dot"></div>
+          </div>
+        </div>
+      </div>
+      <div class="state-card">
+        <div class="state-label">Premium — alert state</div>
+        <div class="widget weather-target d-premium">
+          <span class="premium-badge">Calendar</span>
+          <div class="verdict">Your BBQ (12pm) — forecast changed.</div>
+          <div class="bottom-row">
+            <div class="sub">Rain likely 11:30am–1pm</div>
+            <div class="accent-dot alert-dot"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ── DIRECTION 4 ── -->
+  <div class="direction-section d4">
+    <div class="direction-header">
+      <span class="direction-label">Direction 4</span>
+      <h2>Layered Zones</h2>
+      <p>Three distinct horizontal zones separated by hairline dividers: verdict / contextual details / mood line. Structured and scannable — each zone has a clear job. Slightly more information-dense; works well for power users (Elena archetype) while remaining clean for casual users.</p>
+    </div>
+    <div class="states-grid">
+      <div class="state-card">
+        <div class="state-label">Standard state</div>
+        <div class="widget weather-target">
+          <div class="zone-verdict">
+            <div class="verdict">Light jacket weather.</div>
+          </div>
+          <div class="zone-details">
+            <div class="detail-item">
+              <strong>Bring</strong>
+              ☂ Umbrella
+            </div>
+            <div class="detail-item">
+              <strong>Best window</strong>
+              11am–2pm
+            </div>
+          </div>
+          <div class="zone-mood">
+            <div class="mood">Nicer than it looks. Get outside if you can.</div>
+          </div>
+        </div>
+      </div>
+      <div class="state-card">
+        <div class="state-label">All-clear state</div>
+        <div class="widget weather-target">
+          <div class="zone-verdict">
+            <div class="verdict">You're good. Go live your day.</div>
+          </div>
+          <div class="zone-mood" style="border-top: 1px solid var(--surf-var)">
+            <div class="mood">Honestly lovely today. Eat lunch outside.</div>
+          </div>
+        </div>
+      </div>
+      <div class="state-card">
+        <div class="state-label">Premium — 2 conflicting events</div>
+        <div class="widget weather-target d-premium">
+          <span class="premium-badge">Calendar</span>
+          <div class="zone-verdict">
+            <div class="verdict">2 outdoor events at 3pm · Light rain · Check both.</div>
+          </div>
+          <div class="zone-details">
+            <div class="detail-item">
+              <strong>School Pickup</strong>
+              3:00pm
+            </div>
+            <div class="detail-item">
+              <strong>Site Visit</strong>
+              3:00pm
+            </div>
+          </div>
+          <div class="zone-mood" style="border-top: 1px solid var(--surf-var)">
+            <div class="mood">Tap to see both event forecasts.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ── NOTIFICATION EXAMPLES ── -->
+  <div class="direction-section">
+    <div class="direction-header">
+      <span class="direction-label">All Directions</span>
+      <h2>Notification Patterns</h2>
+      <p>Confirmation-first (free tier) and change-triggered (premium). These appear identically across all four widget directions — notification design is independent of widget layout choice.</p>
+    </div>
+    <div class="states-grid">
+      <div class="state-card">
+        <div class="state-label">Confirmation-first (free tier)</div>
+        <div class="notif-example weather-target">
+          <div class="notif-header">
+            <span class="notif-icon">🌤</span>
+            <span class="notif-app">WeatherApp</span>
+            <span class="notif-time">7:02am</span>
+          </div>
+          <div class="notif-title">Still looks great for today.</div>
+          <div class="notif-body">Clear through the afternoon. Light jacket, no umbrella needed.</div>
+        </div>
+      </div>
+      <div class="state-card">
+        <div class="state-label">Change-triggered (premium)</div>
+        <div class="notif-example weather-target">
+          <div class="notif-header">
+            <span class="notif-icon">⚠️</span>
+            <span class="notif-app">WeatherApp</span>
+            <span class="notif-time">10:47am</span>
+          </div>
+          <div class="notif-title">Your BBQ (12pm) — forecast changed.</div>
+          <div class="notif-body">Rain now likely 11:30am–1pm. Previously confirmed clear.</div>
+        </div>
+      </div>
+      <div class="state-card">
+        <div class="state-label">Proactive good news (premium)</div>
+        <div class="notif-example weather-target">
+          <div class="notif-header">
+            <span class="notif-icon">✅</span>
+            <span class="notif-app">WeatherApp</span>
+            <span class="notif-time">8:47am</span>
+          </div>
+          <div class="notif-title">Your BBQ (12pm) is clear.</div>
+          <div class="notif-body">Brief clouds pass by 10:30. You're good to go.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ── ONBOARDING ── -->
+  <div class="direction-section">
+    <div class="direction-header">
+      <span class="direction-label">All Directions</span>
+      <h2>Onboarding — 60-Second Setup</h2>
+      <p>Single screen. One permission. Plain language. Widget appears on home screen in &lt; 40 seconds after grant. Onboarding is identical across all direction choices.</p>
+    </div>
+    <div class="states-grid">
+      <div class="state-card">
+        <div class="state-label">Permission screen</div>
+        <div class="onboard-screen weather-target">
+          <div class="onboard-icon">🗓</div>
+          <div class="onboard-title">We use your calendar to tell you when weather matters to your plans.</div>
+          <div class="onboard-body">Calendar data is used locally on-device. It is never uploaded, stored on servers, or shared.</div>
+          <div class="onboard-btn" style="background: var(--accent); color: var(--surf)">Allow calendar access</div>
+          <div class="onboard-skip">Continue without calendar — free features only</div>
+        </div>
+      </div>
+      <div class="state-card">
+        <div class="state-label">Post-grant — widget ready</div>
+        <div class="onboard-screen weather-target">
+          <div class="onboard-icon">✅</div>
+          <div class="onboard-title">Your widget is ready.</div>
+          <div class="onboard-body">WeatherApp is now on your home screen. You don't need to open the app — it will update automatically and tell you when something matters.</div>
+          <div class="onboard-btn" style="background: var(--accent); color: var(--surf)">Got it</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<footer>WeatherApp · UX Design Directions · Lafayette · 2026-03-08</footer>
+
+<script>
+  let currentWeather = 'clear';
+  let isDark = false;
+
+  const weatherIcons = {
+    clear: '☀️',
+    overcast: '☁️',
+    rain: '🌧'
+  };
+
+  function setWeather(state) {
+    currentWeather = state;
+    document.querySelectorAll('.weather-target').forEach(el => {
+      el.classList.remove('clear', 'overcast', 'rain');
+      el.classList.add(state);
+      if (isDark) el.classList.add('dark');
+    });
+    // update accent dots
+    document.querySelectorAll('.weather-target-dot').forEach(el => {
+      el.style.background = 'var(--accent)';
+    });
+    // update icons
+    document.querySelectorAll('.weather-icon').forEach(el => {
+      el.textContent = weatherIcons[state];
+    });
+    // update buttons
+    ['clear','overcast','rain'].forEach(s => {
+      document.getElementById('btn-' + s).classList.toggle('active', s === state);
+    });
+  }
+
+  function toggleDark() {
+    isDark = !isDark;
+    document.body.classList.toggle('dark-page', isDark);
+    document.querySelectorAll('.weather-target').forEach(el => {
+      el.classList.toggle('dark', isDark);
+    });
+    document.getElementById('btn-dark').classList.toggle('active', isDark);
+    document.getElementById('btn-dark').textContent = isDark ? 'Light Mode' : 'Dark Mode';
+  }
+
+  // Initialize
+  setWeather('clear');
+</script>
+</body>
+</html>

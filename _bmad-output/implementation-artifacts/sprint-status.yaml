@@ -1,0 +1,65 @@
+# generated: 2026-03-08
+# project: WeatherApp
+# project_key: NOKEY
+# tracking_system: file-system
+# story_location: _bmad-output/implementation-artifacts
+
+# STATUS DEFINITIONS:
+# ==================
+# Epic Status:
+#   - backlog: Epic not yet started
+#   - in-progress: Epic actively being worked on
+#   - done: All stories in epic completed
+#
+# Epic Status Transitions:
+#   - backlog → in-progress: Automatically when first story is created (via create-story)
+#   - in-progress → done: Manually when all stories reach 'done' status
+#
+# Story Status:
+#   - backlog: Story only exists in epic file
+#   - ready-for-dev: Story file created in stories folder
+#   - in-progress: Developer actively working on implementation
+#   - review: Ready for code review (via Dev's code-review workflow)
+#   - done: Story completed
+#
+# Retrospective Status:
+#   - optional: Can be completed but not required
+#   - done: Retrospective has been completed
+#
+# WORKFLOW NOTES:
+# ===============
+# - Epic transitions to 'in-progress' automatically when first story is created
+# - Stories can be worked in parallel if team capacity allows
+# - SM typically creates next story after previous one is 'done' to incorporate learnings
+# - Dev moves story to 'review', then runs code-review (fresh context, different LLM recommended)
+
+generated: 2026-03-08
+project: WeatherApp
+project_key: NOKEY
+tracking_system: file-system
+story_location: _bmad-output/implementation-artifacts
+
+development_status:
+  epic-1: in-progress
+  1-1-project-foundation-ci-setup: done
+  1-2-cloudflare-weather-proxy: review
+  1-3-weather-data-layer: ready-for-dev
+  1-4-verdict-generation-engine: ready-for-dev
+  1-5-home-screen-widget: ready-for-dev
+  1-6-onboarding-permission-flow: ready-for-dev
+  1-7-hourly-detail-view: ready-for-dev
+  1-8-settings-screen-mood-card-sharing: ready-for-dev
+  epic-1-retrospective: optional
+
+  epic-2: in-progress
+  2-1-alert-state-machine-room-schema: ready-for-dev
+  2-2-alert-evaluation-worker-free-tier: ready-for-dev
+  2-3-notification-delivery-permission-flow: ready-for-dev
+  epic-2-retrospective: optional
+
+  epic-3: in-progress
+  3-1-premium-subscription-billing: ready-for-dev
+  3-2-calendar-data-layer: ready-for-dev
+  3-3-calendar-scan-worker-proactive-widget: ready-for-dev
+  3-4-change-triggered-event-alerts: ready-for-dev
+  epic-3-retrospective: optional

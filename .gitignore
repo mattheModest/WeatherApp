@@ -1,0 +1,19 @@
+*.iml
+.gradle
+/local.properties
+/.idea
+.DS_Store
+/build
+/captures
+.externalNativeBuild
+.cxx
+local.properties
+
+# Android module build outputs
+app/build/
+
+# Cloudflare worker
+cloudflare-worker/node_modules/
+cloudflare-worker/.wrangler/
+cloudflare-worker/dist/
+cloudflare-worker/.env
