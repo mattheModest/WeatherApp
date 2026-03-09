@@ -12,6 +12,7 @@ import androidx.work.CoroutineWorker
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import androidx.work.WorkerParameters
+import com.weatherapp.data.billing.BillingRepository
 import com.weatherapp.data.datastore.PreferenceKeys
 import com.weatherapp.data.db.dao.ForecastDao
 import com.weatherapp.data.weather.WeatherRepository
@@ -30,12 +31,26 @@ class ForecastRefreshWorker @AssistedInject constructor(
     private val weatherRepository: WeatherRepository,
     private val forecastDao: ForecastDao,
     private val dataStore: DataStore<Preferences>,
-    private val workManager: WorkManager
+    private val workManager: WorkManager,
+    private val billingRepository: BillingRepository
 ) : CoroutineWorker(appContext, workerParams) {
 
     private val verdictGenerator = VerdictGenerator()
 
     override suspend fun doWork(): Result {
+        // Read isPremium at the very start of doWork()
+        val isPremium = dataStore.data.first()[PreferenceKeys.KEY_IS_PREMIUM] ?: false
+
+        // 24h billing check gate
+        val lastBillingCheck = dataStore.data.first()[PreferenceKeys.KEY_LAST_BILLING_CHECK] ?: 0L
+        val nowEpoch = System.currentTimeMillis() / 1000L
+        val billingCheckAgeSeconds = nowEpoch - lastBillingCheck
+        if (billingCheckAgeSeconds > 86400L) {
+            Timber.d("ForecastRefreshWorker: billing check age=${billingCheckAgeSeconds}s — running checkAndUpdatePremiumStatus")
+            billingRepository.checkAndUpdatePremiumStatus()
+                .onFailure { e -> Timber.w(e, "ForecastRefreshWorker: billing check failed") }
+        }
+
         // Check READ_CALENDAR permission — if revoked, operate in weather-only mode silently
         val calendarPermission = ContextCompat.checkSelfPermission(
             applicationContext,
@@ -90,6 +105,13 @@ class ForecastRefreshWorker @AssistedInject constructor(
                 val alertWork = OneTimeWorkRequestBuilder<AlertEvaluationWorker>().build()
                 workManager.enqueue(alertWork)
                 Timber.d("ForecastRefreshWorker: AlertEvaluationWorker enqueued")
+
+                // If premium, also enqueue CalendarScanWorker
+                if (isPremium) {
+                    val calendarWork = OneTimeWorkRequestBuilder<CalendarScanWorker>().build()
+                    workManager.enqueue(calendarWork)
+                    Timber.d("ForecastRefreshWorker: CalendarScanWorker enqueued (premium)")
+                }
 
                 Result.success()
             } else {

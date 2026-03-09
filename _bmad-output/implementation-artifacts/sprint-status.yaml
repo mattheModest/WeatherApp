@@ -57,9 +57,9 @@ development_status:
   2-3-notification-delivery-permission-flow: done
   epic-2-retrospective: optional
 
-  epic-3: in-progress
-  3-1-premium-subscription-billing: ready-for-dev
-  3-2-calendar-data-layer: ready-for-dev
-  3-3-calendar-scan-worker-proactive-widget: ready-for-dev
-  3-4-change-triggered-event-alerts: ready-for-dev
+  epic-3: done
+  3-1-premium-subscription-billing: done
+  3-2-calendar-data-layer: done
+  3-3-calendar-scan-worker-proactive-widget: done
+  3-4-change-triggered-event-alerts: done
   epic-3-retrospective: optional

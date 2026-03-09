@@ -1,5 +1,6 @@
 package com.weatherapp.ui.settings
 
+import android.app.Activity
 import android.content.Intent
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -87,6 +88,7 @@ fun SettingsScreen(
                         onTempUnitToggled = { viewModel.onTempUnitToggled() },
                         onNotificationsToggled = { viewModel.onNotificationsToggled() },
                         onNavigateToPremium = onNavigateToPremium,
+                        onUpgradeTapped = { viewModel.onUpgradeTapped(context as Activity) },
                         onShareMoodCard = {
                             val shareIntent = Intent(Intent.ACTION_SEND).apply {
                                 type = "text/plain"
@@ -110,6 +112,7 @@ private fun SettingsContent(
     onTempUnitToggled: () -> Unit,
     onNotificationsToggled: () -> Unit,
     onNavigateToPremium: () -> Unit,
+    onUpgradeTapped: () -> Unit,
     onShareMoodCard: () -> Unit
 ) {
     Column(
@@ -195,6 +198,12 @@ private fun SettingsContent(
                         modifier = Modifier.heightIn(min = 48.dp)
                     ) {
                         Text("Learn more — \$7.99/year", fontSize = 14.sp)
+                    }
+                    TextButton(
+                        onClick = onUpgradeTapped,
+                        modifier = Modifier.heightIn(min = 48.dp)
+                    ) {
+                        Text("Upgrade to Premium", fontSize = 14.sp)
                     }
                 }
             }

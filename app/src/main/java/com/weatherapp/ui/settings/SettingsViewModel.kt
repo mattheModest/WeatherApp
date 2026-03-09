@@ -1,10 +1,12 @@
 package com.weatherapp.ui.settings
 
+import android.app.Activity
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.weatherapp.data.billing.BillingRepository
 import com.weatherapp.data.datastore.PreferenceKeys
 import com.weatherapp.util.UiState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -19,7 +21,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SettingsViewModel @Inject constructor(
-    private val dataStore: DataStore<Preferences>
+    private val dataStore: DataStore<Preferences>,
+    private val billingRepository: BillingRepository
 ) : ViewModel() {
 
     val uiState = dataStore.data
@@ -71,6 +74,13 @@ class SettingsViewModel @Inject constructor(
                 prefs[PreferenceKeys.KEY_NOTIFICATIONS_ENABLED] = !current
             }
             Timber.d("SettingsViewModel: notifications toggled to ${!current}")
+        }
+    }
+
+    fun onUpgradeTapped(activity: Activity) {
+        viewModelScope.launch {
+            billingRepository.launchPurchaseFlow(activity)
+                .onFailure { e -> Timber.e(e, "SettingsViewModel: launchPurchaseFlow failed") }
         }
     }
 }

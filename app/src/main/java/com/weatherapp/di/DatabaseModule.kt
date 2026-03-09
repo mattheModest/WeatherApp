@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Room
 import com.weatherapp.data.db.AppDatabase
 import com.weatherapp.data.db.dao.AlertStateDao
+import com.weatherapp.data.db.dao.CalendarEventForecastDao
 import com.weatherapp.data.db.dao.ForecastDao
 import dagger.Module
 import dagger.Provides
@@ -24,7 +25,7 @@ object DatabaseModule {
             AppDatabase::class.java,
             "weather_app_db"
         )
-        .addMigrations(AppDatabase.MIGRATION_1_2)
+        .addMigrations(AppDatabase.MIGRATION_1_2, AppDatabase.MIGRATION_2_3)
         .build()
 
     @Provides
@@ -32,4 +33,8 @@ object DatabaseModule {
 
     @Provides
     fun provideAlertStateDao(db: AppDatabase): AlertStateDao = db.alertStateDao()
+
+    @Provides
+    fun provideCalendarEventForecastDao(db: AppDatabase): CalendarEventForecastDao =
+        db.calendarEventForecastDao()
 }
