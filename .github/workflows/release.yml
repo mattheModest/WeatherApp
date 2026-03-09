@@ -1,0 +1,67 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Version tag (e.g. v1.0.0)'
+        required: true
+        default: 'v1.0.0'
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - uses: gradle/actions/setup-gradle@v3
+
+      - name: Run tests
+        run: ./gradlew test
+
+      - name: Build debug APK
+        run: ./gradlew assembleDebug
+
+      - name: Determine version tag
+        id: tag
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "version=${{ github.event.inputs.tag }}" >> $GITHUB_OUTPUT
+          else
+            echo "version=${GITHUB_REF#refs/tags/}" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Rename APK
+        run: |
+          mv app/build/outputs/apk/debug/app-debug.apk \
+             app/build/outputs/apk/debug/WeatherApp-${{ steps.tag.outputs.version }}.apk
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.tag.outputs.version }}
+          name: WeatherApp ${{ steps.tag.outputs.version }}
+          body: |
+            ## WeatherApp ${{ steps.tag.outputs.version }}
+
+            ### Install (Android sideload)
+            1. Download **WeatherApp-${{ steps.tag.outputs.version }}.apk** below
+            2. On your Android device: **Settings → Security → Install unknown apps** → allow your browser/file manager
+            3. Open the downloaded APK and tap **Install**
+            4. Launch WeatherApp and complete the 60-second onboarding
+
+            > Requires Android 14+ (API 34)
+          files: app/build/outputs/apk/debug/WeatherApp-${{ steps.tag.outputs.version }}.apk
+          draft: false
+          prerelease: false

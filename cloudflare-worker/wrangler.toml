@@ -1,0 +1,12 @@
+name = "weatherapp-worker"
+main = "src/worker.ts"
+compatibility_date = "2026-01-01"
+workers_dev = true
+
+[[kv_namespaces]]
+binding = "WEATHER_CACHE"
+id = "b4b36dd0c6a64cbe90ccd5350bdf58f4"
+preview_id = "67e2f72a8dd04d6dbd4ebbce197fe2b4"
+
+[vars]
+OPEN_METEO_BASE_URL = "https://api.open-meteo.com/v1"

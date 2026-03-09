@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">WeatherApp</string>
+    <string name="widget_description">Shows today\'s weather verdict, what to bring, and best outdoor window</string>
+</resources>
