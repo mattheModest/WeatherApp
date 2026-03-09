@@ -4,7 +4,7 @@ import android.app.Activity
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
-import com.android.billingclient.api.BillingResponseCode
+import com.android.billingclient.api.BillingClient
 import com.android.billingclient.api.Purchase
 import com.weatherapp.data.datastore.PreferenceKeys
 import kotlinx.coroutines.flow.first
@@ -23,7 +23,7 @@ class BillingRepository @Inject constructor(
 
     init {
         billingClientWrapper.setPurchasesUpdatedCallback { result, purchases ->
-            if (result.responseCode == BillingResponseCode.OK && purchases != null) {
+            if (result.responseCode == BillingClient.BillingResponseCode.OK && purchases != null) {
                 purchases.filter {
                     it.purchaseState == Purchase.PurchaseState.PURCHASED &&
                     it.products.contains(PREMIUM_SKU)
@@ -54,7 +54,7 @@ class BillingRepository @Inject constructor(
             it.purchaseState == Purchase.PurchaseState.PURCHASED && !it.isAcknowledged
         }.forEach { purchase ->
             val ackResult = billingClientWrapper.acknowledgePurchase(purchase.purchaseToken)
-            if (ackResult.responseCode == BillingResponseCode.OK) {
+            if (ackResult.responseCode == BillingClient.BillingResponseCode.OK) {
                 Timber.d("BillingRepository: purchase acknowledged")
             } else {
                 Timber.w("BillingRepository: acknowledgment failed: ${ackResult.responseCode}")

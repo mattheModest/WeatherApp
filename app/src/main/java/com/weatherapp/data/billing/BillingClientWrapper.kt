@@ -27,7 +27,7 @@ class BillingClientWrapper @Inject constructor(
         return suspendCancellableCoroutine { continuation ->
             billingClient.startConnection(object : BillingClientStateListener {
                 override fun onBillingSetupFinished(result: BillingResult) {
-                    val connected = result.responseCode == BillingResponseCode.OK
+                    val connected = result.responseCode == BillingClient.BillingResponseCode.OK
                     Timber.d("BillingClientWrapper: setup finished, connected=$connected")
                     if (continuation.isActive) continuation.resume(connected)
                 }
@@ -45,7 +45,7 @@ class BillingClientWrapper @Inject constructor(
             .setProductType(BillingClient.ProductType.SUBS)
             .build()
         val result = billingClient.queryPurchasesAsync(params)
-        return if (result.billingResult.responseCode == BillingResponseCode.OK) {
+        return if (result.billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
             result.purchasesList
         } else {
             Timber.w("queryPurchasesAsync failed: ${result.billingResult.responseCode}")
@@ -63,7 +63,7 @@ class BillingClientWrapper @Inject constructor(
         )
         val params = QueryProductDetailsParams.newBuilder().setProductList(productList).build()
         val result = billingClient.queryProductDetails(params)
-        return if (result.billingResult.responseCode == BillingResponseCode.OK) {
+        return if (result.billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
             result.productDetailsList?.firstOrNull()
         } else {
             Timber.w("queryProductDetails failed: ${result.billingResult.responseCode}")
