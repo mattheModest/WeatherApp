@@ -4,8 +4,10 @@ import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.MutablePreferences
 import androidx.datastore.preferences.core.Preferences
-import androidx.test.core.app.ApplicationProvider
+import androidx.datastore.preferences.core.edit
 import androidx.work.ListenableWorker.Result
+import io.mockk.mockkStatic
+import io.mockk.unmockkAll
 import androidx.work.WorkManager
 import androidx.work.WorkerParameters
 import com.google.gson.Gson
@@ -22,6 +24,7 @@ import io.mockk.mockk
 import io.mockk.slot
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
+import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
@@ -43,6 +46,7 @@ class CalendarScanWorkerTest {
 
     @Before
     fun setUp() {
+        mockkStatic("androidx.datastore.preferences.core.PreferencesKt")
         calendarRepository       = mockk(relaxed = true)
         forecastDao              = mockk(relaxed = true)
         calendarEventForecastDao = mockk(relaxed = true)
@@ -55,6 +59,11 @@ class CalendarScanWorkerTest {
         }
         every { dataStore.data } returns flowOf(prefs)
         coEvery { forecastDao.queryByTimeWindow(any(), any()) } returns flowOf(allClearHours())
+    }
+
+    @After
+    fun tearDown() {
+        unmockkAll()
     }
 
     // --- isOutdoorPotential tests ---

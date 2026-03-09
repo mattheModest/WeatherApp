@@ -4,13 +4,17 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.MutablePreferences
 import androidx.datastore.preferences.core.Preferences
 import com.weatherapp.data.datastore.PreferenceKeys
+import androidx.datastore.preferences.core.edit
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.mockkStatic
 import io.mockk.slot
+import io.mockk.unmockkAll
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
+import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
@@ -25,9 +29,15 @@ class BillingRepositoryTest {
 
     @Before
     fun setUp() {
+        mockkStatic("androidx.datastore.preferences.core.PreferencesKt")
         billingClientWrapper = mockk(relaxed = true)
         dataStore = mockk()
         billingRepository = BillingRepository(billingClientWrapper, dataStore)
+    }
+
+    @After
+    fun tearDown() {
+        unmockkAll()
     }
 
     @Test

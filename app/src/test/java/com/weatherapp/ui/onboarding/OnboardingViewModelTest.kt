@@ -5,14 +5,23 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.work.WorkManager
 import androidx.work.WorkRequest
+import androidx.datastore.preferences.core.edit
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
+import io.mockk.mockkStatic
+import io.mockk.slot
+import io.mockk.unmockkAll
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
+import kotlinx.coroutines.test.advanceUntilIdle
+import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.test.setMain
+import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Before
@@ -21,6 +30,9 @@ import com.weatherapp.util.UiState
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class OnboardingViewModelTest {
+
+    private val testDispatcher = UnconfinedTestDispatcher()
+    private val editSlot = slot<suspend (androidx.datastore.preferences.core.MutablePreferences) -> Unit>()
 
     private lateinit var viewModel: OnboardingViewModel
     private lateinit var mockDataStore: DataStore<Preferences>
@@ -31,6 +43,8 @@ class OnboardingViewModelTest {
 
     @Before
     fun setUp() {
+        Dispatchers.setMain(testDispatcher)
+        mockkStatic("androidx.datastore.preferences.core.PreferencesKt")
         mockPrefs = mockk<Preferences>(relaxed = true)
         every { mockPrefs[any<Preferences.Key<Boolean>>()] } returns null
         every { mockPrefs[any<Preferences.Key<String>>()] } returns null
@@ -39,9 +53,8 @@ class OnboardingViewModelTest {
 
         mockDataStore = mockk<DataStore<Preferences>>(relaxed = true)
         every { mockDataStore.data } returns flowOf(mockPrefs)
-        coEvery { mockDataStore.edit(any()) } coAnswers {
-            firstArg<suspend (androidx.datastore.preferences.core.MutablePreferences) -> Unit>()
-                .invoke(mockMutablePrefs)
+        coEvery { mockDataStore.edit(capture(editSlot)) } coAnswers {
+            editSlot.captured.invoke(mockMutablePrefs)
             mockPrefs
         }
 
@@ -59,8 +72,14 @@ class OnboardingViewModelTest {
         )
     }
 
+    @After
+    fun tearDown() {
+        Dispatchers.resetMain()
+        unmockkAll()
+    }
+
     @Test
-    fun `initial state is Success with LOCATION_PERMISSION step`() = runTest(UnconfinedTestDispatcher()) {
+    fun `initial state is Success with LOCATION_PERMISSION step`() = runTest(testDispatcher) {
         val state = viewModel.uiState.value
         assertTrue("Expected UiState.Success", state is UiState.Success)
         val data = (state as UiState.Success).data
@@ -70,7 +89,7 @@ class OnboardingViewModelTest {
     }
 
     @Test
-    fun `onLocationGranted advances step to CALENDAR_RATIONALE`() = runTest(UnconfinedTestDispatcher()) {
+    fun `onLocationGranted advances step to CALENDAR_RATIONALE`() = runTest(testDispatcher) {
         viewModel.onLocationGranted()
 
         val state = viewModel.uiState.value
@@ -82,7 +101,7 @@ class OnboardingViewModelTest {
 
     @Test
     fun `onLocationDenied advances step to MANUAL_LOCATION and sets locationDenied true`() =
-        runTest(UnconfinedTestDispatcher()) {
+        runTest(testDispatcher) {
             viewModel.onLocationDenied()
 
             val state = viewModel.uiState.value
@@ -94,10 +113,11 @@ class OnboardingViewModelTest {
 
     @Test
     fun `onCalendarDenied writes KEY_HAS_COMPLETED_ONBOARDING true to DataStore`() =
-        runTest(UnconfinedTestDispatcher()) {
+        runTest(testDispatcher) {
             viewModel.onLocationGranted()
             viewModel.onCalendarRationaleAcknowledged()
             viewModel.onCalendarDenied()
+            advanceUntilIdle()
 
             coVerify {
                 mockDataStore.edit(any())
@@ -112,10 +132,11 @@ class OnboardingViewModelTest {
 
     @Test
     fun `onCalendarGranted writes KEY_HAS_COMPLETED_ONBOARDING true to DataStore`() =
-        runTest(UnconfinedTestDispatcher()) {
+        runTest(testDispatcher) {
             viewModel.onLocationGranted()
             viewModel.onCalendarRationaleAcknowledged()
             viewModel.onCalendarGranted()
+            advanceUntilIdle()
 
             coVerify {
                 mockDataStore.edit(any())
@@ -130,10 +151,11 @@ class OnboardingViewModelTest {
 
     @Test
     fun `onCalendarGranted enqueues work via WorkManager`() =
-        runTest(UnconfinedTestDispatcher()) {
+        runTest(testDispatcher) {
             viewModel.onLocationGranted()
             viewModel.onCalendarRationaleAcknowledged()
             viewModel.onCalendarGranted()
+            advanceUntilIdle()
 
             coVerify { mockWorkManager.enqueue(any<WorkRequest>()) }
             coVerify { mockWorkManager.enqueueUniquePeriodicWork(any(), any(), any()) }
