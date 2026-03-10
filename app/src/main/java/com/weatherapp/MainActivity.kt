@@ -6,6 +6,7 @@ import android.content.ComponentName
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -67,6 +68,13 @@ class MainActivity : ComponentActivity() {
         if (appWidgetManager.isRequestPinAppWidgetSupported) {
             appWidgetManager.requestPinAppWidget(provider, null, null)
             Timber.d("MainActivity: widget pin requested")
+        } else {
+            Toast.makeText(
+                this,
+                "Long-press your home screen → Widgets → WeatherApp",
+                Toast.LENGTH_LONG
+            ).show()
+            Timber.d("MainActivity: pin not supported, showed instructions toast")
         }
     }
 }

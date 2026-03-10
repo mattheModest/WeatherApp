@@ -47,7 +47,7 @@ fun WeatherWidgetContent(state: WidgetDisplayState) {
     val tokens = WeatherDesignTokens.getTokens(state.weatherState, isDark)
 
     GlanceTheme {
-        // Outer box = card background (bottom zone color)
+        // Outer box: bottom-zone color as base, rounded card
         Box(
             modifier = GlanceModifier
                 .fillMaxSize()
@@ -102,50 +102,52 @@ private fun FullWidgetLayout(
 ) {
     Column(modifier = GlanceModifier.fillMaxSize()) {
 
-        // ── Top zone: chipBackground tint over card ──
-        Row(
+        // ── Top zone: separate Box with topZoneBackground ──
+        // Using a Box wrapper ensures the background renders as a distinct layer
+        Box(
             modifier = GlanceModifier
                 .fillMaxWidth()
-                .background(ColorProvider(tokens.chipBackground))
-                .padding(horizontal = 14.dp, vertical = 12.dp),
-            verticalAlignment = Alignment.CenterVertically
+                .background(ColorProvider(tokens.topZoneBackground))
+                .padding(horizontal = 14.dp, vertical = 12.dp)
         ) {
-            Text(
-                text = weatherEmoji(state.weatherState),
-                style = TextStyle(fontSize = 26.sp)
-            )
-            Spacer(modifier = GlanceModifier.width(10.dp))
-            Column {
+            Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(
-                    text = state.verdict,
-                    style = TextStyle(
-                        color = ColorProvider(tokens.verdictText),
-                        fontSize = 15.sp,
-                        fontWeight = FontWeight.Bold
-                    ),
-                    maxLines = 2
+                    text = weatherEmoji(state.weatherState),
+                    style = TextStyle(fontSize = 26.sp)
                 )
-                if (state.bestWindow != null) {
+                Spacer(modifier = GlanceModifier.width(10.dp))
+                Column {
                     Text(
-                        text = "Good window: ${state.bestWindow}",
+                        text = state.verdict,
                         style = TextStyle(
-                            color = ColorProvider(tokens.accentColor),
-                            fontSize = 11.sp
-                        )
+                            color = ColorProvider(tokens.verdictText),
+                            fontSize = 15.sp,
+                            fontWeight = FontWeight.Bold
+                        ),
+                        maxLines = 2
                     )
+                    if (state.bestWindow != null) {
+                        Text(
+                            text = "Good window: ${state.bestWindow}",
+                            style = TextStyle(
+                                color = ColorProvider(tokens.accentColor),
+                                fontSize = 11.sp
+                            )
+                        )
+                    }
                 }
             }
         }
 
-        // ── Hairline divider ──
+        // ── Accent divider ──
         Box(
             modifier = GlanceModifier
                 .fillMaxWidth()
-                .height(1.dp)
-                .background(ColorProvider(tokens.secondaryText.copy(alpha = 0.2f)))
+                .height(2.dp)
+                .background(ColorProvider(tokens.accentColor))
         ) {}
 
-        // ── Bottom zone: inherits cardBackground from outer Box ──
+        // ── Bottom zone: cardBackground (set on outer Box, fills remainder) ──
         Column(
             modifier = GlanceModifier
                 .fillMaxWidth()
@@ -195,7 +197,7 @@ private fun FullWidgetLayout(
 private fun BringChip(text: String, tokens: WeatherColorTokens) {
     Box(
         modifier = GlanceModifier
-            .background(ColorProvider(tokens.background))
+            .background(ColorProvider(tokens.chipBackground))
             .cornerRadius(12.dp)
             .padding(horizontal = 8.dp, vertical = 3.dp),
         contentAlignment = Alignment.Center

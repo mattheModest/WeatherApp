@@ -100,7 +100,7 @@ fun MainScreen(
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .background(tokens.chipBackground.copy(alpha = 0.35f))
+                            .background(tokens.topZoneBackground)
                             .padding(horizontal = 20.dp, vertical = 20.dp),
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.spacedBy(14.dp)
