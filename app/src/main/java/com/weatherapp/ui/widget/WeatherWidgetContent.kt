@@ -27,11 +27,13 @@ import androidx.glance.layout.padding
 import androidx.glance.layout.width
 import androidx.glance.semantics.contentDescription
 import androidx.glance.semantics.semantics
+import androidx.glance.text.FontStyle
 import androidx.glance.text.FontWeight
 import androidx.glance.text.Text
 import androidx.glance.text.TextStyle
 import androidx.glance.unit.ColorProvider
 import com.weatherapp.MainActivity
+import com.weatherapp.model.WeatherState
 import com.weatherapp.model.WidgetDisplayState
 import com.weatherapp.ui.theme.WeatherColorTokens
 import com.weatherapp.ui.theme.WeatherDesignTokens
@@ -55,10 +57,10 @@ fun WeatherWidgetContent(state: WidgetDisplayState) {
                 ))
                 .semantics { contentDescription = buildContentDescription(state) }
         ) {
-            when {
-                state.isAllClear -> AllClearLayout(state = state, tokens = tokens)
-                isMinimal        -> MinimalWidgetLayout(state = state, tokens = tokens)
-                else             -> FullWidgetLayout(state = state, tokens = tokens)
+            if (isMinimal) {
+                MinimalWidgetLayout(state = state, tokens = tokens)
+            } else {
+                FullWidgetLayout(state = state, tokens = tokens)
             }
         }
     }
@@ -69,85 +71,36 @@ private fun MinimalWidgetLayout(
     state: WidgetDisplayState,
     tokens: WeatherColorTokens
 ) {
-    Column(
+    Row(
         modifier = GlanceModifier
             .fillMaxSize()
             .padding(horizontal = 12.dp, vertical = 8.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
-            text = state.verdict,
-            style = TextStyle(
-                color = ColorProvider(tokens.verdictText),
-                fontSize = 16.sp,
-                fontWeight = FontWeight.Bold
-            ),
-            maxLines = 2
+            text = weatherEmoji(state.weatherState),
+            style = TextStyle(fontSize = 18.sp)
         )
-        if (state.isStale) {
-            Spacer(modifier = GlanceModifier.height(4.dp))
+        Spacer(modifier = GlanceModifier.width(8.dp))
+        Column(verticalAlignment = Alignment.CenterVertically) {
             Text(
-                text = formatStaleness(state.lastUpdateEpoch),
-                style = TextStyle(
-                    color = ColorProvider(tokens.secondaryText),
-                    fontSize = 10.sp
-                )
-            )
-        }
-    }
-}
-
-@Composable
-private fun AllClearLayout(
-    state: WidgetDisplayState,
-    tokens: WeatherColorTokens
-) {
-    Column(
-        modifier = GlanceModifier
-            .fillMaxSize()
-            .padding(horizontal = 14.dp, vertical = 12.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        if (state.currentTempC != null) {
-            Text(
-                text = "${state.currentTempC.toInt()}°",
+                text = state.verdict,
                 style = TextStyle(
                     color = ColorProvider(tokens.verdictText),
-                    fontSize = 28.sp,
+                    fontSize = 14.sp,
                     fontWeight = FontWeight.Bold
-                )
-            )
-            Spacer(modifier = GlanceModifier.height(4.dp))
-        }
-        Text(
-            text = state.verdict,
-            style = TextStyle(
-                color = ColorProvider(tokens.verdictText),
-                fontSize = 20.sp,
-                fontWeight = FontWeight.Bold
-            ),
-            maxLines = 2
-        )
-        if (state.moodLine.isNotEmpty()) {
-            Spacer(modifier = GlanceModifier.height(6.dp))
-            Text(
-                text = state.moodLine,
-                style = TextStyle(
-                    color = ColorProvider(tokens.secondaryText),
-                    fontSize = 13.sp
                 ),
-                maxLines = 1
+                maxLines = 2
             )
-        }
-        if (state.isStale) {
-            Spacer(modifier = GlanceModifier.height(4.dp))
-            Text(
-                text = formatStaleness(state.lastUpdateEpoch),
-                style = TextStyle(
-                    color = ColorProvider(tokens.secondaryText),
-                    fontSize = 10.sp
+            if (state.isStale) {
+                Text(
+                    text = formatStaleness(state.lastUpdateEpoch),
+                    style = TextStyle(
+                        color = ColorProvider(tokens.secondaryText),
+                        fontSize = 10.sp
+                    )
                 )
-            )
+            }
         }
     }
 }
@@ -157,93 +110,98 @@ private fun FullWidgetLayout(
     state: WidgetDisplayState,
     tokens: WeatherColorTokens
 ) {
-    Column(
-        modifier = GlanceModifier
-            .fillMaxSize()
-            .padding(horizontal = 14.dp, vertical = 12.dp)
-    ) {
-        // Temperature + verdict top line
-        if (state.currentTempC != null) {
-            val tempDisplay = "${state.currentTempC.toInt()}°"
-            Row(modifier = GlanceModifier.fillMaxWidth()) {
-                Text(
-                    text = tempDisplay,
-                    style = TextStyle(
-                        color = ColorProvider(tokens.verdictText),
-                        fontSize = 28.sp,
-                        fontWeight = FontWeight.Bold
-                    )
-                )
-                Spacer(modifier = GlanceModifier.width(10.dp))
+    Column(modifier = GlanceModifier.fillMaxSize()) {
+
+        // ── Top zone: weather emoji + bold verdict ──
+        Row(
+            modifier = GlanceModifier
+                .fillMaxWidth()
+                .background(ColorProvider(tokens.chipBackground))
+                .padding(horizontal = 14.dp, vertical = 12.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = weatherEmoji(state.weatherState),
+                style = TextStyle(fontSize = 26.sp)
+            )
+            Spacer(modifier = GlanceModifier.width(10.dp))
+            Column {
                 Text(
                     text = state.verdict,
                     style = TextStyle(
                         color = ColorProvider(tokens.verdictText),
-                        fontSize = 18.sp,
+                        fontSize = 15.sp,
                         fontWeight = FontWeight.Bold
                     ),
                     maxLines = 2
                 )
-            }
-        } else {
-            // Verdict line — primary, bold, large (AC-1)
-            Text(
-                text = state.verdict,
-                style = TextStyle(
-                    color = ColorProvider(tokens.verdictText),
-                    fontSize = 20.sp,
-                    fontWeight = FontWeight.Bold
-                ),
-                maxLines = 2
-            )
-        }
-
-        // Staleness indicator (AC-4)
-        if (state.isStale) {
-            Spacer(modifier = GlanceModifier.height(2.dp))
-            Text(
-                text = formatStaleness(state.lastUpdateEpoch),
-                style = TextStyle(
-                    color = ColorProvider(tokens.secondaryText),
-                    fontSize = 10.sp
-                )
-            )
-        }
-
-        // Bring chips (AC-1)
-        if (state.bringItems.isNotEmpty()) {
-            Spacer(modifier = GlanceModifier.height(8.dp))
-            Row(modifier = GlanceModifier.fillMaxWidth()) {
-                state.bringItems.take(3).forEachIndexed { index, item ->
-                    if (index > 0) Spacer(modifier = GlanceModifier.width(4.dp))
-                    BringChip(text = item, tokens = tokens)
+                if (state.bestWindow != null) {
+                    Text(
+                        text = "Good window: ${state.bestWindow}",
+                        style = TextStyle(
+                            color = ColorProvider(tokens.accentColor),
+                            fontSize = 11.sp
+                        )
+                    )
                 }
             }
         }
 
-        // Best outdoor window (AC-1)
-        if (state.bestWindow != null) {
-            Spacer(modifier = GlanceModifier.height(8.dp))
-            Text(
-                text = "Best window: ${state.bestWindow}",
-                style = TextStyle(
-                    color = ColorProvider(tokens.secondaryText),
-                    fontSize = 12.sp
-                )
-            )
-        }
+        // ── Hairline divider ──
+        Box(
+            modifier = GlanceModifier
+                .fillMaxWidth()
+                .height(1.dp)
+                .background(ColorProvider(tokens.secondaryText.copy(alpha = 0.2f)))
+        ) {}
 
-        // Mood line (AC-1)
-        if (state.moodLine.isNotEmpty()) {
-            Spacer(modifier = GlanceModifier.height(4.dp))
-            Text(
-                text = state.moodLine,
-                style = TextStyle(
-                    color = ColorProvider(tokens.secondaryText),
-                    fontSize = 12.sp
-                ),
-                maxLines = 1
-            )
+        // ── Bottom zone: mood line + chips + accent dot ──
+        Column(
+            modifier = GlanceModifier
+                .fillMaxSize()
+                .background(ColorProvider(tokens.cardBackground))
+                .padding(horizontal = 12.dp, vertical = 8.dp)
+        ) {
+            if (state.moodLine.isNotEmpty()) {
+                Text(
+                    text = state.moodLine,
+                    style = TextStyle(
+                        color = ColorProvider(tokens.secondaryText),
+                        fontSize = 11.sp,
+                        fontStyle = FontStyle.Italic
+                    ),
+                    maxLines = 1
+                )
+                Spacer(modifier = GlanceModifier.height(6.dp))
+            }
+            Row(
+                modifier = GlanceModifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                state.bringItems.take(2).forEachIndexed { index, item ->
+                    if (index > 0) Spacer(modifier = GlanceModifier.width(4.dp))
+                    BringChip(text = item, tokens = tokens)
+                }
+                Spacer(modifier = GlanceModifier.width(8.dp))
+                // Accent dot — mirrors the app card
+                Box(
+                    modifier = GlanceModifier
+                        .width(7.dp)
+                        .height(7.dp)
+                        .cornerRadius(4.dp)
+                        .background(ColorProvider(tokens.accentColor))
+                ) {}
+            }
+            if (state.isStale) {
+                Spacer(modifier = GlanceModifier.height(4.dp))
+                Text(
+                    text = formatStaleness(state.lastUpdateEpoch),
+                    style = TextStyle(
+                        color = ColorProvider(tokens.secondaryText),
+                        fontSize = 10.sp
+                    )
+                )
+            }
         }
     }
 }
@@ -252,9 +210,9 @@ private fun FullWidgetLayout(
 private fun BringChip(text: String, tokens: WeatherColorTokens) {
     Box(
         modifier = GlanceModifier
-            .background(ColorProvider(tokens.chipBackground))
+            .background(ColorProvider(tokens.background))
             .cornerRadius(12.dp)
-            .padding(horizontal = 8.dp, vertical = 4.dp),
+            .padding(horizontal = 8.dp, vertical = 3.dp),
         contentAlignment = Alignment.Center
     ) {
         Text(
@@ -268,13 +226,20 @@ private fun BringChip(text: String, tokens: WeatherColorTokens) {
     }
 }
 
+private fun weatherEmoji(state: WeatherState): String = when (state) {
+    WeatherState.CLEAR    -> "☀️"
+    WeatherState.OVERCAST -> "☁️"
+    WeatherState.RAIN     -> "🌧"
+    WeatherState.STORM    -> "⛈"
+}
+
 private fun buildContentDescription(state: WidgetDisplayState): String {
     val sb = StringBuilder(state.verdict)
     if (state.bringItems.isNotEmpty()) {
         sb.append(". Bring: ${state.bringItems.joinToString(", ")}")
     }
     if (state.bestWindow != null) {
-        sb.append(". Best time: ${state.bestWindow}")
+        sb.append(". Best window: ${state.bestWindow}")
     }
     if (state.isStale) {
         sb.append(". Data may be outdated.")
