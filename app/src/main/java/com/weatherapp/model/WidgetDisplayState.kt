@@ -8,7 +8,8 @@ data class WidgetDisplayState(
     val moodLine: String,
     val lastUpdateEpoch: Long,
     val isStale: Boolean,
-    val weatherState: WeatherState
+    val weatherState: WeatherState,
+    val currentTempC: Float? = null
 ) {
     companion object {
         val EMPTY = WidgetDisplayState(

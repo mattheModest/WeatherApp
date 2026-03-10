@@ -108,6 +108,17 @@ private fun AllClearLayout(
             .padding(horizontal = 14.dp, vertical = 12.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
+        if (state.currentTempC != null) {
+            Text(
+                text = "${state.currentTempC.toInt()}°",
+                style = TextStyle(
+                    color = ColorProvider(tokens.verdictText),
+                    fontSize = 28.sp,
+                    fontWeight = FontWeight.Bold
+                )
+            )
+            Spacer(modifier = GlanceModifier.height(4.dp))
+        }
         Text(
             text = state.verdict,
             style = TextStyle(
@@ -151,16 +162,41 @@ private fun FullWidgetLayout(
             .fillMaxSize()
             .padding(horizontal = 14.dp, vertical = 12.dp)
     ) {
-        // Verdict line — primary, bold, large (AC-1)
-        Text(
-            text = state.verdict,
-            style = TextStyle(
-                color = ColorProvider(tokens.verdictText),
-                fontSize = 20.sp,
-                fontWeight = FontWeight.Bold
-            ),
-            maxLines = 2
-        )
+        // Temperature + verdict top line
+        if (state.currentTempC != null) {
+            val tempDisplay = "${state.currentTempC.toInt()}°"
+            Row(modifier = GlanceModifier.fillMaxWidth()) {
+                Text(
+                    text = tempDisplay,
+                    style = TextStyle(
+                        color = ColorProvider(tokens.verdictText),
+                        fontSize = 28.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+                )
+                Spacer(modifier = GlanceModifier.width(10.dp))
+                Text(
+                    text = state.verdict,
+                    style = TextStyle(
+                        color = ColorProvider(tokens.verdictText),
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Bold
+                    ),
+                    maxLines = 2
+                )
+            }
+        } else {
+            // Verdict line — primary, bold, large (AC-1)
+            Text(
+                text = state.verdict,
+                style = TextStyle(
+                    color = ColorProvider(tokens.verdictText),
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Bold
+                ),
+                maxLines = 2
+            )
+        }
 
         // Staleness indicator (AC-4)
         if (state.isStale) {

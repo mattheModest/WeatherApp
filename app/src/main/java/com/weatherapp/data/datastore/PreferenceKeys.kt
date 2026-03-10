@@ -1,6 +1,7 @@
 package com.weatherapp.data.datastore
 
 import androidx.datastore.preferences.core.booleanPreferencesKey
+import androidx.datastore.preferences.core.floatPreferencesKey
 import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 
@@ -20,4 +21,5 @@ object PreferenceKeys {
     val KEY_SHOULD_REQUEST_NOTIFICATIONS = booleanPreferencesKey("should_request_notifications")
     val KEY_NOTIFICATIONS_PERMISSION_REQUESTED = booleanPreferencesKey("notifications_permission_requested")
     val KEY_NOTIFICATIONS_ENABLED = booleanPreferencesKey("notifications_enabled")
+    val KEY_CURRENT_TEMP_C = floatPreferencesKey("current_temp_c")
 }

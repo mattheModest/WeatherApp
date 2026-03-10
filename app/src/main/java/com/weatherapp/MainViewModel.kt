@@ -7,14 +7,19 @@ import androidx.datastore.preferences.core.edit
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.weatherapp.data.datastore.PreferenceKeys
+import com.weatherapp.model.WidgetDisplayState
+import com.weatherapp.ui.widget.inferWeatherStateFromVerdictPublic
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
@@ -32,6 +37,40 @@ class MainViewModel @Inject constructor(
 
     private val _requestNotificationPermission = MutableSharedFlow<Unit>(extraBufferCapacity = 1)
     val requestNotificationPermission: SharedFlow<Unit> = _requestNotificationPermission.asSharedFlow()
+
+    val weatherDisplayState: StateFlow<WidgetDisplayState> = dataStore.data.map { prefs ->
+        val verdictText = prefs[PreferenceKeys.KEY_WIDGET_VERDICT] ?: ""
+        val bringListStr = prefs[PreferenceKeys.KEY_BRING_LIST] ?: ""
+        val stalenessFlag = prefs[PreferenceKeys.KEY_STALENESS_FLAG] ?: false
+        val lastUpdateEpoch = prefs[PreferenceKeys.KEY_LAST_UPDATE_EPOCH] ?: 0L
+        val isAllClear = prefs[PreferenceKeys.KEY_ALL_CLEAR] ?: false
+        val isStale = stalenessFlag || (lastUpdateEpoch > 0 &&
+            System.currentTimeMillis() / 1000L - lastUpdateEpoch > 1800)
+        val weatherState = inferWeatherStateFromVerdictPublic(verdictText, isAllClear)
+        WidgetDisplayState(
+            verdict         = verdictText,
+            bringItems      = bringListStr.split("|").filter { it.isNotEmpty() },
+            bestWindow      = prefs[PreferenceKeys.KEY_BEST_WINDOW]?.takeIf { it.isNotEmpty() },
+            isAllClear      = isAllClear,
+            moodLine        = prefs[PreferenceKeys.KEY_MOOD_LINE] ?: "",
+            lastUpdateEpoch = lastUpdateEpoch,
+            isStale         = isStale,
+            weatherState    = weatherState,
+            currentTempC    = prefs[PreferenceKeys.KEY_CURRENT_TEMP_C]
+        )
+    }.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5_000),
+        initialValue = WidgetDisplayState.EMPTY
+    )
+
+    val tempUnit: StateFlow<String> = dataStore.data.map { prefs ->
+        prefs[PreferenceKeys.KEY_TEMP_UNIT] ?: "celsius"
+    }.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5_000),
+        initialValue = "celsius"
+    )
 
     init {
         viewModelScope.launch {

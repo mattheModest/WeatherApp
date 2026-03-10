@@ -28,9 +28,13 @@ suspend fun DataStore<Preferences>.readWidgetDisplayState(): WidgetDisplayState 
         moodLine       = prefs[PreferenceKeys.KEY_MOOD_LINE] ?: "",
         lastUpdateEpoch = lastUpdateEpoch,
         isStale        = isStale,
-        weatherState   = weatherState
+        weatherState   = weatherState,
+        currentTempC   = prefs[PreferenceKeys.KEY_CURRENT_TEMP_C]
     )
 }
+
+fun inferWeatherStateFromVerdictPublic(verdictText: String, isAllClear: Boolean): WeatherState =
+    inferWeatherStateFromVerdict(verdictText, isAllClear)
 
 private fun inferWeatherStateFromVerdict(verdictText: String, isAllClear: Boolean): WeatherState {
     val lower = verdictText.lowercase()

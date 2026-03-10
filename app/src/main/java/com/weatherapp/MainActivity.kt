@@ -17,7 +17,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.weatherapp.model.WeatherState
 import com.weatherapp.ui.main.MainScreen
 import com.weatherapp.ui.onboarding.OnboardingScreen
 import com.weatherapp.ui.settings.SettingsScreen
@@ -64,6 +63,8 @@ class MainActivity : ComponentActivity() {
 fun WeatherAppContent(mainViewModel: MainViewModel) {
     val startDestination by mainViewModel.startDestination.collectAsStateWithLifecycle()
     val showHourly by mainViewModel.showHourlySheet.collectAsStateWithLifecycle()
+    val displayState by mainViewModel.weatherDisplayState.collectAsStateWithLifecycle()
+    val tempUnit by mainViewModel.tempUnit.collectAsStateWithLifecycle()
     val navController = rememberNavController()
 
     val notificationPermissionLauncher = rememberLauncherForActivityResult(RequestPermission()) { granted ->
@@ -81,7 +82,7 @@ fun WeatherAppContent(mainViewModel: MainViewModel) {
     val startDest = startDestination ?: return
 
     AdaptiveSkyTheme(
-        weatherState = WeatherState.CLEAR,
+        weatherState = displayState.weatherState,
         darkTheme = isSystemInDarkTheme()
     ) {
         NavHost(
@@ -99,6 +100,8 @@ fun WeatherAppContent(mainViewModel: MainViewModel) {
             }
             composable("main") {
                 MainScreen(
+                    displayState = displayState,
+                    tempUnit = tempUnit,
                     showHourlySheet = showHourly,
                     onOpenHourly = { mainViewModel.openHourlyDetail() },
                     onCloseHourly = { mainViewModel.closeHourlyDetail() },
