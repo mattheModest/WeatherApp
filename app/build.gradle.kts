@@ -18,7 +18,7 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
-        buildConfigField("String", "CLOUDFLARE_WORKER_BASE_URL", "\"https://weatherapp-worker.matthemodest.workers.dev/\"")
+        buildConfigField("String", "CLOUDFLARE_WORKER_BASE_URL", "\"https://weatherapp-worker.siegen2265.workers.dev/\"")
     }
 
     buildTypes {
