@@ -47,15 +47,18 @@ fun WeatherWidgetContent(state: WidgetDisplayState) {
     val tokens = WeatherDesignTokens.getTokens(state.weatherState, isDark)
 
     GlanceTheme {
-        // Outer box: bottom-zone color as base, rounded card
-        Box(
+        // Root Column: cardBackground fills whole card (bottom zone color).
+        // Top zone Row and divider Row each paint their own backgrounds on top.
+        // minSdk=34 so the system applies rounded corners — no cornerRadius() needed here.
+        Column(
             modifier = GlanceModifier
                 .fillMaxSize()
                 .background(ColorProvider(tokens.cardBackground))
-                .cornerRadius(16.dp)
-                .clickable(actionStartActivity<MainActivity>(
-                    actionParametersOf(ActionParameters.Key<Boolean>("open_hourly") to true)
-                ))
+                .clickable(
+                    actionStartActivity<MainActivity>(
+                        actionParametersOf(ActionParameters.Key<Boolean>("open_hourly") to true)
+                    )
+                )
                 .semantics { contentDescription = buildContentDescription(state) }
         ) {
             if (isMinimal) {
@@ -75,6 +78,7 @@ private fun MinimalWidgetLayout(
     Row(
         modifier = GlanceModifier
             .fillMaxSize()
+            .background(ColorProvider(tokens.topZoneBackground))
             .padding(horizontal = 12.dp, vertical = 8.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -95,100 +99,99 @@ private fun MinimalWidgetLayout(
     }
 }
 
+// Emits three direct children into the parent Column:
+//   1. Top zone Row  (topZoneBackground)
+//   2. Divider Row   (accentColor, 2dp)
+//   3. Bottom zone Column (no background — parent cardBackground shows through)
 @Composable
 private fun FullWidgetLayout(
     state: WidgetDisplayState,
     tokens: WeatherColorTokens
 ) {
-    Column(modifier = GlanceModifier.fillMaxSize()) {
-
-        // ── Top zone: separate Box with topZoneBackground ──
-        // Using a Box wrapper ensures the background renders as a distinct layer
-        Box(
-            modifier = GlanceModifier
-                .fillMaxWidth()
-                .background(ColorProvider(tokens.topZoneBackground))
-                .padding(horizontal = 14.dp, vertical = 12.dp)
-        ) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
+    // ── Top zone ──
+    Row(
+        modifier = GlanceModifier
+            .fillMaxWidth()
+            .background(ColorProvider(tokens.topZoneBackground))
+            .padding(horizontal = 14.dp, vertical = 12.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(
+            text = weatherEmoji(state.weatherState),
+            style = TextStyle(fontSize = 26.sp)
+        )
+        Spacer(modifier = GlanceModifier.width(10.dp))
+        Column {
+            Text(
+                text = state.verdict,
+                style = TextStyle(
+                    color = ColorProvider(tokens.verdictText),
+                    fontSize = 15.sp,
+                    fontWeight = FontWeight.Bold
+                ),
+                maxLines = 2
+            )
+            if (state.bestWindow != null) {
                 Text(
-                    text = weatherEmoji(state.weatherState),
-                    style = TextStyle(fontSize = 26.sp)
-                )
-                Spacer(modifier = GlanceModifier.width(10.dp))
-                Column {
-                    Text(
-                        text = state.verdict,
-                        style = TextStyle(
-                            color = ColorProvider(tokens.verdictText),
-                            fontSize = 15.sp,
-                            fontWeight = FontWeight.Bold
-                        ),
-                        maxLines = 2
+                    text = "Good window: ${state.bestWindow}",
+                    style = TextStyle(
+                        color = ColorProvider(tokens.accentColor),
+                        fontSize = 11.sp
                     )
-                    if (state.bestWindow != null) {
-                        Text(
-                            text = "Good window: ${state.bestWindow}",
-                            style = TextStyle(
-                                color = ColorProvider(tokens.accentColor),
-                                fontSize = 11.sp
-                            )
-                        )
-                    }
-                }
+                )
             }
         }
+    }
 
-        // ── Accent divider ──
-        Box(
-            modifier = GlanceModifier
-                .fillMaxWidth()
-                .height(2.dp)
-                .background(ColorProvider(tokens.accentColor))
-        ) {}
+    // ── Accent divider ──
+    Row(
+        modifier = GlanceModifier
+            .fillMaxWidth()
+            .height(2.dp)
+            .background(ColorProvider(tokens.accentColor))
+    ) {}
 
-        // ── Bottom zone: cardBackground (set on outer Box, fills remainder) ──
-        Column(
-            modifier = GlanceModifier
-                .fillMaxWidth()
-                .padding(horizontal = 12.dp, vertical = 8.dp)
-        ) {
-            if (state.moodLine.isNotEmpty()) {
-                Text(
-                    text = state.moodLine,
-                    style = TextStyle(
-                        color = ColorProvider(tokens.secondaryText),
-                        fontSize = 11.sp,
-                        fontStyle = FontStyle.Italic
-                    ),
-                    maxLines = 1
+    // ── Bottom zone (parent cardBackground shows through) ──
+    Column(
+        modifier = GlanceModifier
+            .fillMaxWidth()
+            .padding(horizontal = 12.dp, vertical = 8.dp)
+    ) {
+        if (state.moodLine.isNotEmpty()) {
+            Text(
+                text = state.moodLine,
+                style = TextStyle(
+                    color = ColorProvider(tokens.secondaryText),
+                    fontSize = 11.sp,
+                    fontStyle = FontStyle.Italic
+                ),
+                maxLines = 1
+            )
+            Spacer(modifier = GlanceModifier.height(6.dp))
+        }
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            state.bringItems.take(2).forEachIndexed { index, item ->
+                if (index > 0) Spacer(modifier = GlanceModifier.width(4.dp))
+                BringChip(text = item, tokens = tokens)
+            }
+            Spacer(modifier = GlanceModifier.width(8.dp))
+            Box(
+                modifier = GlanceModifier
+                    .width(7.dp)
+                    .height(7.dp)
+                    .cornerRadius(4.dp)
+                    .background(ColorProvider(tokens.accentColor))
+            ) {}
+        }
+        if (state.isStale) {
+            Spacer(modifier = GlanceModifier.height(4.dp))
+            Text(
+                text = formatStaleness(state.lastUpdateEpoch),
+                style = TextStyle(
+                    color = ColorProvider(tokens.secondaryText),
+                    fontSize = 10.sp
                 )
-                Spacer(modifier = GlanceModifier.height(6.dp))
-            }
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                state.bringItems.take(2).forEachIndexed { index, item ->
-                    if (index > 0) Spacer(modifier = GlanceModifier.width(4.dp))
-                    BringChip(text = item, tokens = tokens)
-                }
-                Spacer(modifier = GlanceModifier.width(8.dp))
-                Box(
-                    modifier = GlanceModifier
-                        .width(7.dp)
-                        .height(7.dp)
-                        .cornerRadius(4.dp)
-                        .background(ColorProvider(tokens.accentColor))
-                ) {}
-            }
-            if (state.isStale) {
-                Spacer(modifier = GlanceModifier.height(4.dp))
-                Text(
-                    text = formatStaleness(state.lastUpdateEpoch),
-                    style = TextStyle(
-                        color = ColorProvider(tokens.secondaryText),
-                        fontSize = 10.sp
-                    )
-                )
-            }
+            )
         }
     }
 }
