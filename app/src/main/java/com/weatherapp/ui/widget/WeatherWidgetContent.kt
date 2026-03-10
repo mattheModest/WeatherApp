@@ -47,10 +47,11 @@ fun WeatherWidgetContent(state: WidgetDisplayState) {
     val tokens = WeatherDesignTokens.getTokens(state.weatherState, isDark)
 
     GlanceTheme {
+        // Outer box = card background (bottom zone color)
         Box(
             modifier = GlanceModifier
                 .fillMaxSize()
-                .background(ColorProvider(tokens.background))
+                .background(ColorProvider(tokens.cardBackground))
                 .cornerRadius(16.dp)
                 .clickable(actionStartActivity<MainActivity>(
                     actionParametersOf(ActionParameters.Key<Boolean>("open_hourly") to true)
@@ -82,26 +83,15 @@ private fun MinimalWidgetLayout(
             style = TextStyle(fontSize = 18.sp)
         )
         Spacer(modifier = GlanceModifier.width(8.dp))
-        Column(verticalAlignment = Alignment.CenterVertically) {
-            Text(
-                text = state.verdict,
-                style = TextStyle(
-                    color = ColorProvider(tokens.verdictText),
-                    fontSize = 14.sp,
-                    fontWeight = FontWeight.Bold
-                ),
-                maxLines = 2
-            )
-            if (state.isStale) {
-                Text(
-                    text = formatStaleness(state.lastUpdateEpoch),
-                    style = TextStyle(
-                        color = ColorProvider(tokens.secondaryText),
-                        fontSize = 10.sp
-                    )
-                )
-            }
-        }
+        Text(
+            text = state.verdict,
+            style = TextStyle(
+                color = ColorProvider(tokens.verdictText),
+                fontSize = 14.sp,
+                fontWeight = FontWeight.Bold
+            ),
+            maxLines = 2
+        )
     }
 }
 
@@ -112,7 +102,7 @@ private fun FullWidgetLayout(
 ) {
     Column(modifier = GlanceModifier.fillMaxSize()) {
 
-        // ── Top zone: weather emoji + bold verdict ──
+        // ── Top zone: chipBackground tint over card ──
         Row(
             modifier = GlanceModifier
                 .fillMaxWidth()
@@ -155,11 +145,10 @@ private fun FullWidgetLayout(
                 .background(ColorProvider(tokens.secondaryText.copy(alpha = 0.2f)))
         ) {}
 
-        // ── Bottom zone: mood line + chips + accent dot ──
+        // ── Bottom zone: inherits cardBackground from outer Box ──
         Column(
             modifier = GlanceModifier
-                .fillMaxSize()
-                .background(ColorProvider(tokens.cardBackground))
+                .fillMaxWidth()
                 .padding(horizontal = 12.dp, vertical = 8.dp)
         ) {
             if (state.moodLine.isNotEmpty()) {
@@ -174,16 +163,12 @@ private fun FullWidgetLayout(
                 )
                 Spacer(modifier = GlanceModifier.height(6.dp))
             }
-            Row(
-                modifier = GlanceModifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
                 state.bringItems.take(2).forEachIndexed { index, item ->
                     if (index > 0) Spacer(modifier = GlanceModifier.width(4.dp))
                     BringChip(text = item, tokens = tokens)
                 }
                 Spacer(modifier = GlanceModifier.width(8.dp))
-                // Accent dot — mirrors the app card
                 Box(
                     modifier = GlanceModifier
                         .width(7.dp)

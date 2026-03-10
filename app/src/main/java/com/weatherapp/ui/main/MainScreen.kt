@@ -50,7 +50,8 @@ fun MainScreen(
     onOpenHourly: () -> Unit,
     onCloseHourly: () -> Unit,
     onOpenSettings: () -> Unit,
-    onDismissUpdate: () -> Unit
+    onDismissUpdate: () -> Unit,
+    onAddWidget: () -> Unit
 ) {
     val isDark = isSystemInDarkTheme()
     val tokens = WeatherDesignTokens.getTokens(displayState.weatherState, isDark)
@@ -206,7 +207,7 @@ fun MainScreen(
             }
         }
 
-        // Update banner + bottom CTA — stacked at bottom
+        // Update banner + bottom CTAs — stacked at bottom
         Column(
             modifier = Modifier
                 .align(Alignment.BottomCenter)
@@ -221,6 +222,13 @@ fun MainScreen(
                     updateInfo = updateInfo,
                     onDismiss = onDismissUpdate,
                     tokens = tokens
+                )
+            }
+            TextButton(onClick = onAddWidget) {
+                Text(
+                    text = "+ Add widget to home screen",
+                    fontSize = 13.sp,
+                    color = tokens.secondaryText
                 )
             }
             TextButton(onClick = onOpenHourly) {

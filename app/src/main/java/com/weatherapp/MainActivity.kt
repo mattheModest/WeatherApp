@@ -1,6 +1,8 @@
 package com.weatherapp
 
 import android.Manifest
+import android.appwidget.AppWidgetManager
+import android.content.ComponentName
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
@@ -21,6 +23,7 @@ import com.weatherapp.ui.main.MainScreen
 import com.weatherapp.ui.onboarding.OnboardingScreen
 import com.weatherapp.ui.settings.SettingsScreen
 import com.weatherapp.ui.theme.AdaptiveSkyTheme
+import com.weatherapp.ui.widget.WeatherWidgetReceiver
 import dagger.hilt.android.AndroidEntryPoint
 import timber.log.Timber
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -43,7 +46,7 @@ class MainActivity : ComponentActivity() {
         }
 
         setContent {
-            WeatherAppContent(mainViewModel)
+            WeatherAppContent(mainViewModel, onAddWidget = { requestPinWidget() })
         }
     }
 
@@ -57,10 +60,19 @@ class MainActivity : ComponentActivity() {
         super.onResume()
         mainViewModel.onResume()
     }
+
+    private fun requestPinWidget() {
+        val appWidgetManager = AppWidgetManager.getInstance(this)
+        val provider = ComponentName(this, WeatherWidgetReceiver::class.java)
+        if (appWidgetManager.isRequestPinAppWidgetSupported) {
+            appWidgetManager.requestPinAppWidget(provider, null, null)
+            Timber.d("MainActivity: widget pin requested")
+        }
+    }
 }
 
 @Composable
-fun WeatherAppContent(mainViewModel: MainViewModel) {
+fun WeatherAppContent(mainViewModel: MainViewModel, onAddWidget: () -> Unit) {
     val startDestination by mainViewModel.startDestination.collectAsStateWithLifecycle()
     val showHourly by mainViewModel.showHourlySheet.collectAsStateWithLifecycle()
     val displayState by mainViewModel.weatherDisplayState.collectAsStateWithLifecycle()
@@ -108,7 +120,8 @@ fun WeatherAppContent(mainViewModel: MainViewModel) {
                     onOpenHourly = { mainViewModel.openHourlyDetail() },
                     onCloseHourly = { mainViewModel.closeHourlyDetail() },
                     onOpenSettings = { navController.navigate("settings") },
-                    onDismissUpdate = { mainViewModel.dismissUpdate() }
+                    onDismissUpdate = { mainViewModel.dismissUpdate() },
+                    onAddWidget = onAddWidget
                 )
             }
             composable("settings") {
