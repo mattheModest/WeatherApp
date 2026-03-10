@@ -3,10 +3,10 @@ package com.weatherapp.ui.widget
 import android.content.Context
 import android.content.res.Configuration
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.glance.GlanceModifier
-import androidx.glance.GlanceTheme
 import androidx.glance.LocalContext
 import androidx.glance.LocalSize
 import androidx.glance.action.ActionParameters
@@ -35,7 +35,6 @@ import androidx.glance.unit.ColorProvider
 import com.weatherapp.MainActivity
 import com.weatherapp.model.WeatherState
 import com.weatherapp.model.WidgetDisplayState
-import com.weatherapp.ui.theme.WeatherColorTokens
 import com.weatherapp.ui.theme.WeatherDesignTokens
 
 @Composable
@@ -46,173 +45,150 @@ fun WeatherWidgetContent(state: WidgetDisplayState) {
     val isDark = isSystemInDarkTheme(context)
     val tokens = WeatherDesignTokens.getTokens(state.weatherState, isDark)
 
-    GlanceTheme {
-        // Root Column: cardBackground fills whole card (bottom zone color).
-        // Top zone Row and divider Row each paint their own backgrounds on top.
-        // minSdk=34 so the system applies rounded corners — no cornerRadius() needed here.
-        Column(
+    val clickAction = actionStartActivity<MainActivity>(
+        actionParametersOf(ActionParameters.Key<Boolean>("open_hourly") to true)
+    )
+
+    if (isMinimal) {
+        // ── Minimal: single row, full widget = top zone color ──
+        Row(
             modifier = GlanceModifier
                 .fillMaxSize()
-                .background(ColorProvider(tokens.cardBackground))
-                .clickable(
-                    actionStartActivity<MainActivity>(
-                        actionParametersOf(ActionParameters.Key<Boolean>("open_hourly") to true)
-                    )
-                )
-                .semantics { contentDescription = buildContentDescription(state) }
+                .background(tokens.topZoneBackground)
+                .clickable(clickAction)
+                .semantics { contentDescription = state.verdict }
+                .padding(horizontal = 12.dp, vertical = 8.dp),
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            if (isMinimal) {
-                MinimalWidgetLayout(state = state, tokens = tokens)
-            } else {
-                FullWidgetLayout(state = state, tokens = tokens)
-            }
-        }
-    }
-}
-
-@Composable
-private fun MinimalWidgetLayout(
-    state: WidgetDisplayState,
-    tokens: WeatherColorTokens
-) {
-    Row(
-        modifier = GlanceModifier
-            .fillMaxSize()
-            .background(ColorProvider(tokens.topZoneBackground))
-            .padding(horizontal = 12.dp, vertical = 8.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Text(
-            text = weatherEmoji(state.weatherState),
-            style = TextStyle(fontSize = 18.sp)
-        )
-        Spacer(modifier = GlanceModifier.width(8.dp))
-        Text(
-            text = state.verdict,
-            style = TextStyle(
-                color = ColorProvider(tokens.verdictText),
-                fontSize = 14.sp,
-                fontWeight = FontWeight.Bold
-            ),
-            maxLines = 2
-        )
-    }
-}
-
-// Emits three direct children into the parent Column:
-//   1. Top zone Row  (topZoneBackground)
-//   2. Divider Row   (accentColor, 2dp)
-//   3. Bottom zone Column (no background — parent cardBackground shows through)
-@Composable
-private fun FullWidgetLayout(
-    state: WidgetDisplayState,
-    tokens: WeatherColorTokens
-) {
-    // ── Top zone ──
-    Row(
-        modifier = GlanceModifier
-            .fillMaxWidth()
-            .background(ColorProvider(tokens.topZoneBackground))
-            .padding(horizontal = 14.dp, vertical = 12.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Text(
-            text = weatherEmoji(state.weatherState),
-            style = TextStyle(fontSize = 26.sp)
-        )
-        Spacer(modifier = GlanceModifier.width(10.dp))
-        Column {
+            Text(
+                text = weatherEmoji(state.weatherState),
+                style = TextStyle(fontSize = 18.sp)
+            )
+            Spacer(modifier = GlanceModifier.width(8.dp))
             Text(
                 text = state.verdict,
                 style = TextStyle(
                     color = ColorProvider(tokens.verdictText),
-                    fontSize = 15.sp,
+                    fontSize = 14.sp,
                     fontWeight = FontWeight.Bold
                 ),
                 maxLines = 2
             )
-            if (state.bestWindow != null) {
+        }
+        return
+    }
+
+    // ── Full layout: explicit-height top zone + divider + bottom zone ──
+    Column(
+        modifier = GlanceModifier
+            .fillMaxSize()
+            .background(tokens.cardBackground)
+            .clickable(clickAction)
+            .semantics { contentDescription = buildContentDescription(state) }
+    ) {
+        // TOP ZONE — explicit height so it doesn't consume the full Column
+        Row(
+            modifier = GlanceModifier
+                .fillMaxWidth()
+                .height(72.dp)
+                .background(tokens.topZoneBackground)
+                .padding(horizontal = 14.dp, vertical = 10.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = weatherEmoji(state.weatherState),
+                style = TextStyle(fontSize = 26.sp)
+            )
+            Spacer(modifier = GlanceModifier.width(10.dp))
+            Column {
                 Text(
-                    text = "Good window: ${state.bestWindow}",
+                    text = state.verdict,
                     style = TextStyle(
-                        color = ColorProvider(tokens.accentColor),
-                        fontSize = 11.sp
+                        color = ColorProvider(tokens.verdictText),
+                        fontSize = 15.sp,
+                        fontWeight = FontWeight.Bold
+                    ),
+                    maxLines = 2
+                )
+                if (state.bestWindow != null) {
+                    Text(
+                        text = "Good window: ${state.bestWindow}",
+                        style = TextStyle(
+                            color = ColorProvider(tokens.accentColor),
+                            fontSize = 11.sp
+                        )
+                    )
+                }
+            }
+        }
+
+        // DIVIDER — 2dp accent line
+        Row(
+            modifier = GlanceModifier
+                .fillMaxWidth()
+                .height(2.dp)
+                .background(tokens.accentColor)
+        ) {}
+
+        // BOTTOM ZONE — cardBackground shows through from root Column
+        Column(
+            modifier = GlanceModifier
+                .fillMaxWidth()
+                .padding(horizontal = 12.dp, vertical = 8.dp)
+        ) {
+            if (state.moodLine.isNotEmpty()) {
+                Text(
+                    text = state.moodLine,
+                    style = TextStyle(
+                        color = ColorProvider(tokens.secondaryText),
+                        fontSize = 11.sp,
+                        fontStyle = FontStyle.Italic
+                    ),
+                    maxLines = 1
+                )
+                Spacer(modifier = GlanceModifier.height(6.dp))
+            }
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                state.bringItems.take(2).forEachIndexed { index, item ->
+                    if (index > 0) Spacer(modifier = GlanceModifier.width(6.dp))
+                    // Chip
+                    Box(
+                        modifier = GlanceModifier
+                            .background(tokens.chipBackground)
+                            .cornerRadius(12.dp)
+                            .padding(horizontal = 8.dp, vertical = 4.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            text = item,
+                            style = TextStyle(
+                                color = ColorProvider(tokens.chipText),
+                                fontSize = 11.sp,
+                                fontWeight = FontWeight.Medium
+                            )
+                        )
+                    }
+                }
+                Spacer(modifier = GlanceModifier.width(8.dp))
+                Box(
+                    modifier = GlanceModifier
+                        .width(7.dp)
+                        .height(7.dp)
+                        .cornerRadius(4.dp)
+                        .background(tokens.accentColor)
+                ) {}
+            }
+            if (state.isStale) {
+                Spacer(modifier = GlanceModifier.height(4.dp))
+                Text(
+                    text = formatStaleness(state.lastUpdateEpoch),
+                    style = TextStyle(
+                        color = ColorProvider(tokens.secondaryText),
+                        fontSize = 10.sp
                     )
                 )
             }
         }
-    }
-
-    // ── Accent divider ──
-    Row(
-        modifier = GlanceModifier
-            .fillMaxWidth()
-            .height(2.dp)
-            .background(ColorProvider(tokens.accentColor))
-    ) {}
-
-    // ── Bottom zone (parent cardBackground shows through) ──
-    Column(
-        modifier = GlanceModifier
-            .fillMaxWidth()
-            .padding(horizontal = 12.dp, vertical = 8.dp)
-    ) {
-        if (state.moodLine.isNotEmpty()) {
-            Text(
-                text = state.moodLine,
-                style = TextStyle(
-                    color = ColorProvider(tokens.secondaryText),
-                    fontSize = 11.sp,
-                    fontStyle = FontStyle.Italic
-                ),
-                maxLines = 1
-            )
-            Spacer(modifier = GlanceModifier.height(6.dp))
-        }
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            state.bringItems.take(2).forEachIndexed { index, item ->
-                if (index > 0) Spacer(modifier = GlanceModifier.width(4.dp))
-                BringChip(text = item, tokens = tokens)
-            }
-            Spacer(modifier = GlanceModifier.width(8.dp))
-            Box(
-                modifier = GlanceModifier
-                    .width(7.dp)
-                    .height(7.dp)
-                    .cornerRadius(4.dp)
-                    .background(ColorProvider(tokens.accentColor))
-            ) {}
-        }
-        if (state.isStale) {
-            Spacer(modifier = GlanceModifier.height(4.dp))
-            Text(
-                text = formatStaleness(state.lastUpdateEpoch),
-                style = TextStyle(
-                    color = ColorProvider(tokens.secondaryText),
-                    fontSize = 10.sp
-                )
-            )
-        }
-    }
-}
-
-@Composable
-private fun BringChip(text: String, tokens: WeatherColorTokens) {
-    Box(
-        modifier = GlanceModifier
-            .background(ColorProvider(tokens.chipBackground))
-            .cornerRadius(12.dp)
-            .padding(horizontal = 8.dp, vertical = 3.dp),
-        contentAlignment = Alignment.Center
-    ) {
-        Text(
-            text = text,
-            style = TextStyle(
-                color = ColorProvider(tokens.chipText),
-                fontSize = 11.sp,
-                fontWeight = FontWeight.Medium
-            )
-        )
     }
 }
 
@@ -225,15 +201,9 @@ private fun weatherEmoji(state: WeatherState): String = when (state) {
 
 private fun buildContentDescription(state: WidgetDisplayState): String {
     val sb = StringBuilder(state.verdict)
-    if (state.bringItems.isNotEmpty()) {
-        sb.append(". Bring: ${state.bringItems.joinToString(", ")}")
-    }
-    if (state.bestWindow != null) {
-        sb.append(". Best window: ${state.bestWindow}")
-    }
-    if (state.isStale) {
-        sb.append(". Data may be outdated.")
-    }
+    if (state.bringItems.isNotEmpty()) sb.append(". Bring: ${state.bringItems.joinToString(", ")}")
+    if (state.bestWindow != null) sb.append(". Best window: ${state.bestWindow}")
+    if (state.isStale) sb.append(". Data may be outdated.")
     return sb.toString()
 }
 
