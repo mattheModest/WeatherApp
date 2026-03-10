@@ -225,7 +225,7 @@ private fun FullWidgetLayout(
         if (state.bestWindow != null) {
             Spacer(modifier = GlanceModifier.height(8.dp))
             Text(
-                text = "Best time: ${state.bestWindow}",
+                text = "Best window: ${state.bestWindow}",
                 style = TextStyle(
                     color = ColorProvider(tokens.secondaryText),
                     fontSize = 12.sp

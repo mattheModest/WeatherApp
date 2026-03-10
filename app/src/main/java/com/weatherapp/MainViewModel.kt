@@ -7,6 +7,8 @@ import androidx.datastore.preferences.core.edit
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.weatherapp.data.datastore.PreferenceKeys
+import com.weatherapp.data.update.UpdateChecker
+import com.weatherapp.data.update.UpdateInfo
 import com.weatherapp.model.WidgetDisplayState
 import com.weatherapp.ui.widget.inferWeatherStateFromVerdictPublic
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -26,8 +28,12 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    private val dataStore: DataStore<Preferences>
+    private val dataStore: DataStore<Preferences>,
+    private val updateChecker: UpdateChecker
 ) : ViewModel() {
+
+    private val _updateInfo = MutableStateFlow<UpdateInfo?>(null)
+    val updateInfo: StateFlow<UpdateInfo?> = _updateInfo.asStateFlow()
 
     private val _startDestination = MutableStateFlow<String?>(null)
     val startDestination: StateFlow<String?> = _startDestination.asStateFlow()
@@ -79,6 +85,14 @@ class MainViewModel @Inject constructor(
             _startDestination.value = if (hasCompletedOnboarding) "main" else "onboarding"
             Timber.d("MainViewModel: startDestination=${_startDestination.value}")
         }
+        viewModelScope.launch {
+            _updateInfo.value = updateChecker.checkForUpdate()
+            Timber.d("MainViewModel: updateInfo=${_updateInfo.value}")
+        }
+    }
+
+    fun dismissUpdate() {
+        _updateInfo.value = null
     }
 
     fun openHourlyDetail() {

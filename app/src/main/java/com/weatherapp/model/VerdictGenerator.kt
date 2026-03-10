@@ -10,11 +10,11 @@ class VerdictGenerator {
     fun generateVerdict(hourlyData: List<ForecastHour>, comfortOffset: Double = 0.0): VerdictResult {
         if (hourlyData.isEmpty()) {
             return VerdictResult(
-                verdictText = "Weather data loading...",
+                verdictText = "Checking the forecast...",
                 bringList = emptyList(),
                 bestWindow = null,
                 isAllClear = false,
-                moodLine = "Check back in a moment."
+                moodLine = "One moment."
             )
         }
         val bringList = evaluateBringList(hourlyData)
@@ -34,18 +34,18 @@ class VerdictGenerator {
         // Thresholds shift down for cold-acclimated users (negative offset) and
         // up for heat-acclimated users (positive offset).
         return when {
-            peakTempC >= 28 + comfortOffset -> "No jacket needed"
-            peakTempC >= 20 + comfortOffset -> "Light layers today"
-            peakTempC >= 12 + comfortOffset -> "Light jacket weather"
-            peakTempC >= 5  + comfortOffset -> "Jacket weather"
-            else                            -> "Bundle up today"
+            peakTempC >= 28 + comfortOffset -> "Nothing to grab. Warm all day."
+            peakTempC >= 20 + comfortOffset -> "Light layers, if anything."
+            peakTempC >= 12 + comfortOffset -> "Light jacket weather."
+            peakTempC >= 5  + comfortOffset -> "Jacket day. Don't skip it."
+            else                            -> "Bundle up. It's a cold one."
         }
     }
 
     fun evaluateBringList(hourlyData: List<ForecastHour>): List<String> {
         val items = mutableListOf<String>()
         val hasRain = hourlyData.any { it.precipitationProbability >= UMBRELLA_THRESHOLD }
-        if (hasRain) items.add("Bring an umbrella")
+        if (hasRain) items.add("☂ Umbrella")
         val hasSunnyAfternoon = hourlyData.any { hour ->
             val localHour = Instant.ofEpochSecond(hour.hourEpoch)
                 .atZone(ZoneId.systemDefault()).hour
@@ -53,7 +53,7 @@ class VerdictGenerator {
                 hour.precipitationProbability < 0.10 &&
                 hour.weatherCode in 0..2
         }
-        if (hasSunnyAfternoon) items.add("Sunscreen today")
+        if (hasSunnyAfternoon) items.add("☀ Sunscreen")
         return items
     }
 
@@ -91,7 +91,7 @@ class VerdictGenerator {
         return if (bestStart != null && bestEnd != null) {
             val startLabel = formatHour(bestStart)
             val endLabel = formatHour(bestEnd)
-            "Best time outside: $startLabel–$endLabel"
+            "$startLabel–$endLabel"
         } else null
     }
 
@@ -116,11 +116,11 @@ class VerdictGenerator {
         val lovelyThreshold = 20.0 + comfortOffset
         return when {
             hasStorm     -> "Stay in if you can. This one means it."
-            hasHeavyRain -> "Proper rain today. Definitely bring that umbrella."
-            hasRain      -> "A good day to stay cosy. Or embrace the drizzle."
+            hasHeavyRain -> "Proper rain today. You'll want that umbrella."
+            hasRain      -> "Good day to stay cosy — or just embrace the drizzle."
             hasWind      -> "Breezy today. Tie your hat down."
             isAllClear && peakTemp >= lovelyThreshold -> "Honestly lovely today. Eat lunch outside."
-            isAllClear   -> "A really good day. Don't forget to step out."
+            isAllClear   -> "A genuinely good day. Don't forget to step outside."
             else         -> "Grey but manageable. You've got this."
         }
     }

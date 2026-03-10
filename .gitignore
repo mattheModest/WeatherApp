@@ -12,6 +12,9 @@ local.properties
 # Android module build outputs
 app/build/
 
+# Release signing key — never commit
+app/weatherapp-release.jks
+
 # Cloudflare worker
 cloudflare-worker/node_modules/
 cloudflare-worker/.wrangler/

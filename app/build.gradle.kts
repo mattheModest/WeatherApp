@@ -1,3 +1,10 @@
+import java.util.Properties
+
+val localProps = Properties().apply {
+    val f = rootProject.file("local.properties")
+    if (f.exists()) load(f.inputStream())
+}
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
@@ -13,17 +20,27 @@ android {
         applicationId = "com.weatherapp"
         minSdk = 34
         targetSdk = 35
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = 2
+        versionName = "1.1"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
         buildConfigField("String", "CLOUDFLARE_WORKER_BASE_URL", "\"https://weatherapp-worker.siegen2265.workers.dev/\"")
     }
 
+    signingConfigs {
+        create("release") {
+            storeFile = file("weatherapp-release.jks")
+            storePassword = "Shejutirahman11x"
+            keyAlias = "weatherapp"
+            keyPassword = "Shejutirahman11x"
+        }
+    }
+
     buildTypes {
         release {
             isMinifyEnabled = true
+            signingConfig = signingConfigs.getByName("release")
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
