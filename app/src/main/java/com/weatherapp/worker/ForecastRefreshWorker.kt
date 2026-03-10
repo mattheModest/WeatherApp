@@ -15,6 +15,7 @@ import androidx.work.WorkerParameters
 import com.weatherapp.data.billing.BillingRepository
 import com.weatherapp.data.datastore.PreferenceKeys
 import com.weatherapp.data.db.dao.ForecastDao
+import com.weatherapp.data.location.LocationRepository
 import com.weatherapp.data.weather.WeatherRepository
 import com.weatherapp.model.VerdictGenerator
 import com.weatherapp.ui.widget.WeatherWidget
@@ -23,6 +24,7 @@ import dagger.assisted.AssistedInject
 import kotlinx.coroutines.flow.first
 import timber.log.Timber
 import java.io.IOException
+import java.time.LocalDate
 
 @HiltWorker
 class ForecastRefreshWorker @AssistedInject constructor(
@@ -32,7 +34,8 @@ class ForecastRefreshWorker @AssistedInject constructor(
     private val forecastDao: ForecastDao,
     private val dataStore: DataStore<Preferences>,
     private val workManager: WorkManager,
-    private val billingRepository: BillingRepository
+    private val billingRepository: BillingRepository,
+    private val locationRepository: LocationRepository
 ) : CoroutineWorker(appContext, workerParams) {
 
     private val verdictGenerator = VerdictGenerator()
@@ -74,7 +77,12 @@ class ForecastRefreshWorker @AssistedInject constructor(
                 val endOfDay     = startOfDay + 86400L
                 val todayHours   = forecastDao.queryByTimeWindow(startOfDay, endOfDay).first()
 
-                val verdictResult = verdictGenerator.generateVerdict(todayHours)
+                val location = locationRepository.getSnappedLocation()
+                val comfortOffset = if (location != null) {
+                    VerdictGenerator.computeComfortOffset(location.first, LocalDate.now().monthValue)
+                } else 0.0
+
+                val verdictResult = verdictGenerator.generateVerdict(todayHours, comfortOffset)
 
                 // Atomic write — all content keys first, KEY_LAST_UPDATE_EPOCH LAST
                 dataStore.edit { prefs ->

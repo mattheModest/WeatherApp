@@ -5,6 +5,7 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.weatherapp.data.datastore.PreferenceKeys
+import com.weatherapp.data.location.LocationRepository
 import com.weatherapp.data.weather.WeatherRepository
 import com.weatherapp.model.VerdictGenerator
 import com.weatherapp.util.UiState
@@ -16,6 +17,7 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.stateIn
 import timber.log.Timber
 import java.time.Instant
+import java.time.LocalDate
 import java.time.ZoneId
 import javax.inject.Inject
 import kotlin.math.roundToInt
@@ -23,7 +25,8 @@ import kotlin.math.roundToInt
 @HiltViewModel
 class HourlyDetailViewModel @Inject constructor(
     private val weatherRepository: WeatherRepository,
-    private val dataStore: DataStore<Preferences>
+    private val dataStore: DataStore<Preferences>,
+    private val locationRepository: LocationRepository
 ) : ViewModel() {
 
     val uiState = flow {
@@ -35,6 +38,10 @@ class HourlyDetailViewModel @Inject constructor(
 
         val prefs = dataStore.data.first()
         val tempUnit = prefs[PreferenceKeys.KEY_TEMP_UNIT] ?: "celsius"
+        val location = locationRepository.getSnappedLocation()
+        val comfortOffset = if (location != null) {
+            VerdictGenerator.computeComfortOffset(location.first, LocalDate.now().monthValue)
+        } else 0.0
 
         weatherRepository.getHourlyForecast(currentHourStart, endOfDay).collect { hours ->
             val rows = hours
@@ -50,7 +57,8 @@ class HourlyDetailViewModel @Inject constructor(
                     }
                     val verdictText = VerdictGenerator.hourlyClothingVerdict(
                         tempC = hour.temperatureC,
-                        precipProb = hour.precipitationProbability
+                        precipProb = hour.precipitationProbability,
+                        comfortOffset = comfortOffset
                     )
                     val temperatureDisplay = if (tempUnit == "fahrenheit") {
                         val fahrenheit = (hour.temperatureC * 9.0 / 5.0 + 32.0).roundToInt()

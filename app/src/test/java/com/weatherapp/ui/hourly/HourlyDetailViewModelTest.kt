@@ -4,6 +4,7 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import com.weatherapp.data.db.entity.ForecastHour
 import com.weatherapp.data.datastore.PreferenceKeys
+import com.weatherapp.data.location.LocationRepository
 import com.weatherapp.data.weather.WeatherRepository
 import com.weatherapp.util.UiState
 import io.mockk.every
@@ -24,6 +25,7 @@ class HourlyDetailViewModelTest {
     private lateinit var mockWeatherRepository: WeatherRepository
     private lateinit var mockDataStore: DataStore<Preferences>
     private lateinit var mockPrefs: Preferences
+    private lateinit var mockLocationRepository: LocationRepository
 
     @Before
     fun setUp() {
@@ -34,13 +36,14 @@ class HourlyDetailViewModelTest {
         every { mockDataStore.data } returns flowOf(mockPrefs)
 
         mockWeatherRepository = mockk()
+        mockLocationRepository = mockk(relaxed = true)
     }
 
     @Test
     fun `initial state is UiState Loading`() = runTest(UnconfinedTestDispatcher()) {
         every { mockWeatherRepository.getHourlyForecast(any(), any()) } returns flowOf(emptyList())
 
-        val viewModel = HourlyDetailViewModel(mockWeatherRepository, mockDataStore)
+        val viewModel = HourlyDetailViewModel(mockWeatherRepository, mockDataStore, mockLocationRepository)
         // The stateIn initialValue is UiState.Loading — check it immediately (before flow emits)
         // With UnconfinedTestDispatcher the flow runs eagerly but we check the declared initial
         val initial = viewModel.uiState
@@ -78,7 +81,7 @@ class HourlyDetailViewModelTest {
         every { mockWeatherRepository.getHourlyForecast(any(), any()) } returns
             flowOf(listOf(pastHour, currentHour, futureHour))
 
-        val viewModel = HourlyDetailViewModel(mockWeatherRepository, mockDataStore)
+        val viewModel = HourlyDetailViewModel(mockWeatherRepository, mockDataStore, mockLocationRepository)
 
         val state = viewModel.uiState.value
         if (state is UiState.Success) {
@@ -104,7 +107,7 @@ class HourlyDetailViewModelTest {
         )
         every { mockWeatherRepository.getHourlyForecast(any(), any()) } returns flowOf(listOf(hour))
 
-        val viewModel = HourlyDetailViewModel(mockWeatherRepository, mockDataStore)
+        val viewModel = HourlyDetailViewModel(mockWeatherRepository, mockDataStore, mockLocationRepository)
 
         val state = viewModel.uiState.value
         if (state is UiState.Success) {
@@ -130,7 +133,7 @@ class HourlyDetailViewModelTest {
         )
         every { mockWeatherRepository.getHourlyForecast(any(), any()) } returns flowOf(listOf(hour))
 
-        val viewModel = HourlyDetailViewModel(mockWeatherRepository, mockDataStore)
+        val viewModel = HourlyDetailViewModel(mockWeatherRepository, mockDataStore, mockLocationRepository)
 
         val state = viewModel.uiState.value
         if (state is UiState.Success) {
