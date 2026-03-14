@@ -50,35 +50,35 @@ class VerdictGeneratorTest {
         // All-clear overrides clothing verdict when conditions are clear; force not all-clear with rain
         val hotRainyHour = listOf(hour(10, tempC = 30.0, precipProb = 0.5))
         val r = generator.generateVerdict(hotRainyHour)
-        assertEquals("No jacket needed", r.verdictText)
+        assertEquals("Nothing to grab. Warm all day.", r.verdictText)
     }
 
     @Test
     fun `warm temperature produces light layers verdict`() {
         val hours = listOf(hour(10, tempC = 22.0, precipProb = 0.5))
         val result = generator.generateVerdict(hours)
-        assertEquals("Light layers today", result.verdictText)
+        assertEquals("Light layers, if anything.", result.verdictText)
     }
 
     @Test
     fun `mild temperature produces light jacket verdict`() {
         val hours = listOf(hour(10, tempC = 15.0, precipProb = 0.5))
         val result = generator.generateVerdict(hours)
-        assertEquals("Light jacket weather", result.verdictText)
+        assertEquals("Light jacket weather.", result.verdictText)
     }
 
     @Test
     fun `cool temperature produces jacket weather verdict`() {
         val hours = listOf(hour(10, tempC = 8.0, precipProb = 0.5))
         val result = generator.generateVerdict(hours)
-        assertEquals("Jacket weather", result.verdictText)
+        assertEquals("Jacket day. Don't skip it.", result.verdictText)
     }
 
     @Test
     fun `cold temperature produces bundle up verdict`() {
         val hours = listOf(hour(10, tempC = 2.0, precipProb = 0.5))
         val result = generator.generateVerdict(hours)
-        assertEquals("Bundle up today", result.verdictText)
+        assertEquals("Bundle up. It's a cold one.", result.verdictText)
     }
 
     // --- Umbrella threshold boundary tests ---
@@ -87,14 +87,14 @@ class VerdictGeneratorTest {
     fun `precip at exactly 40 percent triggers umbrella`() {
         val hours = listOf(hour(10, precipProb = 0.40))
         val bringList = generator.evaluateBringList(hours)
-        assertTrue(bringList.contains("Bring an umbrella"))
+        assertTrue(bringList.contains("☂ Umbrella"))
     }
 
     @Test
     fun `precip at 39 percent does not trigger umbrella`() {
         val hours = listOf(hour(10, precipProb = 0.39))
         val bringList = generator.evaluateBringList(hours)
-        assertFalse(bringList.contains("Bring an umbrella"))
+        assertFalse(bringList.contains("☂ Umbrella"))
     }
 
     // --- Bring list empty ---
@@ -119,8 +119,8 @@ class VerdictGeneratorTest {
             hour(h, precipProb = 0.05, windKmh = 10.0, weatherCode = 1)
         }
         val window = generator.calculateBestWindow(hours)
-        assertTrue("Expected non-null window", window != null)
-        assertTrue("Expected 'Best time outside:' prefix", window!!.startsWith("Best time outside:"))
+        assertNotNull("Expected non-null best window for 3 clear hours", window)
+        assertTrue("Expected time range format (contains –)", window!!.contains("–"))
     }
 
     @Test
@@ -174,14 +174,14 @@ class VerdictGeneratorTest {
     fun `heavy rain produces proper rain mood line`() {
         val hours = listOf(hour(10, precipProb = 0.75))
         val mood = generator.generateMoodLine(hours, isAllClear = false)
-        assertEquals("Proper rain today. Definitely bring that umbrella.", mood)
+        assertEquals("Proper rain today. You'll want that umbrella.", mood)
     }
 
     @Test
     fun `moderate rain produces cosy mood line`() {
         val hours = listOf(hour(10, precipProb = 0.45))
         val mood = generator.generateMoodLine(hours, isAllClear = false)
-        assertEquals("A good day to stay cosy. Or embrace the drizzle.", mood)
+        assertEquals("Good day to stay cosy — or just embrace the drizzle.", mood)
     }
 
     @Test
@@ -202,7 +202,7 @@ class VerdictGeneratorTest {
     fun `all-clear mild produces good day mood line`() {
         val hours = listOf(hour(10, tempC = 15.0))
         val mood = generator.generateMoodLine(hours, isAllClear = true)
-        assertEquals("A really good day. Don't forget to step out.", mood)
+        assertEquals("A genuinely good day. Don't forget to step outside.", mood)
     }
 
     @Test
@@ -220,6 +220,6 @@ class VerdictGeneratorTest {
         assertFalse(result.isAllClear)
         assertNull(result.bestWindow)
         assertTrue(result.bringList.isEmpty())
-        assertEquals("Weather data loading...", result.verdictText)
+        assertEquals("Checking the forecast...", result.verdictText)
     }
 }

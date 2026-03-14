@@ -86,54 +86,61 @@ fun WeatherWidgetContent(state: WidgetDisplayState) {
             .clickable(clickAction)
             .semantics { contentDescription = buildContentDescription(state) }
     ) {
-        // TOP ZONE — explicit height so it doesn't consume the full Column
-        Row(
+        // TOP ZONE — Box (FrameLayout) gives the most reliable background rendering in RemoteViews
+        Box(
             modifier = GlanceModifier
                 .fillMaxWidth()
                 .height(72.dp)
-                .background(tokens.topZoneBackground)
-                .padding(horizontal = 14.dp, vertical = 10.dp),
-            verticalAlignment = Alignment.CenterVertically
+                .background(tokens.topZoneBackground),
+            contentAlignment = Alignment.CenterStart
         ) {
-            Text(
-                text = weatherEmoji(state.weatherState),
-                style = TextStyle(fontSize = 26.sp)
-            )
-            Spacer(modifier = GlanceModifier.width(10.dp))
-            Column {
+            Row(
+                modifier = GlanceModifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 14.dp, vertical = 10.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
                 Text(
-                    text = state.verdict,
-                    style = TextStyle(
-                        color = ColorProvider(tokens.verdictText),
-                        fontSize = 15.sp,
-                        fontWeight = FontWeight.Bold
-                    ),
-                    maxLines = 2
+                    text = weatherEmoji(state.weatherState),
+                    style = TextStyle(fontSize = 26.sp)
                 )
-                if (state.bestWindow != null) {
+                Spacer(modifier = GlanceModifier.width(10.dp))
+                Column {
                     Text(
-                        text = "Good window: ${state.bestWindow}",
+                        text = state.verdict,
                         style = TextStyle(
-                            color = ColorProvider(tokens.accentColor),
-                            fontSize = 11.sp
-                        )
+                            color = ColorProvider(tokens.verdictText),
+                            fontSize = 15.sp,
+                            fontWeight = FontWeight.Bold
+                        ),
+                        maxLines = 2
                     )
+                    if (state.bestWindow != null) {
+                        Text(
+                            text = "Good window: ${state.bestWindow}",
+                            style = TextStyle(
+                                color = ColorProvider(tokens.accentColor),
+                                fontSize = 11.sp
+                            )
+                        )
+                    }
                 }
             }
         }
 
-        // DIVIDER — 2dp accent line
-        Row(
+        // DIVIDER — 2dp accent line, Box for reliable background rendering
+        Box(
             modifier = GlanceModifier
                 .fillMaxWidth()
                 .height(2.dp)
                 .background(tokens.accentColor)
         ) {}
 
-        // BOTTOM ZONE — cardBackground shows through from root Column
+        // BOTTOM ZONE — explicit cardBackground (belt-and-suspenders alongside root Column)
         Column(
             modifier = GlanceModifier
                 .fillMaxWidth()
+                .background(tokens.cardBackground)
                 .padding(horizontal = 12.dp, vertical = 8.dp)
         ) {
             if (state.moodLine.isNotEmpty()) {
