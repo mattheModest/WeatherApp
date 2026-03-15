@@ -21,7 +21,10 @@ import com.weatherapp.ui.main.MainScreen
 import com.weatherapp.ui.onboarding.OnboardingScreen
 import com.weatherapp.ui.settings.SettingsScreen
 import com.weatherapp.ui.theme.AdaptiveSkyTheme
+import androidx.lifecycle.lifecycleScope
+import com.weatherapp.ui.widget.WeatherWidget
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import timber.log.Timber
 import androidx.activity.compose.rememberLauncherForActivityResult
 
@@ -52,6 +55,7 @@ class MainActivity : ComponentActivity() {
     override fun onResume() {
         super.onResume()
         mainViewModel.onResume()
+        lifecycleScope.launch { WeatherWidget.update(this@MainActivity) }
     }
 
     companion object {

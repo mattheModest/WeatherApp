@@ -9,7 +9,23 @@ import kotlinx.coroutines.flow.first
 
 suspend fun DataStore<Preferences>.readWidgetDisplayState(): WidgetDisplayState {
     val prefs = data.first()
-    val verdictText = prefs[PreferenceKeys.KEY_WIDGET_VERDICT] ?: ""
+
+    // Pick randomly from candidates pool so widget rotates on each re-render.
+    // Falls back to the single stored string if candidates aren't populated yet.
+    val verdictCandidates = prefs[PreferenceKeys.KEY_VERDICT_CANDIDATES]
+        ?.split("|")?.filter { it.isNotEmpty() } ?: emptyList()
+    val verdictText = if (verdictCandidates.isNotEmpty())
+        verdictCandidates.random()
+    else
+        prefs[PreferenceKeys.KEY_WIDGET_VERDICT] ?: ""
+
+    val moodCandidates = prefs[PreferenceKeys.KEY_MOOD_CANDIDATES]
+        ?.split("|")?.filter { it.isNotEmpty() } ?: emptyList()
+    val moodLine = if (moodCandidates.isNotEmpty())
+        moodCandidates.random()
+    else
+        prefs[PreferenceKeys.KEY_MOOD_LINE] ?: ""
+
     val bringListStr = prefs[PreferenceKeys.KEY_BRING_LIST] ?: ""
     val stalenessFlag = prefs[PreferenceKeys.KEY_STALENESS_FLAG] ?: false
     val lastUpdateEpoch = prefs[PreferenceKeys.KEY_LAST_UPDATE_EPOCH] ?: 0L
@@ -25,7 +41,7 @@ suspend fun DataStore<Preferences>.readWidgetDisplayState(): WidgetDisplayState 
         bringItems     = bringListStr.split("|").filter { it.isNotEmpty() },
         bestWindow     = prefs[PreferenceKeys.KEY_BEST_WINDOW]?.takeIf { it.isNotEmpty() },
         isAllClear     = isAllClear,
-        moodLine       = prefs[PreferenceKeys.KEY_MOOD_LINE] ?: "",
+        moodLine       = moodLine,
         lastUpdateEpoch = lastUpdateEpoch,
         isStale        = isStale,
         weatherState   = weatherState,
