@@ -22,4 +22,6 @@ object PreferenceKeys {
     val KEY_NOTIFICATIONS_PERMISSION_REQUESTED = booleanPreferencesKey("notifications_permission_requested")
     val KEY_NOTIFICATIONS_ENABLED = booleanPreferencesKey("notifications_enabled")
     val KEY_CURRENT_TEMP_C = floatPreferencesKey("current_temp_c")
+    val KEY_VERDICT_CANDIDATES = stringPreferencesKey("verdict_candidates")
+    val KEY_MOOD_CANDIDATES = stringPreferencesKey("mood_candidates")
 }

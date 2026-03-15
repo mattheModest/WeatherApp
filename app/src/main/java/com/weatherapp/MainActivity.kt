@@ -63,7 +63,7 @@ class MainActivity : ComponentActivity() {
 fun WeatherAppContent(mainViewModel: MainViewModel) {
     val startDestination by mainViewModel.startDestination.collectAsStateWithLifecycle()
     val showHourly by mainViewModel.showHourlySheet.collectAsStateWithLifecycle()
-    val displayState by mainViewModel.weatherDisplayState.collectAsStateWithLifecycle()
+    val displayState by mainViewModel.displayState.collectAsStateWithLifecycle()
     val tempUnit by mainViewModel.tempUnit.collectAsStateWithLifecycle()
     val updateInfo by mainViewModel.updateInfo.collectAsStateWithLifecycle()
     val navController = rememberNavController()

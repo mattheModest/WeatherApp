@@ -19,6 +19,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
@@ -70,6 +71,20 @@ class MainViewModel @Inject constructor(
         initialValue = WidgetDisplayState.EMPTY
     )
 
+    private val _pickedVerdict = MutableStateFlow("")
+    private val _pickedMood = MutableStateFlow("")
+
+    /** Use this in the UI — verdict and mood line are re-picked randomly on every onResume(). */
+    val displayState: StateFlow<WidgetDisplayState> = combine(
+        weatherDisplayState, _pickedVerdict, _pickedMood
+    ) { state, verdict, mood ->
+        if (verdict.isNotEmpty()) state.copy(verdict = verdict, moodLine = mood) else state
+    }.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5_000),
+        initialValue = WidgetDisplayState.EMPTY
+    )
+
     val tempUnit: StateFlow<String> = dataStore.data.map { prefs ->
         prefs[PreferenceKeys.KEY_TEMP_UNIT] ?: "celsius"
     }.stateIn(
@@ -114,6 +129,15 @@ class MainViewModel @Inject constructor(
     fun onResume() {
         viewModelScope.launch {
             val prefs = dataStore.data.first()
+
+            val verdicts = prefs[PreferenceKeys.KEY_VERDICT_CANDIDATES]
+                ?.split("|")?.filter { it.isNotEmpty() } ?: emptyList()
+            if (verdicts.isNotEmpty()) _pickedVerdict.value = verdicts.random()
+
+            val moods = prefs[PreferenceKeys.KEY_MOOD_CANDIDATES]
+                ?.split("|")?.filter { it.isNotEmpty() } ?: emptyList()
+            if (moods.isNotEmpty()) _pickedMood.value = moods.random()
+
             val shouldRequest = prefs[PreferenceKeys.KEY_SHOULD_REQUEST_NOTIFICATIONS]
             if (shouldRequest == true) {
                 dataStore.edit { it[PreferenceKeys.KEY_SHOULD_REQUEST_NOTIFICATIONS] = false }

@@ -166,6 +166,83 @@ class VerdictGenerator {
         }
     }
 
+    /** Returns all candidate strings for the current condition+zone — no picking, used by the UI to rotate on each resume. */
+    fun generateVerdictCandidates(
+        hourlyData: List<ForecastHour>,
+        comfortOffset: Double = 0.0,
+        climateZone: ClimateZone = ClimateZone.TEMPERATE
+    ): List<String> {
+        if (hourlyData.isEmpty()) return listOf("Checking the forecast...")
+        val condition = detectCondition(hourlyData)
+        val bringList = evaluateBringList(hourlyData)
+        val bestWindow = calculateBestWindow(hourlyData)
+        val isAllClear = bringList.isEmpty() && bestWindow != null &&
+            condition !in setOf(
+                WeatherCondition.STORM, WeatherCondition.HEAVY_RAIN,
+                WeatherCondition.SNOW, WeatherCondition.VERY_WINDY
+            )
+        return when (condition) {
+            WeatherCondition.STORM      -> getCandidates(Pools.stormVerdict, climateZone)
+            WeatherCondition.HEAVY_RAIN -> getCandidates(Pools.heavyRainVerdict, climateZone)
+            WeatherCondition.SNOW       -> getCandidates(Pools.snowVerdict, climateZone)
+            WeatherCondition.RAIN       -> getCandidates(Pools.rainVerdict, climateZone)
+            WeatherCondition.DRIZZLE    -> getCandidates(Pools.drizzleVerdict, climateZone)
+            WeatherCondition.VERY_WINDY -> getCandidates(Pools.veryWindyVerdict, climateZone)
+            WeatherCondition.WINDY      -> getCandidates(Pools.windyVerdict, climateZone)
+            else -> if (isAllClear) getCandidates(Pools.allClearVerdict, climateZone)
+                    else getClothingCandidates(hourlyData, comfortOffset, climateZone)
+        }
+    }
+
+    /** Returns all candidate mood line strings for the current condition+zone. */
+    fun generateMoodCandidates(
+        hourlyData: List<ForecastHour>,
+        isAllClear: Boolean,
+        comfortOffset: Double = 0.0,
+        climateZone: ClimateZone = ClimateZone.TEMPERATE
+    ): List<String> {
+        if (hourlyData.isEmpty()) return listOf("One moment.")
+        val condition = detectCondition(hourlyData)
+        val peakTemp = hourlyData.maxOf { it.temperatureC }
+        val lovelyThreshold = 20.0 + comfortOffset
+        return when (condition) {
+            WeatherCondition.STORM                   -> getCandidates(Pools.stormMood, climateZone)
+            WeatherCondition.HEAVY_RAIN              -> getCandidates(Pools.heavyRainMood, climateZone)
+            WeatherCondition.RAIN                    -> getCandidates(Pools.rainMood, climateZone)
+            WeatherCondition.DRIZZLE                 -> getCandidates(Pools.drizzleMood, climateZone)
+            WeatherCondition.SNOW                    -> getCandidates(Pools.snowMood, climateZone)
+            WeatherCondition.VERY_WINDY,
+            WeatherCondition.WINDY                   -> getCandidates(Pools.windMood, climateZone)
+            WeatherCondition.BREEZY                  -> if (isAllClear && peakTemp >= lovelyThreshold)
+                                                            getCandidates(Pools.allClearWarmMood, climateZone)
+                                                        else getCandidates(Pools.breezeMood, climateZone)
+            else -> when {
+                isAllClear && peakTemp >= lovelyThreshold -> getCandidates(Pools.allClearWarmMood, climateZone)
+                isAllClear                                -> getCandidates(Pools.allClearNeutralMood, climateZone)
+                else                                      -> getCandidates(Pools.greyMood, climateZone)
+            }
+        }
+    }
+
+    private fun getCandidates(pool: ZonedPool, zone: ClimateZone): List<String> =
+        pool[zone] ?: pool[ClimateZone.TEMPERATE]!!
+
+    private fun getClothingCandidates(
+        hourlyData: List<ForecastHour>,
+        comfortOffset: Double,
+        zone: ClimateZone
+    ): List<String> {
+        val peakTempC = hourlyData.maxOf { it.temperatureC }
+        val pool = when {
+            peakTempC >= 28 + comfortOffset -> Pools.hotVerdict
+            peakTempC >= 20 + comfortOffset -> Pools.warmVerdict
+            peakTempC >= 12 + comfortOffset -> Pools.lightJacketVerdict
+            peakTempC >= 5  + comfortOffset -> Pools.jacketVerdict
+            else                            -> Pools.bundleUpVerdict
+        }
+        return getCandidates(pool, zone)
+    }
+
     /** Public overload kept for test compatibility — climateZone defaults to TEMPERATE. */
     fun generateMoodLine(
         hourlyData: List<ForecastHour>,

@@ -86,18 +86,22 @@ class ForecastRefreshWorker @AssistedInject constructor(
                 } else com.weatherapp.model.ClimateZone.TEMPERATE
 
                 val verdictResult = verdictGenerator.generateVerdict(todayHours, comfortOffset, climateZone)
+                val verdictCandidates = verdictGenerator.generateVerdictCandidates(todayHours, comfortOffset, climateZone)
+                val moodCandidates = verdictGenerator.generateMoodCandidates(todayHours, verdictResult.isAllClear, comfortOffset, climateZone)
 
                 val nowSec = System.currentTimeMillis() / 1000L
                 val currentTempC = todayHours.minByOrNull { kotlin.math.abs(it.hourEpoch - nowSec) }?.temperatureC?.toFloat()
 
                 // Atomic write — all content keys first, KEY_LAST_UPDATE_EPOCH LAST
                 dataStore.edit { prefs ->
-                    prefs[PreferenceKeys.KEY_WIDGET_VERDICT]  = verdictResult.verdictText
-                    prefs[PreferenceKeys.KEY_BRING_LIST]      = verdictResult.bringList.joinToString("|")
-                    prefs[PreferenceKeys.KEY_BEST_WINDOW]     = verdictResult.bestWindow ?: ""
-                    prefs[PreferenceKeys.KEY_ALL_CLEAR]       = verdictResult.isAllClear
-                    prefs[PreferenceKeys.KEY_MOOD_LINE]       = verdictResult.moodLine
-                    prefs[PreferenceKeys.KEY_STALENESS_FLAG]  = false
+                    prefs[PreferenceKeys.KEY_WIDGET_VERDICT]       = verdictResult.verdictText
+                    prefs[PreferenceKeys.KEY_BRING_LIST]           = verdictResult.bringList.joinToString("|")
+                    prefs[PreferenceKeys.KEY_BEST_WINDOW]          = verdictResult.bestWindow ?: ""
+                    prefs[PreferenceKeys.KEY_ALL_CLEAR]            = verdictResult.isAllClear
+                    prefs[PreferenceKeys.KEY_MOOD_LINE]            = verdictResult.moodLine
+                    prefs[PreferenceKeys.KEY_VERDICT_CANDIDATES]   = verdictCandidates.joinToString("|")
+                    prefs[PreferenceKeys.KEY_MOOD_CANDIDATES]      = moodCandidates.joinToString("|")
+                    prefs[PreferenceKeys.KEY_STALENESS_FLAG]       = false
                     if (currentTempC != null) prefs[PreferenceKeys.KEY_CURRENT_TEMP_C] = currentTempC
                     // LAST — widget reads this to detect fresh data
                     prefs[PreferenceKeys.KEY_LAST_UPDATE_EPOCH] = System.currentTimeMillis() / 1000L
