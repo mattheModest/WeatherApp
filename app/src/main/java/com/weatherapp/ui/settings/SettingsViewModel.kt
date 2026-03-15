@@ -10,6 +10,7 @@ import androidx.lifecycle.viewModelScope
 import com.weatherapp.data.billing.BillingRepository
 import com.weatherapp.data.datastore.PreferenceKeys
 import com.weatherapp.model.PersonalityCore
+import com.weatherapp.model.PremiumActivation
 import com.weatherapp.model.VisualTheme
 import com.weatherapp.model.personalityCoreFromString
 import com.weatherapp.model.visualThemeFromString
@@ -17,8 +18,10 @@ import com.weatherapp.ui.widget.WeatherWidget
 import com.weatherapp.util.UiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
@@ -33,6 +36,8 @@ class SettingsViewModel @Inject constructor(
     @ApplicationContext private val appContext: Context
 ) : ViewModel() {
 
+    private val _activationResult = MutableStateFlow(ActivationResult.NONE)
+
     val uiState = dataStore.data
         .map { prefs ->
             val tempUnitStr = prefs[PreferenceKeys.KEY_TEMP_UNIT] ?: "celsius"
@@ -43,18 +48,18 @@ class SettingsViewModel @Inject constructor(
             val shareText = "\"$moodLine\"\n\nWeatherApp — daily weather in plain language"
             val personality = personalityCoreFromString(prefs[PreferenceKeys.KEY_PERSONALITY_CORE])
             val visualTheme = visualThemeFromString(prefs[PreferenceKeys.KEY_VISUAL_THEME])
-
-            UiState.Success(
-                SettingsState(
-                    tempUnit = tempUnit,
-                    notificationsEnabled = notificationsEnabled,
-                    isPremium = isPremium,
-                    moodLine = moodLine,
-                    shareText = shareText,
-                    personality = personality,
-                    visualTheme = visualTheme
-                )
-            ) as UiState<SettingsState>
+            SettingsState(
+                tempUnit = tempUnit,
+                notificationsEnabled = notificationsEnabled,
+                isPremium = isPremium,
+                moodLine = moodLine,
+                shareText = shareText,
+                personality = personality,
+                visualTheme = visualTheme
+            )
+        }
+        .combine(_activationResult) { state, result ->
+            UiState.Success(state.copy(activationResult = result)) as UiState<SettingsState>
         }
         .catch { e ->
             Timber.e(e, "SettingsViewModel: error loading settings")
@@ -106,6 +111,23 @@ class SettingsViewModel @Inject constructor(
             WeatherWidget.update(appContext)
             Timber.d("SettingsViewModel: visual theme changed to ${theme.name}")
         }
+    }
+
+    fun tryActivationCode(code: String) {
+        viewModelScope.launch {
+            if (PremiumActivation.isValidCode(code)) {
+                dataStore.edit { prefs -> prefs[PreferenceKeys.KEY_IS_PREMIUM] = true }
+                _activationResult.value = ActivationResult.SUCCESS
+                Timber.d("SettingsViewModel: premium activated via code")
+            } else {
+                _activationResult.value = ActivationResult.INVALID
+                Timber.d("SettingsViewModel: invalid activation code entered")
+            }
+        }
+    }
+
+    fun clearActivationResult() {
+        _activationResult.value = ActivationResult.NONE
     }
 
     fun onUpgradeTapped(activity: Activity) {

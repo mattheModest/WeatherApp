@@ -8,6 +8,8 @@ enum class TempUnit {
     FAHRENHEIT
 }
 
+enum class ActivationResult { NONE, SUCCESS, INVALID }
+
 data class SettingsState(
     val tempUnit: TempUnit,
     val notificationsEnabled: Boolean,
@@ -15,5 +17,6 @@ data class SettingsState(
     val moodLine: String,
     val shareText: String,
     val personality: PersonalityCore = PersonalityCore.FRANK,
-    val visualTheme: VisualTheme = VisualTheme.DEFAULT
+    val visualTheme: VisualTheme = VisualTheme.DEFAULT,
+    val activationResult: ActivationResult = ActivationResult.NONE
 )

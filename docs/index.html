@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>WeatherApp — Weather handled. Go live your day.</title>
-  <meta name="description" content="WeatherApp reads your calendar, checks the forecast, and tells you exactly what you need to know. No data to interpret. One glance, done." />
+  <meta name="description" content="WeatherApp checks the forecast and tells you exactly what to wear and when to go outside. No data to interpret. One glance, done." />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -451,8 +451,8 @@
   <h1>Weather handled.<br /><span>Go live your day.</span></h1>
 
   <p class="subtitle">
-    WeatherApp reads your calendar, checks the forecast, and tells you exactly what you need to know.
-    No raw data. No interpretation. One glance — done.
+    WeatherApp tells you what to wear, what to bring, and when to go outside.
+    No numbers to decode. No guessing. One glance — done.
   </p>
 
   <div class="cta-group">
@@ -464,25 +464,63 @@
     </a>
   </div>
 
-  <p class="req-note">Requires Android 14+ · Sideload install · Free tier works without any account</p>
+  <p class="req-note">Requires Android 14+ · Sideload install · No account required</p>
 
   <!-- Phone mockups -->
   <div class="mockups">
 
-    <!-- Widget — all clear -->
+    <!-- Widget — rainy day -->
     <div class="phone">
       <div class="phone-notch"></div>
       <div class="widget">
-        <div class="widget-label">WeatherApp</div>
-        <div class="widget-verdict">Honestly lovely today.<br/>Eat lunch outside.</div>
-        <div class="widget-chip">✓ You're clear</div>
+        <div class="widget-label">WeatherApp · widget</div>
+        <div class="widget-verdict">🌧 Good day to stay cosy, or just embrace the drizzle.</div>
+        <div style="display:flex;gap:6px;margin:8px 0;">
+          <div class="widget-chip">☂ Umbrella</div>
+          <div class="widget-chip">👢 Waterproof</div>
+        </div>
         <div class="widget-divider"></div>
-        <div class="widget-detail">Best outside: 11am – 2pm</div>
+        <div class="widget-detail">Good window: none today</div>
       </div>
     </div>
 
-    <!-- Widget — calendar-aware (center, raised) -->
+    <!-- Main app screen (center, raised) -->
     <div class="phone center">
+      <div class="phone-notch"></div>
+      <!-- Top zone: verdict -->
+      <div style="background:#1a2535;border-radius:16px 16px 0 0;padding:18px 16px 16px;">
+        <div style="display:flex;align-items:center;gap:12px;">
+          <span style="font-size:32px;">☀️</span>
+          <div>
+            <div style="font-size:17px;font-weight:800;color:#e8eaf6;line-height:1.2;">Light jacket weather.</div>
+            <div style="font-size:11px;color:#6c8fff;margin-top:4px;">Good window: 10am–2pm</div>
+          </div>
+        </div>
+      </div>
+      <!-- Divider -->
+      <div style="height:1px;background:rgba(255,255,255,0.06);"></div>
+      <!-- Bottom zone -->
+      <div style="background:#1a1d27;border-radius:0 0 16px 16px;padding:14px 16px;">
+        <div style="font-size:12px;font-style:italic;color:#8891b2;margin-bottom:10px;">Honestly lovely today. Eat lunch outside.</div>
+        <div style="display:flex;gap:8px;align-items:center;">
+          <div class="widget-chip">☀ Sunscreen</div>
+          <div style="width:7px;height:7px;border-radius:50%;background:#6c8fff;margin-left:4px;"></div>
+        </div>
+      </div>
+      <!-- Forecast card -->
+      <div class="calendar-card" style="margin-top:10px;">
+        <div class="cal-label">Today's forecast</div>
+        <div style="display:flex;gap:5px;margin-top:6px;">
+          <div class="hourly-cell"><div class="hourly-time">9am</div><div class="hourly-temp">☀️</div></div>
+          <div class="hourly-cell best"><div class="hourly-time">11am</div><div class="hourly-temp">☀️</div></div>
+          <div class="hourly-cell best"><div class="hourly-time">1pm</div><div class="hourly-temp">☀️</div></div>
+          <div class="hourly-cell"><div class="hourly-time">4pm</div><div class="hourly-temp">⛅</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Premium: calendar-aware widget -->
+    <div class="phone">
       <div class="phone-notch"></div>
       <div class="widget">
         <div class="widget-label">WeatherApp · Premium</div>
@@ -493,35 +531,7 @@
       </div>
       <div class="calendar-card">
         <div class="cal-label">Saturday BBQ · 3pm</div>
-        <div class="cal-verdict">Sunny, 72°F · No wind · Perfect</div>
-      </div>
-    </div>
-
-    <!-- Hourly detail screen -->
-    <div class="phone">
-      <div class="phone-notch"></div>
-      <div class="screen-bar">
-        <div class="screen-title">Today's Forecast</div>
-        <div class="icon-btn"></div>
-      </div>
-      <div class="hourly-row">
-        <div class="hourly-cell"><div class="hourly-time">9am</div><div class="hourly-temp">🌤</div></div>
-        <div class="hourly-cell"><div class="hourly-time">10am</div><div class="hourly-temp">☀️</div></div>
-        <div class="hourly-cell best"><div class="hourly-time">11am</div><div class="hourly-temp">☀️</div></div>
-        <div class="hourly-cell best"><div class="hourly-time">12pm</div><div class="hourly-temp">☀️</div></div>
-        <div class="hourly-cell"><div class="hourly-time">1pm</div><div class="hourly-temp">⛅</div></div>
-      </div>
-      <div class="hourly-row">
-        <div class="hourly-cell"><div class="hourly-time">9am</div><div class="hourly-temp">64°</div></div>
-        <div class="hourly-cell"><div class="hourly-time">10am</div><div class="hourly-temp">68°</div></div>
-        <div class="hourly-cell best"><div class="hourly-time">11am</div><div class="hourly-temp">72°</div></div>
-        <div class="hourly-cell best"><div class="hourly-time">12pm</div><div class="hourly-temp">74°</div></div>
-        <div class="hourly-cell"><div class="hourly-time">1pm</div><div class="hourly-temp">71°</div></div>
-      </div>
-      <div class="widget" style="margin-top:10px;">
-        <div class="widget-label">Verdict</div>
-        <div class="widget-verdict" style="font-size:12px;">Light jacket weather<br/>Best window: 11am – 2pm</div>
-        <div class="widget-chip amber">☂ Bring umbrella after 4pm</div>
+        <div class="cal-verdict">Sunny · No wind · Perfect</div>
       </div>
     </div>
 
@@ -550,7 +560,7 @@
       <span class="feature-icon">📋</span>
       <div class="feature-title">Contextual bring list</div>
       <div class="feature-desc">
-        "Bring your umbrella" appears only when precipitation probability crosses a threshold worth acting on. Silence means you're good.
+        ☂ Umbrella and ☀ Sunscreen appear only when the forecast actually warrants them. Silence means you're good.
       </div>
       <span class="feature-tag tag-free">Free</span>
     </div>
@@ -559,16 +569,25 @@
       <span class="feature-icon">🕐</span>
       <div class="feature-title">Best outdoor window</div>
       <div class="feature-desc">
-        Hourly forecast distilled to a single time range. Tap to see the full breakdown if you want it.
+        Hourly forecast distilled to a single time range. Tap the widget to see the full breakdown.
       </div>
       <span class="feature-tag tag-free">Free</span>
     </div>
 
     <div class="feature-card">
-      <span class="feature-icon">✅</span>
-      <div class="feature-title">Confirmation-first alerts</div>
+      <span class="feature-icon">🎭</span>
+      <div class="feature-title">Three personalities</div>
       <div class="feature-desc">
-        Good news is confirmed proactively. The app only escalates when something <em>changes</em> after an earlier all-clear. No crying wolf.
+        <strong>Frank</strong> keeps it direct. <strong>Kelvin</strong> explains the science. <strong>Graves</strong> finds the dark side of every forecast. Pick your narrator.
+      </div>
+      <span class="feature-tag tag-free">Free</span>
+    </div>
+
+    <div class="feature-card">
+      <span class="feature-icon">🎨</span>
+      <div class="feature-title">7 visual themes</div>
+      <div class="feature-desc">
+        Default, Sun-Stained Beige, Ink &amp; Editorial, Utility Chic, Chalk &amp; Slate, Neo-Brutalism, 8-Bit Handheld. App and widget update together.
       </div>
       <span class="feature-tag tag-free">Free</span>
     </div>
@@ -586,7 +605,7 @@
       <span class="feature-icon">⚡</span>
       <div class="feature-title">Change-triggered alerts</div>
       <div class="feature-desc">
-        Confirmed your Saturday run was clear on Thursday? Get an alert only if the forecast materially changes. Not before.
+        Confirmed your Saturday run was clear on Thursday? Get notified only if the forecast materially changes. Not before.
       </div>
       <span class="feature-tag tag-premium">Premium</span>
     </div>
@@ -609,8 +628,8 @@
     </div>
     <div class="step">
       <div class="step-num">2</div>
-      <div class="step-title">Grant permissions</div>
-      <div class="step-desc">Location (required). Calendar is optional — unlocks premium intelligence. Both are granted once and never asked again.</div>
+      <div class="step-title">Grant location</div>
+      <div class="step-desc">One permission, one time. The app uses your location to fetch a local forecast. Nothing else is collected.</div>
     </div>
     <div class="step">
       <div class="step-num">3</div>
@@ -658,6 +677,11 @@
       <span>⚠️</span>
       <span>This APK is signed with a debug key. Android will warn you it's from an unknown source — that's expected. The app contains no analytics, no ads, and no data collection beyond what's needed to show you the weather.</span>
     </div>
+
+    <br />
+    <p style="font-size:13px; color:var(--muted); margin-top:8px;">
+      Have an activation code? Enter it in Settings → Premium to unlock instantly — no Play Store required.
+    </p>
 
     <br /><br />
     <a href="https://github.com/matthemodest/WeatherApp/releases/latest" class="btn-primary" style="font-size:16px; padding:16px 36px;">
