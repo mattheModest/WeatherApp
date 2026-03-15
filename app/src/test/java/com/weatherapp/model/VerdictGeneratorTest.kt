@@ -185,7 +185,7 @@ class VerdictGeneratorTest {
         // WMO 61 = slight rain
         val hours = listOf(hour(10, weatherCode = 61))
         val mood = generator.generateMoodLine(hours, isAllClear = false)
-        assertEquals("Good day to stay cosy — or just embrace the drizzle.", mood)
+        assertEquals("Good day to stay cosy, or just embrace the drizzle.", mood)
     }
 
     @Test

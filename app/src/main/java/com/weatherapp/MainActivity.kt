@@ -70,6 +70,7 @@ fun WeatherAppContent(mainViewModel: MainViewModel) {
     val displayState by mainViewModel.displayState.collectAsStateWithLifecycle()
     val tempUnit by mainViewModel.tempUnit.collectAsStateWithLifecycle()
     val updateInfo by mainViewModel.updateInfo.collectAsStateWithLifecycle()
+    val visualTheme by mainViewModel.visualTheme.collectAsStateWithLifecycle()
     val navController = rememberNavController()
 
     val notificationPermissionLauncher = rememberLauncherForActivityResult(RequestPermission()) { granted ->
@@ -109,6 +110,7 @@ fun WeatherAppContent(mainViewModel: MainViewModel) {
                     tempUnit = tempUnit,
                     showHourlySheet = showHourly,
                     updateInfo = updateInfo,
+                    visualTheme = visualTheme,
                     onOpenHourly = { mainViewModel.openHourlyDetail() },
                     onCloseHourly = { mainViewModel.closeHourlyDetail() },
                     onOpenSettings = { navController.navigate("settings") },

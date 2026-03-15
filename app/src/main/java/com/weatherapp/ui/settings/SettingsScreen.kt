@@ -37,6 +37,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.weatherapp.model.PersonalityCore
+import com.weatherapp.model.VisualTheme
 import com.weatherapp.util.UiState
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -90,6 +91,7 @@ fun SettingsScreen(
                         onTempUnitToggled = { viewModel.onTempUnitToggled() },
                         onNotificationsToggled = { viewModel.onNotificationsToggled() },
                         onPersonalitySelected = { viewModel.onPersonalitySelected(it) },
+                        onThemeSelected = { viewModel.onThemeSelected(it) },
                         onNavigateToPremium = onNavigateToPremium,
                         onUpgradeTapped = { viewModel.onUpgradeTapped(context as Activity) },
                         onShareMoodCard = {
@@ -115,6 +117,7 @@ private fun SettingsContent(
     onTempUnitToggled: () -> Unit,
     onNotificationsToggled: () -> Unit,
     onPersonalitySelected: (PersonalityCore) -> Unit,
+    onThemeSelected: (VisualTheme) -> Unit,
     onNavigateToPremium: () -> Unit,
     onUpgradeTapped: () -> Unit,
     onShareMoodCard: () -> Unit
@@ -176,6 +179,23 @@ private fun SettingsContent(
                 personality = p,
                 isSelected = state.personality == p,
                 onClick = { onPersonalitySelected(p) }
+            )
+            Spacer(modifier = Modifier.height(6.dp))
+        }
+
+        // Visual theme selector
+        Spacer(modifier = Modifier.height(12.dp))
+        Text(
+            text = "Visual Theme",
+            style = MaterialTheme.typography.titleSmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            modifier = Modifier.padding(bottom = 6.dp)
+        )
+        VisualTheme.entries.forEach { theme ->
+            ThemeCard(
+                theme = theme,
+                isSelected = state.visualTheme == theme,
+                onClick = { onThemeSelected(theme) }
             )
             Spacer(modifier = Modifier.height(6.dp))
         }
@@ -247,6 +267,48 @@ private fun SettingsContent(
 }
 
 @Composable
+private fun ThemeCard(
+    theme: VisualTheme,
+    isSelected: Boolean,
+    onClick: () -> Unit
+) {
+    val containerColor = if (isSelected)
+        MaterialTheme.colorScheme.primaryContainer
+    else
+        MaterialTheme.colorScheme.surfaceVariant
+
+    val contentColor = if (isSelected)
+        MaterialTheme.colorScheme.onPrimaryContainer
+    else
+        MaterialTheme.colorScheme.onSurfaceVariant
+
+    val border = if (isSelected)
+        BorderStroke(1.5.dp, MaterialTheme.colorScheme.primary)
+    else
+        null
+
+    Card(
+        onClick = onClick,
+        modifier = Modifier.fillMaxWidth(),
+        colors = CardDefaults.cardColors(containerColor = containerColor),
+        border = border
+    ) {
+        Column(modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp)) {
+            Text(
+                text = theme.displayName,
+                style = MaterialTheme.typography.titleSmall,
+                color = contentColor
+            )
+            Text(
+                text = theme.tagline,
+                fontSize = 13.sp,
+                color = contentColor.copy(alpha = 0.75f)
+            )
+        }
+    }
+}
+
+@Composable
 private fun PersonalityCard(
     personality: PersonalityCore,
     isSelected: Boolean,
@@ -283,6 +345,13 @@ private fun PersonalityCard(
                 text = personality.tagline,
                 fontSize = 13.sp,
                 color = contentColor.copy(alpha = 0.75f)
+            )
+            Spacer(modifier = Modifier.height(6.dp))
+            Text(
+                text = personality.sampleVerdict,
+                fontSize = 13.sp,
+                fontStyle = androidx.compose.ui.text.font.FontStyle.Italic,
+                color = contentColor.copy(alpha = 0.6f)
             )
         }
     }

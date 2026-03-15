@@ -1,5 +1,6 @@
 package com.weatherapp.ui.settings
 
+import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.MutablePreferences
 import androidx.datastore.preferences.core.Preferences
@@ -36,6 +37,7 @@ class SettingsViewModelTest {
     private val testDispatcher = UnconfinedTestDispatcher()
     private val editSlot = slot<suspend (MutablePreferences) -> Unit>()
 
+    private val mockContext: Context = mockk(relaxed = true)
     private lateinit var mockDataStore: DataStore<Preferences>
     private lateinit var mockBillingRepository: BillingRepository
     private lateinit var mockPrefs: Preferences
@@ -74,6 +76,7 @@ class SettingsViewModelTest {
         every { mockPrefs[PreferenceKeys.KEY_IS_PREMIUM] } returns isPremium
         every { mockPrefs[PreferenceKeys.KEY_MOOD_LINE] } returns moodLine
         every { mockPrefs[PreferenceKeys.KEY_PERSONALITY_CORE] } returns null
+        every { mockPrefs[PreferenceKeys.KEY_VISUAL_THEME] } returns null
     }
 
     @Test
@@ -85,7 +88,7 @@ class SettingsViewModelTest {
             moodLine = "Grey but manageable."
         )
 
-        val viewModel = SettingsViewModel(mockDataStore, mockBillingRepository)
+        val viewModel = SettingsViewModel(mockDataStore, mockBillingRepository, mockContext)
         backgroundScope.launch { viewModel.uiState.collect {} }
         advanceUntilIdle()
 
@@ -103,7 +106,7 @@ class SettingsViewModelTest {
         runTest(testDispatcher) {
             setupPrefs(tempUnit = "celsius")
 
-            val viewModel = SettingsViewModel(mockDataStore, mockBillingRepository)
+            val viewModel = SettingsViewModel(mockDataStore, mockBillingRepository, mockContext)
             viewModel.onTempUnitToggled()
             advanceUntilIdle()
 
@@ -122,9 +125,10 @@ class SettingsViewModelTest {
             every { secondPrefs[PreferenceKeys.KEY_IS_PREMIUM] } returns false
             every { secondPrefs[PreferenceKeys.KEY_MOOD_LINE] } returns ""
             every { secondPrefs[PreferenceKeys.KEY_PERSONALITY_CORE] } returns null
+            every { secondPrefs[PreferenceKeys.KEY_VISUAL_THEME] } returns null
             every { mockDataStore.data } returns flowOf(secondPrefs)
 
-            val viewModel = SettingsViewModel(mockDataStore, mockBillingRepository)
+            val viewModel = SettingsViewModel(mockDataStore, mockBillingRepository, mockContext)
             viewModel.onTempUnitToggled()
             advanceUntilIdle()
 
@@ -138,7 +142,7 @@ class SettingsViewModelTest {
         val mood = "Honestly lovely today. Eat lunch outside."
         setupPrefs(moodLine = mood)
 
-        val viewModel = SettingsViewModel(mockDataStore, mockBillingRepository)
+        val viewModel = SettingsViewModel(mockDataStore, mockBillingRepository, mockContext)
         backgroundScope.launch { viewModel.uiState.collect {} }
         advanceUntilIdle()
 
@@ -154,7 +158,7 @@ class SettingsViewModelTest {
         runTest(testDispatcher) {
             setupPrefs(notificationsEnabled = false)
 
-            val viewModel = SettingsViewModel(mockDataStore, mockBillingRepository)
+            val viewModel = SettingsViewModel(mockDataStore, mockBillingRepository, mockContext)
             viewModel.onNotificationsToggled()
             advanceUntilIdle()
 

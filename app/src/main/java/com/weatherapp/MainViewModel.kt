@@ -7,7 +7,9 @@ import androidx.datastore.preferences.core.edit
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.weatherapp.data.datastore.PreferenceKeys
+import com.weatherapp.model.VisualTheme
 import com.weatherapp.model.personalityCoreFromString
+import com.weatherapp.model.visualThemeFromString
 import com.weatherapp.data.update.UpdateChecker
 import com.weatherapp.data.update.UpdateInfo
 import com.weatherapp.model.WidgetDisplayState
@@ -92,6 +94,14 @@ class MainViewModel @Inject constructor(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5_000),
         initialValue = "celsius"
+    )
+
+    val visualTheme: StateFlow<VisualTheme> = dataStore.data.map { prefs ->
+        visualThemeFromString(prefs[PreferenceKeys.KEY_VISUAL_THEME])
+    }.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5_000),
+        initialValue = VisualTheme.DEFAULT
     )
 
     init {

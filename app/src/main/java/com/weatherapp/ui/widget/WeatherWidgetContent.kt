@@ -27,34 +27,49 @@ import androidx.glance.layout.padding
 import androidx.glance.layout.width
 import androidx.glance.semantics.contentDescription
 import androidx.glance.semantics.semantics
+import androidx.glance.text.FontFamily
 import androidx.glance.text.FontStyle
 import androidx.glance.text.FontWeight
 import androidx.glance.text.Text
 import androidx.glance.text.TextStyle
 import androidx.glance.unit.ColorProvider
 import com.weatherapp.MainActivity
+import com.weatherapp.model.VisualTheme
 import com.weatherapp.model.WeatherState
 import com.weatherapp.model.WidgetDisplayState
-import com.weatherapp.ui.theme.WeatherDesignTokens
+import com.weatherapp.ui.theme.WeatherColorTokens
+import com.weatherapp.ui.theme.toWidgetTokens
 
 @Composable
-fun WeatherWidgetContent(state: WidgetDisplayState) {
+fun WeatherWidgetContent(state: WidgetDisplayState, visualTheme: VisualTheme = VisualTheme.DEFAULT) {
     val size = LocalSize.current
-    // 80dp threshold: only use minimal layout for truly tiny placements (1 cell).
-    // Previous 110dp threshold matched the minimum height exactly and triggered
-    // on any rounding, causing full-size widgets to always show minimal layout.
     val isMinimal = size.height < 80.dp
-    val isMedium = size.height < 160.dp  // 4×1 range: show top zone only, no chips/mood
+    val isMedium = size.height < 160.dp
     val context = LocalContext.current
     val isDark = isSystemInDarkTheme(context)
-    val tokens = WeatherDesignTokens.getTokens(state.weatherState, isDark)
+    val tokens = visualTheme.toWidgetTokens(state.weatherState, isDark)
+
+    // Per-theme font family for Glance
+    val verdictFont: FontFamily? = when (visualTheme) {
+        VisualTheme.CHALK_SLATE -> FontFamily.Cursive
+        VisualTheme.SUN_STAINED_BEIGE, VisualTheme.UTILITY_CHIC,
+        VisualTheme.EIGHT_BIT -> FontFamily.Monospace
+        else -> null
+    }
+    val metaFont: FontFamily? = when (visualTheme) {
+        VisualTheme.CHALK_SLATE -> FontFamily.Cursive
+        VisualTheme.SUN_STAINED_BEIGE, VisualTheme.UTILITY_CHIC,
+        VisualTheme.EIGHT_BIT -> FontFamily.Monospace
+        else -> null
+    }
+    val showLiveBadge = visualTheme == VisualTheme.UTILITY_CHIC
+    val useAsciiWeather = visualTheme == VisualTheme.EIGHT_BIT
 
     val clickAction = actionStartActivity<MainActivity>(
         actionParametersOf(ActionParameters.Key<Boolean>("open_hourly") to true)
     )
 
     if (isMinimal) {
-        // Minimal: single solid-color row
         Box(
             modifier = GlanceModifier
                 .fillMaxSize()
@@ -69,7 +84,7 @@ fun WeatherWidgetContent(state: WidgetDisplayState) {
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = weatherEmoji(state.weatherState),
+                    text = weatherEmoji(state.weatherState, useAsciiWeather),
                     style = TextStyle(fontSize = 18.sp)
                 )
                 Spacer(modifier = GlanceModifier.width(8.dp))
@@ -78,7 +93,8 @@ fun WeatherWidgetContent(state: WidgetDisplayState) {
                     style = TextStyle(
                         color = ColorProvider(tokens.verdictText),
                         fontSize = 14.sp,
-                        fontWeight = FontWeight.Bold
+                        fontWeight = FontWeight.Bold,
+                        fontFamily = verdictFont
                     ),
                     maxLines = 2
                 )
@@ -88,9 +104,6 @@ fun WeatherWidgetContent(state: WidgetDisplayState) {
     }
 
     if (isMedium) {
-        // Medium (4×1): painter's algorithm two-zone, 50/50 split based on actual widget height.
-        // Using LocalSize.current to compute zone heights dynamically so spacing is equal
-        // regardless of how tall the launcher places the widget.
         val topHeight = size.height / 2
         val bottomHeight = size.height / 2
         Box(
@@ -99,15 +112,10 @@ fun WeatherWidgetContent(state: WidgetDisplayState) {
                 .clickable(clickAction)
                 .semantics { contentDescription = buildContentDescription(state) }
         ) {
-            // Layer 1: card background (entire widget)
             Box(modifier = GlanceModifier.fillMaxSize().background(tokens.cardBackground)) {}
-            // Layer 2: accent divider strip (topHeight + 2dp so 2dp peeks below top zone)
             Box(modifier = GlanceModifier.fillMaxWidth().height(topHeight + 2.dp).background(tokens.accentColor)) {}
-            // Layer 3: top zone (40% of widget height)
             Box(modifier = GlanceModifier.fillMaxWidth().height(topHeight).background(tokens.topZoneBackground)) {}
-            // Layer 4: content
             Column(modifier = GlanceModifier.fillMaxSize()) {
-                // TOP: emoji + verdict — 40% of height
                 Row(
                     modifier = GlanceModifier
                         .fillMaxWidth()
@@ -115,21 +123,40 @@ fun WeatherWidgetContent(state: WidgetDisplayState) {
                         .padding(horizontal = 12.dp, vertical = 8.dp),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text(text = weatherEmoji(state.weatherState), style = TextStyle(fontSize = 30.sp))
+                    Text(text = weatherEmoji(state.weatherState, useAsciiWeather), style = TextStyle(fontSize = 30.sp))
                     Spacer(modifier = GlanceModifier.width(8.dp))
                     Text(
                         text = state.verdict,
                         style = TextStyle(
                             color = ColorProvider(tokens.verdictText),
-                            fontSize = 19.sp,
-                            fontWeight = FontWeight.Bold
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.Bold,
+                            fontFamily = verdictFont
                         ),
-                        maxLines = 1
+                        maxLines = 2
                     )
+                    if (showLiveBadge) {
+                        Spacer(modifier = GlanceModifier.defaultWeight())
+                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                            Box(
+                                modifier = GlanceModifier
+                                    .width(5.dp)
+                                    .height(5.dp)
+                                    .cornerRadius(3.dp)
+                                    .background(tokens.accentColor)
+                            ) {}
+                            Text(
+                                text = "LIVE",
+                                style = TextStyle(
+                                    color = ColorProvider(tokens.accentColor),
+                                    fontSize = 7.sp,
+                                    fontFamily = metaFont
+                                )
+                            )
+                        }
+                    }
                 }
-                // 2dp spacer for the accent divider
                 Spacer(modifier = GlanceModifier.height(2.dp))
-                // BOTTOM: mood line + chips — tiered sizes: 13sp → 10sp
                 Row(
                     modifier = GlanceModifier
                         .fillMaxWidth()
@@ -143,10 +170,11 @@ fun WeatherWidgetContent(state: WidgetDisplayState) {
                                 text = state.moodLine,
                                 style = TextStyle(
                                     color = ColorProvider(tokens.secondaryText),
-                                    fontSize = 13.sp,
-                                    fontStyle = FontStyle.Italic
+                                    fontSize = 11.sp,
+                                    fontStyle = FontStyle.Italic,
+                                    fontFamily = metaFont
                                 ),
-                                maxLines = 1
+                                maxLines = 2
                             )
                             Spacer(modifier = GlanceModifier.height(4.dp))
                         }
@@ -165,7 +193,8 @@ fun WeatherWidgetContent(state: WidgetDisplayState) {
                                         style = TextStyle(
                                             color = ColorProvider(tokens.chipText),
                                             fontSize = 10.sp,
-                                            fontWeight = FontWeight.Medium
+                                            fontWeight = FontWeight.Medium,
+                                            fontFamily = metaFont
                                         )
                                     )
                                 }
@@ -176,7 +205,8 @@ fun WeatherWidgetContent(state: WidgetDisplayState) {
                                     text = "Good window: ${state.bestWindow}",
                                     style = TextStyle(
                                         color = ColorProvider(tokens.accentColor),
-                                        fontSize = 10.sp
+                                        fontSize = 10.sp,
+                                        fontFamily = metaFont
                                     )
                                 )
                             }
@@ -188,30 +218,19 @@ fun WeatherWidgetContent(state: WidgetDisplayState) {
         return
     }
 
-    // ── Full layout — painter's algorithm ──
-    // All background zones are SIBLINGS inside the root Box (FrameLayout).
-    // None are nested inside each other, which is the only reliable way to get
-    // multiple background colors in Glance/RemoteViews.
-    //
-    // Drawing order (bottom → top):
-    //   1. cardBackground   fills the entire widget
-    //   2. accentColor      fills top 74dp  (72dp zone + 2dp divider)
-    //   3. topZoneBackground fills top 72dp  (covers accent, leaving 2dp divider visible)
-    //   4. content Column   transparent, just layout
+    // ── Full layout ───────────────────────────────────────────────────────────
     Box(
         modifier = GlanceModifier
             .fillMaxSize()
             .clickable(clickAction)
             .semantics { contentDescription = buildContentDescription(state) }
     ) {
-        // Layer 1: bottom-zone / card background (entire widget)
         Box(
             modifier = GlanceModifier
                 .fillMaxSize()
                 .background(tokens.cardBackground)
         ) {}
 
-        // Layer 2: accent divider strip — 74dp tall so 2dp peeks below top zone
         Box(
             modifier = GlanceModifier
                 .fillMaxWidth()
@@ -219,7 +238,6 @@ fun WeatherWidgetContent(state: WidgetDisplayState) {
                 .background(tokens.accentColor)
         ) {}
 
-        // Layer 3: top-zone background — 72dp, covers accent except the bottom 2dp divider
         Box(
             modifier = GlanceModifier
                 .fillMaxWidth()
@@ -227,10 +245,8 @@ fun WeatherWidgetContent(state: WidgetDisplayState) {
                 .background(tokens.topZoneBackground)
         ) {}
 
-        // Layer 4: content — no background, sits on top of the painted layers
         Column(modifier = GlanceModifier.fillMaxSize()) {
 
-            // TOP CONTENT — 72dp, aligns with top zone background
             Row(
                 modifier = GlanceModifier
                     .fillMaxWidth()
@@ -239,17 +255,18 @@ fun WeatherWidgetContent(state: WidgetDisplayState) {
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = weatherEmoji(state.weatherState),
+                    text = weatherEmoji(state.weatherState, useAsciiWeather),
                     style = TextStyle(fontSize = 26.sp)
                 )
                 Spacer(modifier = GlanceModifier.width(10.dp))
-                Column {
+                Column(modifier = GlanceModifier.defaultWeight()) {
                     Text(
                         text = state.verdict,
                         style = TextStyle(
                             color = ColorProvider(tokens.verdictText),
                             fontSize = 15.sp,
-                            fontWeight = FontWeight.Bold
+                            fontWeight = FontWeight.Bold,
+                            fontFamily = verdictFont
                         ),
                         maxLines = 2
                     )
@@ -258,17 +275,35 @@ fun WeatherWidgetContent(state: WidgetDisplayState) {
                             text = "Good window: ${state.bestWindow}",
                             style = TextStyle(
                                 color = ColorProvider(tokens.accentColor),
-                                fontSize = 11.sp
+                                fontSize = 11.sp,
+                                fontFamily = metaFont
+                            )
+                        )
+                    }
+                }
+                if (showLiveBadge) {
+                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                        Box(
+                            modifier = GlanceModifier
+                                .width(6.dp)
+                                .height(6.dp)
+                                .cornerRadius(3.dp)
+                                .background(tokens.accentColor)
+                        ) {}
+                        Text(
+                            text = "LIVE",
+                            style = TextStyle(
+                                color = ColorProvider(tokens.accentColor),
+                                fontSize = 8.sp,
+                                fontFamily = metaFont
                             )
                         )
                     }
                 }
             }
 
-            // 2dp spacer aligns with the accent divider painted in Layer 2
             Spacer(modifier = GlanceModifier.height(2.dp))
 
-            // BOTTOM CONTENT — sits on cardBackground from Layer 1
             Column(
                 modifier = GlanceModifier
                     .fillMaxWidth()
@@ -280,9 +315,10 @@ fun WeatherWidgetContent(state: WidgetDisplayState) {
                         style = TextStyle(
                             color = ColorProvider(tokens.secondaryText),
                             fontSize = 11.sp,
-                            fontStyle = FontStyle.Italic
+                            fontStyle = FontStyle.Italic,
+                            fontFamily = metaFont
                         ),
-                        maxLines = 1
+                        maxLines = 2
                     )
                     Spacer(modifier = GlanceModifier.height(6.dp))
                 }
@@ -301,19 +337,23 @@ fun WeatherWidgetContent(state: WidgetDisplayState) {
                                 style = TextStyle(
                                     color = ColorProvider(tokens.chipText),
                                     fontSize = 11.sp,
-                                    fontWeight = FontWeight.Medium
+                                    fontWeight = FontWeight.Medium,
+                                    fontFamily = metaFont
                                 )
                             )
                         }
                     }
                     Spacer(modifier = GlanceModifier.width(8.dp))
-                    Box(
-                        modifier = GlanceModifier
-                            .width(7.dp)
-                            .height(7.dp)
-                            .cornerRadius(4.dp)
-                            .background(tokens.accentColor)
-                    ) {}
+                    // Accent dot — skip for UTILITY (LIVE badge handles it)
+                    if (!showLiveBadge) {
+                        Box(
+                            modifier = GlanceModifier
+                                .width(7.dp)
+                                .height(7.dp)
+                                .cornerRadius(4.dp)
+                                .background(tokens.accentColor)
+                        ) {}
+                    }
                 }
                 if (state.isStale) {
                     Spacer(modifier = GlanceModifier.height(4.dp))
@@ -321,7 +361,8 @@ fun WeatherWidgetContent(state: WidgetDisplayState) {
                         text = formatStaleness(state.lastUpdateEpoch),
                         style = TextStyle(
                             color = ColorProvider(tokens.secondaryText),
-                            fontSize = 10.sp
+                            fontSize = 10.sp,
+                            fontFamily = metaFont
                         )
                     )
                 }
@@ -330,11 +371,19 @@ fun WeatherWidgetContent(state: WidgetDisplayState) {
     }
 }
 
-private fun weatherEmoji(state: WeatherState): String = when (state) {
-    WeatherState.CLEAR    -> "☀️"
-    WeatherState.OVERCAST -> "☁️"
-    WeatherState.RAIN     -> "🌧"
-    WeatherState.STORM    -> "⛈"
+private fun weatherEmoji(state: WeatherState, useAscii: Boolean = false): String {
+    if (useAscii) return when (state) {
+        WeatherState.CLEAR    -> "[*]"
+        WeatherState.OVERCAST -> "[=]"
+        WeatherState.RAIN     -> "[|]"
+        WeatherState.STORM    -> "[!]"
+    }
+    return when (state) {
+        WeatherState.CLEAR    -> "☀️"
+        WeatherState.OVERCAST -> "☁️"
+        WeatherState.RAIN     -> "🌧"
+        WeatherState.STORM    -> "⛈"
+    }
 }
 
 private fun buildContentDescription(state: WidgetDisplayState): String {

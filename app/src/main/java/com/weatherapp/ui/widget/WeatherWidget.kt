@@ -11,8 +11,11 @@ import androidx.glance.appwidget.GlanceAppWidget
 import androidx.glance.appwidget.GlanceAppWidgetManager
 import androidx.glance.appwidget.SizeMode
 import androidx.glance.appwidget.provideContent
+import com.weatherapp.data.datastore.PreferenceKeys
 import com.weatherapp.data.datastore.weatherDataStore
+import com.weatherapp.model.VisualTheme
 import com.weatherapp.model.WidgetDisplayState
+import com.weatherapp.model.visualThemeFromString
 import timber.log.Timber
 
 class WeatherWidget : GlanceAppWidget() {
@@ -28,16 +31,18 @@ class WeatherWidget : GlanceAppWidget() {
             // Glance pushes new RemoteViews to the launcher. This is the correct
             // Glance pattern: state flows in, not read once before provideContent.
             var state by remember { mutableStateOf(WidgetDisplayState.EMPTY) }
+            var theme by remember { mutableStateOf(VisualTheme.DEFAULT) }
 
             LaunchedEffect(Unit) {
                 store.data.collect { prefs ->
                     val built = buildWidgetDisplayState(prefs)
                     state = if (built.verdict.isEmpty()) WidgetDisplayState.EMPTY else built
-                    Timber.d("WeatherWidget: recomposing, verdict='${state.verdict}'")
+                    theme = visualThemeFromString(prefs[PreferenceKeys.KEY_VISUAL_THEME])
+                    Timber.d("WeatherWidget: recomposing, verdict='${state.verdict}', theme=${theme.name}")
                 }
             }
 
-            WeatherWidgetContent(state)
+            WeatherWidgetContent(state, theme)
         }
     }
 

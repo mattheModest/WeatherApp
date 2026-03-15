@@ -50,7 +50,7 @@ internal object GravesPools : PoolSet {
             "Pouring. Tropically pouring. The kind that ends conversations and ruins shoes. Waterproof everything."
         ),
         ST to listOf(
-            "Heavy subtropical rain — rare, but it arrived with conviction. Waterproof jacket and low expectations.",
+            "Heavy subtropical rain. Rare, but it arrived with conviction. Waterproof jacket and low expectations.",
             "The sky has committed to this in a way that most people never commit to anything. Full waterproofing.",
             "Pouring. The summer heat has been building this and now it's here. Full gear.",
             "Heavy rain. Subtropical intensity. Whatever you're planning, add 'significantly wetter' to the itinerary."
@@ -78,7 +78,7 @@ internal object GravesPools : PoolSet {
     override val rainVerdict: ZonedPool = mapOf(
         TR to listOf(
             "Afternoon tropical rain. You knew this was coming. The sky here is very consistent about it.",
-            "It's raining. Properly tropical rain — warm, heavy, entirely unbothered by your schedule. Umbrella.",
+            "It's raining. Properly tropical rain. Warm, heavy, entirely unbothered by your schedule. Umbrella.",
             "Rain today. The tropics are not subtle about precipitation. Umbrella or arrive wet.",
             "Bring an umbrella. The afternoon convection has started and it will continue until it decides to stop."
         ),
@@ -89,7 +89,7 @@ internal object GravesPools : PoolSet {
             "Umbrella. The subtropical trough didn't ask for your input and neither did the forecast."
         ),
         TE to listOf(
-            "Raining. Properly. Take an umbrella or arrive wet — both are valid choices with different consequences.",
+            "Raining. Properly. Take an umbrella or arrive wet. Both are valid choices with different consequences.",
             "It's raining and it has no intention of stopping for you specifically. Umbrella.",
             "Rain today. Moderate, persistent, and thoroughly unbothered by your plans.",
             "Bring an umbrella. You'll thank yourself at around 2pm when it's still raining."
@@ -124,14 +124,14 @@ internal object GravesPools : PoolSet {
         TE to listOf(
             "Drizzling. Not enough to cancel plans. Just enough to make everything slightly worse.",
             "Technically precipitation. Just enough to ruin your hair and not enough to justify staying in.",
-            "Drizzle. The cruelest weather — too wet to ignore, not wet enough to complain about properly.",
+            "Drizzle. The cruelest weather. Too wet to ignore, not wet enough to complain about properly.",
             "The sky is being passive aggressive. Hood or light layer."
         ),
         OC to listOf(
             "Atlantic drizzle. The oceanic climate's default mode. Hood up and get on with it.",
             "Fine maritime rain. Too light to mention. Too persistent to ignore. You know what to do.",
             "Drizzle. You live here. You know about the drizzle. Hood.",
-            "Oceanic drizzle — the kind of precipitation that just exists here as background moisture. Hood."
+            "Oceanic drizzle. The kind of precipitation that just exists here as background moisture. Hood."
         ),
         NO to listOf(
             "Cold drizzle. Not dramatic. Not warm. Just persistent and slightly below the temperature of your tolerance.",
@@ -168,7 +168,7 @@ internal object GravesPools : PoolSet {
         ),
         NO to listOf(
             "Snow. Yes. Still. This is what you signed up for. Bundle up.",
-            "Nordic snowfall. Full winter kit. The question isn't whether it's cold — it's how cold.",
+            "Nordic snowfall. Full winter kit. The question isn't whether it's cold. It's how cold.",
             "Snow. The world is frozen and beautiful and your commute is ruined. Standard Nordic winter.",
             "Snowing. Again. The Norse gods were not joking about this place. Everything you own."
         )
@@ -178,7 +178,7 @@ internal object GravesPools : PoolSet {
         TR to listOf(
             "Gale-force tropical winds. This is either a system edge or something worse approaching. Stay in.",
             "Very dangerous wind conditions. The tropical atmosphere has organised itself against outdoor activity. Inside.",
-            "Gale winds in the tropics — something serious is happening. Stay inside and monitor conditions.",
+            "Gale winds in the tropics. Something serious is happening. Stay inside and monitor conditions.",
             "Near-gale tropical conditions. The sky has strong opinions today. Do not argue with it from outside."
         ),
         ST to listOf(
@@ -221,7 +221,7 @@ internal object GravesPools : PoolSet {
             "Properly windy subtropical day. The pressure gradient has strong opinions. Windproof layer."
         ),
         TE to listOf(
-            "Properly windy. The umbrella is a trap today — leave it.",
+            "Properly windy. The umbrella is a trap today. Leave it.",
             "Strong wind. Your plans just got harder. The forecast has no apologies.",
             "Windy enough that the outside is working against you today. Skip the umbrella.",
             "It's very windy and the wind does not care that you have somewhere to be."
@@ -260,13 +260,13 @@ internal object GravesPools : PoolSet {
             "The heat is here and it means it. Sunscreen. Water. Tempered expectations."
         ),
         OC to listOf(
-            "Anomalous oceanic heat. The Atlantic is not cooling things today. Enjoy it or suffer it — both are options.",
+            "Anomalous oceanic heat. The Atlantic is not cooling things today. Enjoy it or suffer it. Both are options.",
             "Hot by maritime standards. The blocking high has removed the usual sea breeze. Sunscreen is still necessary.",
             "Warm enough to be uncomfortable, which is not something this climate usually has to apologise for. Sunscreen.",
             "Maritime heatwave. Rare and disorienting. Hydrate. Use sunscreen. Try not to be surprised by it."
         ),
         NO to listOf(
-            "Hot by Nordic standards. Which is still not that hot. But UV at this latitude is deceptive — use sunscreen.",
+            "Hot by Nordic standards. Which is still not that hot. But UV at this latitude is deceptive. Use sunscreen.",
             "Anomalously warm. The Nordic summer occasionally delivers this. It will pass, but for now, sunscreen and water.",
             "Warm enough to notice, which here means something. Sunscreen. Daylight hours are long; UV exposure accumulates.",
             "Nordic warm day. The midnight sun means more UV hours than you think. Sunscreen is non-optional."
@@ -347,13 +347,13 @@ internal object GravesPools : PoolSet {
             "Sub-12°C in the tropics. Something unusual is happening. Jacket. Possibly two."
         ),
         ST to listOf(
-            "Cold. Jacket. Don't try to tough it out — nobody's watching.",
+            "Cold. Jacket. Don't try to tough it out. Nobody's watching.",
             "Cold snap. The subtropical sky has remembered it has a winter mode. Jacket.",
             "Cold enough to matter. Jacket. The warmth will be back. It is not back yet.",
             "Single digits. Jacket. The forecast has made its position on today clear."
         ),
         TE to listOf(
-            "Cold. Jacket. Don't try to tough it out — nobody's watching.",
+            "Cold. Jacket. Don't try to tough it out. Nobody's watching.",
             "Jacket weather. The sunshine is decorative. It is not helping.",
             "Cold enough to matter. Jacket. Maybe gloves if you're honest with yourself.",
             "Single digits. Jacket. The weather has made its position clear."
@@ -382,13 +382,13 @@ internal object GravesPools : PoolSet {
         ST to listOf(
             "It's properly cold. All the layers. Every single one.",
             "Bitter cold snap. The subtropical cold outbreak has nothing against you. It just doesn't care. Bundle up.",
-            "Sub-zero feels. Whatever gap exists in your cold weather clothing — the cold has already found it.",
+            "Sub-zero feels. Whatever gap exists in your cold weather clothing. The cold has already found it.",
             "Cold. Genuinely cold. Bundle up and come to terms with it."
         ),
         TE to listOf(
             "It's properly cold. All the layers. Every single one.",
             "Bitter out there. The cold has nothing personal against you. It just doesn't care.",
-            "Sub-zero feels. Whatever gap exists between your scarf and collar — the cold has already found it.",
+            "Sub-zero feels. Whatever gap exists between your scarf and collar. The cold has already found it.",
             "Cold. Genuinely cold. Bundle up and come to terms with it."
         ),
         OC to listOf(
@@ -565,7 +565,7 @@ internal object GravesPools : PoolSet {
             "Fine oceanic precipitation. The kind that just exists. You know what to do."
         ),
         NO to listOf(
-            "Cold fine precipitation. The drizzle here doesn't have the luxury of being merely annoying — it's cold too.",
+            "Cold fine precipitation. The drizzle here doesn't have the luxury of being merely annoying. It's cold too.",
             "Near-freezing drizzle. The worst kind. Not enough to name, too cold to ignore.",
             "Nordic drizzle. The cold makes the subtlety feel sarcastic.",
             "Fine cold mist. Damp and cold and persistent. The Nordic climate's version of drizzle."
@@ -583,7 +583,7 @@ internal object GravesPools : PoolSet {
             "Picturesque. Treacherous. Somehow both at once.",
             "The world looks like a greeting card. The commute does not.",
             "Subtropical snow is an event. The black ice will not announce itself.",
-            "Snow is frozen disappointment. Subtropical edition — rarer and therefore worse."
+            "Snow is frozen disappointment. Subtropical edition. Rarer and therefore worse."
         ),
         TE to listOf(
             "Picturesque. Treacherous. Somehow both at once.",

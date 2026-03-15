@@ -164,7 +164,7 @@ class VerdictGenerator {
         }
     }
 
-    /** Returns all candidate strings for the current condition+zone — no picking, used by the UI to rotate on each resume. */
+    /** Returns all candidate strings for the current condition+zone. No picking, used by the UI to rotate on each resume. */
     fun generateVerdictCandidates(
         hourlyData: List<ForecastHour>,
         comfortOffset: Double = 0.0,
@@ -341,7 +341,7 @@ class VerdictGenerator {
         }
     }
 
-    /** Public overload kept for test compatibility — climateZone defaults to TEMPERATE. */
+    /** Public overload kept for test compatibility. ClimateZone defaults to TEMPERATE. */
     fun generateMoodLine(
         hourlyData: List<ForecastHour>,
         isAllClear: Boolean,
@@ -383,7 +383,7 @@ class VerdictGenerator {
     companion object {
         const val UMBRELLA_THRESHOLD = 0.40
 
-        /** Kept as a named constant — also lives at index 0 of allClearVerdict[TEMPERATE]. */
+        /** Kept as a named constant. Also lives at index 0 of allClearVerdict[TEMPERATE]. */
         const val ALL_CLEAR_MESSAGE = "You're good. Go live your day."
 
         fun climateZoneFromAbsLat(absLat: Double): ClimateZone = when {
@@ -430,9 +430,9 @@ class VerdictGenerator {
                 else                        -> "Bundle up"
             }
             val rainQualifier = when {
-                precipProb >= 0.70 -> " — heavy rain likely"
-                precipProb >= 0.40 -> " — rain likely"
-                precipProb >= 0.20 -> " — chance of showers"
+                precipProb >= 0.70 -> ". Heavy rain likely"
+                precipProb >= 0.40 -> ". Rain likely"
+                precipProb >= 0.20 -> ". Chance of showers"
                 else               -> ""
             }
             return clothingBand + rainQualifier
@@ -441,7 +441,7 @@ class VerdictGenerator {
 }
 
 // ---------------------------------------------------------------------------
-// Copy pools — all date-seeded, all zone-aware
+// Copy pools. All date-seeded, all zone-aware
 // Index 0 of ClimateZone.TEMPERATE is the canonical "anchor" line for each pool
 // (used by tests to assert deterministic output via testDateIndex = 0).
 // ---------------------------------------------------------------------------
@@ -458,7 +458,7 @@ private object Pools : PoolSet {
     override val allClearVerdict: ZonedPool = mapOf(
         T  to listOf(
             "You're good. Go live your day.",
-            "Nothing to carry. Hot and clear — enjoy it.",
+            "Nothing to carry. Hot and clear. Enjoy it.",
             "Forecast is clean. No excuses to stay inside.",
             "Zero weather drama today. Enjoy it.",
             "Clear skies. Go touch some sunshine."
@@ -479,7 +479,7 @@ private object Pools : PoolSet {
         ),
         OC to listOf(
             "You're good. Go live your day.",
-            "Actually a decent day — don't waste it indoors.",
+            "Actually a decent day. Don't waste it indoors.",
             "Rare one today. Get outside while you can.",
             "The weather's cooperating for once. Return the favor.",
             "Clear and calm. Practically a holiday."
@@ -517,7 +517,7 @@ private object Pools : PoolSet {
         ),
         OC to listOf(
             "Storm today. Even by your standards, it's rough out.",
-            "Worse than usual — and that's saying something.",
+            "Worse than usual, and that's saying something.",
             "This is a proper one. Stay in if you can.",
             "Nastier than normal out there. Take it seriously.",
             "Even locals should think twice today. Stay in."
@@ -533,7 +533,7 @@ private object Pools : PoolSet {
 
     override val heavyRainVerdict: ZonedPool = mapOf(
         T  to listOf(
-            "Heavy rain. Get covered — properly covered.",
+            "Heavy rain. Get covered. Properly covered.",
             "Serious rain today. Waterproofing required.",
             "It's going to properly rain on you. Plan for it.",
             "Real rain today. Don't fight it, just dress for it.",
@@ -554,7 +554,7 @@ private object Pools : PoolSet {
             "No such thing as overdressed for this one."
         ),
         OC to listOf(
-            "Heavy rain today — worse than the usual drizzle.",
+            "Heavy rain today. Worse than the usual drizzle.",
             "Actually serious rain. Umbrella and waterproofs.",
             "Proper downpour today. Don't be underprepared.",
             "Real rain. Even by your standards, this is a wet one.",
@@ -562,7 +562,7 @@ private object Pools : PoolSet {
         ),
         NO to listOf(
             "Heavy rain. Properly heavy. You know what to do.",
-            "Real rain — not the gentle kind. Dress for it.",
+            "Real rain. Not the gentle kind. Dress for it.",
             "This is a wet day even by local standards.",
             "Umbrella. Waterproof. Go.",
             "Proper downpour today. You know the drill."
@@ -574,7 +574,7 @@ private object Pools : PoolSet {
             "Carry an umbrella. Rain likely.",
             "Chance of rain. Better covered than not.",
             "Probably going to rain. Plan for it.",
-            "Bring something waterproof — just in case.",
+            "Bring something waterproof. Just in case.",
             "Rain on the way. Cover yourself."
         ),
         ST to listOf(
@@ -588,7 +588,7 @@ private object Pools : PoolSet {
             "Yeah, bring the umbrella.",
             "It's a wet one today.",
             "Don't fight the rain. Just dress for it.",
-            "Soggy out there — plan accordingly.",
+            "Soggy out there. Plan accordingly.",
             "It's going to rain on you. Just accept it."
         ),
         OC to listOf(
@@ -610,35 +610,35 @@ private object Pools : PoolSet {
     override val drizzleVerdict: ZonedPool = mapOf(
         T  to listOf(
             "Light rain out there. Might want an umbrella.",
-            "Drizzle today — carry something just in case.",
+            "Drizzle today. Carry something just in case.",
             "A bit of light rain. Not terrible, but cover up.",
             "Drizzly out there. Better with an umbrella.",
             "Might get a little wet. Worth carrying something."
         ),
         ST to listOf(
             "Drizzle today. Light jacket or umbrella.",
-            "On-and-off showers — go prepared.",
+            "On-and-off showers. Go prepared.",
             "Light rain likely. Carry something just in case.",
             "Drizzly out there. Not terrible but go covered.",
             "Grab an umbrella. Just in case."
         ),
         TE to listOf(
             "Drizzly out there. Could be worse.",
-            "Light rain — carry something waterproof.",
+            "Light rain. Carry something waterproof.",
             "On and off showers. Umbrella wouldn't hurt.",
             "Damp day. You'll be fine, but go prepared.",
             "Classic grey and drizzly. You know how this goes."
         ),
         OC to listOf(
             "Drizzle. Obviously. Carry an umbrella.",
-            "Light rain — the usual. You're used to this.",
+            "Light rain. The usual. You're used to this.",
             "Grey and damp. Standard. Go prepared.",
             "Drizzly. Standard issue.",
             "More drizzle. This is just the weather doing weather things."
         ),
         NO to listOf(
             "Drizzle. Fine. Carry something.",
-            "Light rain — barely worth noting. Umbrella if you want.",
+            "Light rain. Barely worth noting. Umbrella if you want.",
             "Damp out there. Not new information.",
             "Drizzly and grey. You've seen worse. Go.",
             "It's drizzling. You've dressed for worse."
@@ -650,11 +650,11 @@ private object Pools : PoolSet {
             "Snow. This is historic. Also dress like it's an emergency.",
             "SNOW. Wear everything warm you own.",
             "It's actually snowing. Dress extremely warm.",
-            "Snow day. This is not normal — treat it accordingly.",
+            "Snow day. This is not normal. Treat it accordingly.",
             "Snowing. Every warm layer you own. Now."
         ),
         ST to listOf(
-            "Snow today — rare but real. Dress for it.",
+            "Snow today. Rare but real. Dress for it.",
             "It's snowing. Bundle up properly.",
             "Snow day. Dress warmer than you think you need to.",
             "Rare snow event. Layer up completely.",
@@ -668,11 +668,11 @@ private object Pools : PoolSet {
             "The boots aren't optional today."
         ),
         OC to listOf(
-            "Snow today — rarer here than you'd think. Dress for it.",
+            "Snow today. Rarer here than you'd think. Dress for it.",
             "It's actually snowing. Layer up properly.",
             "Snow out there. Don't be underdressed.",
             "White stuff's falling. Treat it like the real thing it is.",
-            "Snow day. Boots and layers — the full kit."
+            "Snow day. Boots and layers. The full kit."
         ),
         NO to listOf(
             "Snow. Yes, again. Boots and layers, you know the drill.",
@@ -688,7 +688,7 @@ private object Pools : PoolSet {
             "Dangerous winds today. Stay inside if you can.",
             "Very strong winds. Not a good day to be out.",
             "Wind is intense today. Limit time outside.",
-            "Strong gusts — potentially dangerous. Be careful.",
+            "Strong gusts. Potentially dangerous. Be careful.",
             "Extreme wind. Stay in if possible."
         ),
         ST to listOf(
@@ -702,18 +702,18 @@ private object Pools : PoolSet {
             "Hang onto everything. The wind's not messing around.",
             "Strong gusts today. Loose items will find new homes.",
             "Windy enough to make walking feel like an argument.",
-            "It's wild out there. Hold your ground — literally.",
+            "It's wild out there. Hold your ground. Literally.",
             "Very windy. Umbrellas will die. Don't even try."
         ),
         OC to listOf(
             "Even by your standards, it's wild out today.",
             "Worse than the usual breezy. Properly windy.",
-            "This is real wind — beyond the background stuff. Be careful.",
+            "This is real wind. Beyond the background stuff. Be careful.",
             "Nastier than usual out there. Head down.",
-            "Strong gusts — not just breezy. Dress and brace accordingly."
+            "Strong gusts. Not just breezy. Dress and brace accordingly."
         ),
         NO to listOf(
-            "Very windy — even for here. Take it seriously.",
+            "Very windy. Even for here. Take it seriously.",
             "Winds are intense today. Even your tolerance has limits.",
             "This is beyond normal windy. Head down and hold on.",
             "Wild out there today. Don't underestimate it.",
@@ -725,7 +725,7 @@ private object Pools : PoolSet {
         T  to listOf(
             "Gusty out there today. Not great for being outside.",
             "Strong winds today. Worth noting.",
-            "Windy out there — more than you're used to.",
+            "Windy out there. More than you're used to.",
             "Decent wind today. Hold onto your hat.",
             "Windy. Unusual for you. Worth noting."
         ),
@@ -744,7 +744,7 @@ private object Pools : PoolSet {
             "Windy enough to make walking feel like an argument."
         ),
         OC to listOf(
-            "Windy — more than the usual breezy. Head down.",
+            "Windy. More than the usual breezy. Head down.",
             "Gusts today. Beyond the background noise.",
             "It's blowing out there. You'll feel this one.",
             "Properly windy. Not just the usual.",
@@ -765,7 +765,7 @@ private object Pools : PoolSet {
             "Same as yesterday. You know the drill.",
             "Classic day. Light clothes, done.",
             "Warm and then some. Keep it minimal.",
-            "You don't need layers — you need water."
+            "You don't need layers. You need water."
         ),
         ST to listOf(
             "Nothing to grab. Warm all day.",
@@ -782,9 +782,9 @@ private object Pools : PoolSet {
             "Warm enough that layers would be a mistake."
         ),
         OC to listOf(
-            "Nothing to grab. Genuinely warm today — savor it.",
+            "Nothing to grab. Genuinely warm today. Savor it.",
             "Hot by local standards. Dress accordingly and enjoy.",
-            "Warm out there. This doesn't happen often — dress light.",
+            "Warm out there. This doesn't happen often. Dress light.",
             "Actual warmth. No layers. Go live.",
             "It's properly warm. Don't waste it overthinking your outfit."
         ),
@@ -800,27 +800,27 @@ private object Pools : PoolSet {
     override val warmVerdict: ZonedPool = mapOf(
         T  to listOf(
             "Surprisingly cool today. You might want a light layer.",
-            "A little on the cooler side — bring something thin.",
+            "A little on the cooler side. Bring something thin.",
             "Not your average hot day. Light layer just in case.",
             "Cooler than usual. A thin something wouldn't hurt.",
-            "Light layers — it's actually not that warm today."
+            "Light layers. It's actually not that warm today."
         ),
         ST to listOf(
             "Light layers, if anything.",
-            "A little something — or nothing. Your call.",
+            "A little something, or nothing. Your call.",
             "Could get cool, but don't overthink it.",
             "One layer should cover it today.",
             "Comfortable out there. Dress easy."
         ),
         TE to listOf(
             "Light layers, if anything.",
-            "Thin layer — or don't. You'll survive either way.",
+            "Thin layer, or don't. You'll survive either way.",
             "That annoying in-between temperature. Have fun deciding.",
             "Technically you could skip the jacket. Technically.",
             "Not cold enough to complain about. Not warm enough to be happy."
         ),
         OC to listOf(
-            "Light layers — it's pleasant but don't push it.",
+            "Light layers. It's pleasant but don't push it.",
             "Not bad out. A thin layer and you're sorted.",
             "Mild enough to enjoy, cool enough to need something.",
             "One layer. That's all. You've done this before.",
@@ -829,7 +829,7 @@ private object Pools : PoolSet {
         NO to listOf(
             "Practically t-shirt weather. Light layer if you must.",
             "This counts as warm here. You know what to wear.",
-            "Light layers — or honestly just a t-shirt. Live a little.",
+            "Light layers, or honestly just a t-shirt. Live a little.",
             "Nice enough to underdress a bit. You've earned it.",
             "Warm by local standards. Dress accordingly and enjoy."
         )
@@ -841,7 +841,7 @@ private object Pools : PoolSet {
             "Chilly for you. Don't underestimate it.",
             "This is cold. Bring a proper jacket.",
             "Surprisingly cold today. Take it seriously.",
-            "You'll want a jacket — yes, really."
+            "You'll want a jacket. Yes, really."
         ),
         ST to listOf(
             "Light jacket weather.",
@@ -858,15 +858,15 @@ private object Pools : PoolSet {
             "Jacket weather. Not negotiating on this one."
         ),
         OC to listOf(
-            "Light jacket — pretty standard day, honestly.",
+            "Light jacket. Pretty standard day, honestly.",
             "Normal day. Jacket, done.",
             "Grab a jacket. Nothing dramatic.",
-            "Jacket weather — which is most days. You know the drill.",
+            "Jacket weather, which is most days. You know the drill.",
             "The usual. Jacket and get on with it."
         ),
         NO to listOf(
             "Light jacket at most. Not that cold.",
-            "Jacket if you want — you'll probably be fine without.",
+            "Jacket if you want. You'll probably be fine without.",
             "Mild enough. Something light if it makes you feel better.",
             "Not exactly warm, but hardly jacket-mandatory.",
             "A layer or two. This barely qualifies as cold."
@@ -877,7 +877,7 @@ private object Pools : PoolSet {
         T  to listOf(
             "Extremely cold today. Full jacket, layers underneath.",
             "This is genuinely cold weather. Dress accordingly.",
-            "Bundle up — this isn't normal for you.",
+            "Bundle up. This isn't normal for you.",
             "Cold enough to be a real problem. Take it seriously.",
             "You're going to want everything warm you own."
         ),
@@ -944,7 +944,7 @@ private object Pools : PoolSet {
             "Bundle up. Even by your standards.",
             "Cold enough to matter, even for you. Layer properly.",
             "This is actual cold. Not the mild stuff. Dress for it.",
-            "Full kit today. You know what cold really means — this qualifies.",
+            "Full kit today. You know what cold really means. This qualifies.",
             "Proper cold. Even you'll feel it. Bundle up."
         )
     )
@@ -971,7 +971,7 @@ private object Pools : PoolSet {
             "Serious weather. Take it seriously or find out."
         ),
         OC to listOf(
-            "Worse than usual — and it's usually rough. Stay in.",
+            "Worse than usual, and it's usually rough. Stay in.",
             "This is legitimately bad, even by local standards.",
             "Storm today. Properly. Not the drizzle kind.",
             "Even locals are staying in. Take the hint."
@@ -1004,7 +1004,7 @@ private object Pools : PoolSet {
             "It's going to pour. You've been warned."
         ),
         OC to listOf(
-            "Heavy rain — worse than the usual grey. Umbrella up.",
+            "Heavy rain. Worse than the usual grey. Umbrella up.",
             "Actually serious rain. Not just the normal overcast.",
             "Proper downpour. Even by local standards, this is wet.",
             "Heavy one. Take the umbrella seriously today."
@@ -1021,7 +1021,7 @@ private object Pools : PoolSet {
         T  to listOf(
             "Rain on the way. Cover yourself.",
             "Wet out there. You know the drill.",
-            "Rain likely — plan for it.",
+            "Rain likely. Plan for it.",
             "On-and-off rain. Stay covered."
         ),
         ST to listOf(
@@ -1031,7 +1031,7 @@ private object Pools : PoolSet {
             "Drizzly and dramatic. Classic."
         ),
         TE to listOf(
-            "Good day to stay cosy — or just embrace the drizzle.",
+            "Good day to stay cosy, or just embrace the drizzle.",
             "It's going to rain on you. Best just accept it.",
             "Don't fight the rain. You will lose.",
             "Soggy out there. Plan accordingly."
@@ -1071,13 +1071,13 @@ private object Pools : PoolSet {
         ),
         OC to listOf(
             "Drizzle. Standard. Carry an umbrella.",
-            "Light rain — the usual. You're used to this.",
+            "Light rain. The usual. You're used to this.",
             "Grey and damp. Standard.",
             "More drizzle. This is just the weather doing its thing."
         ),
         NO to listOf(
             "Drizzle. Fine. Carry something.",
-            "Light rain — barely worth noting.",
+            "Light rain. Barely worth noting.",
             "Damp out there. Not new information.",
             "It's drizzling. You've dressed for worse."
         )
@@ -1086,12 +1086,12 @@ private object Pools : PoolSet {
     override val snowMood: ZonedPool = mapOf(
         T  to listOf(
             "This is genuinely unusual. Stay warm and be careful.",
-            "Snow day — an event, really. Enjoy it carefully.",
+            "Snow day. An event, really. Enjoy it carefully.",
             "Not normal for you. Dress accordingly and take it easy.",
             "The snow's pretty but be careful out there."
         ),
         ST to listOf(
-            "Snow day — rarer here than you'd think.",
+            "Snow day. Rarer here than you'd think.",
             "It's snowing. Take it seriously.",
             "Layer up and go carefully.",
             "Not your everyday weather. Dress for it."
@@ -1103,7 +1103,7 @@ private object Pools : PoolSet {
             "Winter's doing its thing. Lean into it."
         ),
         OC to listOf(
-            "Snow today — rarer here than you'd expect.",
+            "Snow today. Rarer here than you'd expect.",
             "Actual snow. Dress accordingly and take it easy.",
             "White stuff's falling. Enjoy the novelty.",
             "Snow day. A bit of extra care goes a long way."
@@ -1125,19 +1125,19 @@ private object Pools : PoolSet {
         ),
         ST to listOf(
             "Don't bother with an umbrella, it'll just flip.",
-            "Blustery out there. Great hair day — for someone else.",
+            "Blustery out there. Great hair day. For someone else.",
             "Wind's in a bad mood. Don't take it personally.",
             "Hold onto your hat. Literally."
         ),
         TE to listOf(
             "Don't bother with an umbrella, it'll just flip.",
-            "Blustery out there. Great hair day — for someone else.",
+            "Blustery out there. Great hair day. For someone else.",
             "Nature's fan is on full blast today.",
             "Wind's in a bad mood. Don't take it personally.",
             "Properly dramatic out there. Duck down."
         ),
         OC to listOf(
-            "Windier than usual — even by local standards.",
+            "Windier than usual. Even by local standards.",
             "Don't bother with an umbrella, it'll just flip.",
             "Blustery out there. More so than normal.",
             "Wind's up today. Properly up."
@@ -1153,7 +1153,7 @@ private object Pools : PoolSet {
     override val breezeMood: ZonedPool = mapOf(
         T  to listOf(
             "Breezy out there. A nice change, honestly.",
-            "Light wind — refreshing today.",
+            "Light wind. Refreshing today.",
             "A little breeze. Not bad at all.",
             "Cooler than usual with the wind. Enjoy it."
         ),
@@ -1173,7 +1173,7 @@ private object Pools : PoolSet {
             "Breezy. The usual.",
             "Wind's doing its thing. Background stuff.",
             "Light breeze. Nothing unusual.",
-            "Windy — which is just how it goes here."
+            "Windy, which is just how it goes here."
         ),
         NO to listOf(
             "Breezy. Baseline.",

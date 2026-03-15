@@ -1,6 +1,7 @@
 package com.weatherapp.ui.settings
 
 import android.app.Activity
+import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
@@ -9,9 +10,13 @@ import androidx.lifecycle.viewModelScope
 import com.weatherapp.data.billing.BillingRepository
 import com.weatherapp.data.datastore.PreferenceKeys
 import com.weatherapp.model.PersonalityCore
+import com.weatherapp.model.VisualTheme
 import com.weatherapp.model.personalityCoreFromString
+import com.weatherapp.model.visualThemeFromString
+import com.weatherapp.ui.widget.WeatherWidget
 import com.weatherapp.util.UiState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.first
@@ -24,7 +29,8 @@ import javax.inject.Inject
 @HiltViewModel
 class SettingsViewModel @Inject constructor(
     private val dataStore: DataStore<Preferences>,
-    private val billingRepository: BillingRepository
+    private val billingRepository: BillingRepository,
+    @ApplicationContext private val appContext: Context
 ) : ViewModel() {
 
     val uiState = dataStore.data
@@ -36,6 +42,7 @@ class SettingsViewModel @Inject constructor(
             val moodLine = prefs[PreferenceKeys.KEY_MOOD_LINE] ?: ""
             val shareText = "\"$moodLine\"\n\nWeatherApp — daily weather in plain language"
             val personality = personalityCoreFromString(prefs[PreferenceKeys.KEY_PERSONALITY_CORE])
+            val visualTheme = visualThemeFromString(prefs[PreferenceKeys.KEY_VISUAL_THEME])
 
             UiState.Success(
                 SettingsState(
@@ -44,7 +51,8 @@ class SettingsViewModel @Inject constructor(
                     isPremium = isPremium,
                     moodLine = moodLine,
                     shareText = shareText,
-                    personality = personality
+                    personality = personality,
+                    visualTheme = visualTheme
                 )
             ) as UiState<SettingsState>
         }
@@ -87,6 +95,16 @@ class SettingsViewModel @Inject constructor(
                 prefs[PreferenceKeys.KEY_PERSONALITY_CORE] = personality.name
             }
             Timber.d("SettingsViewModel: personality changed to ${personality.name}")
+        }
+    }
+
+    fun onThemeSelected(theme: VisualTheme) {
+        viewModelScope.launch {
+            dataStore.edit { prefs ->
+                prefs[PreferenceKeys.KEY_VISUAL_THEME] = theme.name
+            }
+            WeatherWidget.update(appContext)
+            Timber.d("SettingsViewModel: visual theme changed to ${theme.name}")
         }
     }
 
