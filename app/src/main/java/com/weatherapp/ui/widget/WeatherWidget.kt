@@ -1,6 +1,11 @@
 package com.weatherapp.ui.widget
 
 import android.content.Context
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.glance.GlanceId
 import androidx.glance.appwidget.GlanceAppWidget
 import androidx.glance.appwidget.GlanceAppWidgetManager
@@ -12,16 +17,26 @@ import timber.log.Timber
 
 class WeatherWidget : GlanceAppWidget() {
 
-    // SizeMode.Exact reports the actual placed size so LocalSize.current is reliable.
-    // Default SizeMode.Single can report wrong/rounded dimensions, causing the
-    // minimal-layout threshold to fire even for full-size widgets.
     override val sizeMode = SizeMode.Exact
 
     override suspend fun provideGlance(context: Context, id: GlanceId) {
-        val rawState = context.applicationContext.weatherDataStore.readWidgetDisplayState()
-        val state = if (rawState.verdict.isEmpty()) WidgetDisplayState.EMPTY else rawState
-        Timber.d("WeatherWidget: providing glance, isStale=${state.isStale}, allClear=${state.isAllClear}")
+        val store = context.applicationContext.weatherDataStore
+
         provideContent {
+            // Observe DataStore reactively. Every write (e.g. from rotateWidgetCopy)
+            // triggers a collect emission → state updates → composition re-runs →
+            // Glance pushes new RemoteViews to the launcher. This is the correct
+            // Glance pattern: state flows in, not read once before provideContent.
+            var state by remember { mutableStateOf(WidgetDisplayState.EMPTY) }
+
+            LaunchedEffect(Unit) {
+                store.data.collect { prefs ->
+                    val built = buildWidgetDisplayState(prefs)
+                    state = if (built.verdict.isEmpty()) WidgetDisplayState.EMPTY else built
+                    Timber.d("WeatherWidget: recomposing, verdict='${state.verdict}'")
+                }
+            }
+
             WeatherWidgetContent(state)
         }
     }
@@ -33,7 +48,7 @@ class WeatherWidget : GlanceAppWidget() {
             glanceIds.forEach { glanceId ->
                 WeatherWidget().update(context, glanceId)
             }
-            Timber.d("WeatherWidget.update: refreshed ${glanceIds.size} widget(s)")
+            Timber.d("WeatherWidget.update: triggered ${glanceIds.size} widget session(s)")
         }
     }
 }

@@ -8,6 +8,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.weatherapp.data.billing.BillingRepository
 import com.weatherapp.data.datastore.PreferenceKeys
+import com.weatherapp.model.PersonalityCore
+import com.weatherapp.model.personalityCoreFromString
 import com.weatherapp.util.UiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
@@ -33,6 +35,7 @@ class SettingsViewModel @Inject constructor(
             val isPremium = prefs[PreferenceKeys.KEY_IS_PREMIUM] ?: false
             val moodLine = prefs[PreferenceKeys.KEY_MOOD_LINE] ?: ""
             val shareText = "\"$moodLine\"\n\nWeatherApp — daily weather in plain language"
+            val personality = personalityCoreFromString(prefs[PreferenceKeys.KEY_PERSONALITY_CORE])
 
             UiState.Success(
                 SettingsState(
@@ -40,7 +43,8 @@ class SettingsViewModel @Inject constructor(
                     notificationsEnabled = notificationsEnabled,
                     isPremium = isPremium,
                     moodLine = moodLine,
-                    shareText = shareText
+                    shareText = shareText,
+                    personality = personality
                 )
             ) as UiState<SettingsState>
         }
@@ -74,6 +78,15 @@ class SettingsViewModel @Inject constructor(
                 prefs[PreferenceKeys.KEY_NOTIFICATIONS_ENABLED] = !current
             }
             Timber.d("SettingsViewModel: notifications toggled to ${!current}")
+        }
+    }
+
+    fun onPersonalitySelected(personality: PersonalityCore) {
+        viewModelScope.launch {
+            dataStore.edit { prefs ->
+                prefs[PreferenceKeys.KEY_PERSONALITY_CORE] = personality.name
+            }
+            Timber.d("SettingsViewModel: personality changed to ${personality.name}")
         }
     }
 

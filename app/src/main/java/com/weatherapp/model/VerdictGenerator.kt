@@ -6,8 +6,6 @@ import java.time.LocalDate
 import java.time.ZoneId
 import kotlin.math.abs
 
-private typealias ZonedPool = Map<ClimateZone, List<String>>
-
 class VerdictGenerator {
 
     /** Override in tests to pin pool selection to a specific index. */
@@ -243,6 +241,106 @@ class VerdictGenerator {
         return getCandidates(pool, zone)
     }
 
+    /** Returns verdict candidates for the given personality. FRANK delegates to the existing method. */
+    fun generateVerdictCandidates(
+        personality: PersonalityCore,
+        hourlyData: List<ForecastHour>,
+        comfortOffset: Double = 0.0,
+        climateZone: ClimateZone = ClimateZone.TEMPERATE
+    ): List<String> = when (personality) {
+        PersonalityCore.FRANK  -> generateVerdictCandidates(hourlyData, comfortOffset, climateZone)
+        PersonalityCore.KELVIN -> generateVerdictCandidatesFromPools(KelvinPools, hourlyData, comfortOffset, climateZone)
+        PersonalityCore.GRAVES -> generateVerdictCandidatesFromPools(GravesPools, hourlyData, comfortOffset, climateZone)
+    }
+
+    /** Returns mood candidates for the given personality. FRANK delegates to the existing method. */
+    fun generateMoodCandidates(
+        personality: PersonalityCore,
+        hourlyData: List<ForecastHour>,
+        isAllClear: Boolean,
+        comfortOffset: Double = 0.0,
+        climateZone: ClimateZone = ClimateZone.TEMPERATE
+    ): List<String> = when (personality) {
+        PersonalityCore.FRANK  -> generateMoodCandidates(hourlyData, isAllClear, comfortOffset, climateZone)
+        PersonalityCore.KELVIN -> generateMoodCandidatesFromPools(KelvinPools, hourlyData, isAllClear, comfortOffset, climateZone)
+        PersonalityCore.GRAVES -> generateMoodCandidatesFromPools(GravesPools, hourlyData, isAllClear, comfortOffset, climateZone)
+    }
+
+    private fun generateVerdictCandidatesFromPools(
+        p: PoolSet,
+        hourlyData: List<ForecastHour>,
+        comfortOffset: Double,
+        climateZone: ClimateZone
+    ): List<String> {
+        if (hourlyData.isEmpty()) return listOf("Checking the forecast...")
+        val condition = detectCondition(hourlyData)
+        val bringList = evaluateBringList(hourlyData)
+        val bestWindow = calculateBestWindow(hourlyData)
+        val isAllClear = bringList.isEmpty() && bestWindow != null &&
+            condition !in setOf(
+                WeatherCondition.STORM, WeatherCondition.HEAVY_RAIN,
+                WeatherCondition.SNOW, WeatherCondition.VERY_WINDY
+            )
+        return when (condition) {
+            WeatherCondition.STORM      -> getCandidates(p.stormVerdict, climateZone)
+            WeatherCondition.HEAVY_RAIN -> getCandidates(p.heavyRainVerdict, climateZone)
+            WeatherCondition.SNOW       -> getCandidates(p.snowVerdict, climateZone)
+            WeatherCondition.RAIN       -> getCandidates(p.rainVerdict, climateZone)
+            WeatherCondition.DRIZZLE    -> getCandidates(p.drizzleVerdict, climateZone)
+            WeatherCondition.VERY_WINDY -> getCandidates(p.veryWindyVerdict, climateZone)
+            WeatherCondition.WINDY      -> getCandidates(p.windyVerdict, climateZone)
+            else -> if (isAllClear) getCandidates(p.allClearVerdict, climateZone)
+                    else getClothingCandidatesFromPools(p, hourlyData, comfortOffset, climateZone)
+        }
+    }
+
+    private fun getClothingCandidatesFromPools(
+        p: PoolSet,
+        hourlyData: List<ForecastHour>,
+        comfortOffset: Double,
+        zone: ClimateZone
+    ): List<String> {
+        val peakTempC = hourlyData.maxOf { it.temperatureC }
+        val pool = when {
+            peakTempC >= 28 + comfortOffset -> p.hotVerdict
+            peakTempC >= 20 + comfortOffset -> p.warmVerdict
+            peakTempC >= 12 + comfortOffset -> p.lightJacketVerdict
+            peakTempC >= 5  + comfortOffset -> p.jacketVerdict
+            else                            -> p.bundleUpVerdict
+        }
+        return getCandidates(pool, zone)
+    }
+
+    private fun generateMoodCandidatesFromPools(
+        p: PoolSet,
+        hourlyData: List<ForecastHour>,
+        isAllClear: Boolean,
+        comfortOffset: Double,
+        climateZone: ClimateZone
+    ): List<String> {
+        if (hourlyData.isEmpty()) return listOf("One moment.")
+        val condition = detectCondition(hourlyData)
+        val peakTemp = hourlyData.maxOf { it.temperatureC }
+        val lovelyThreshold = 20.0 + comfortOffset
+        return when (condition) {
+            WeatherCondition.STORM                   -> getCandidates(p.stormMood, climateZone)
+            WeatherCondition.HEAVY_RAIN              -> getCandidates(p.heavyRainMood, climateZone)
+            WeatherCondition.RAIN                    -> getCandidates(p.rainMood, climateZone)
+            WeatherCondition.DRIZZLE                 -> getCandidates(p.drizzleMood, climateZone)
+            WeatherCondition.SNOW                    -> getCandidates(p.snowMood, climateZone)
+            WeatherCondition.VERY_WINDY,
+            WeatherCondition.WINDY                   -> getCandidates(p.windMood, climateZone)
+            WeatherCondition.BREEZY                  -> if (isAllClear && peakTemp >= lovelyThreshold)
+                                                            getCandidates(p.allClearWarmMood, climateZone)
+                                                        else getCandidates(p.breezeMood, climateZone)
+            else -> when {
+                isAllClear && peakTemp >= lovelyThreshold -> getCandidates(p.allClearWarmMood, climateZone)
+                isAllClear                                -> getCandidates(p.allClearNeutralMood, climateZone)
+                else                                      -> getCandidates(p.greyMood, climateZone)
+            }
+        }
+    }
+
     /** Public overload kept for test compatibility — climateZone defaults to TEMPERATE. */
     fun generateMoodLine(
         hourlyData: List<ForecastHour>,
@@ -348,7 +446,7 @@ class VerdictGenerator {
 // (used by tests to assert deterministic output via testDateIndex = 0).
 // ---------------------------------------------------------------------------
 
-private object Pools {
+private object Pools : PoolSet {
     private val T  = ClimateZone.TROPICAL
     private val ST = ClimateZone.SUBTROPICAL
     private val TE = ClimateZone.TEMPERATE
@@ -357,7 +455,7 @@ private object Pools {
 
     // ── Verdict pools ────────────────────────────────────────────────────────
 
-    val allClearVerdict: ZonedPool = mapOf(
+    override val allClearVerdict: ZonedPool = mapOf(
         T  to listOf(
             "You're good. Go live your day.",
             "Nothing to carry. Hot and clear — enjoy it.",
@@ -395,7 +493,7 @@ private object Pools {
         )
     )
 
-    val stormVerdict: ZonedPool = mapOf(
+    override val stormVerdict: ZonedPool = mapOf(
         T  to listOf(
             "Stay inside. This is a real storm.",
             "Don't go out. Seriously.",
@@ -433,7 +531,7 @@ private object Pools {
         )
     )
 
-    val heavyRainVerdict: ZonedPool = mapOf(
+    override val heavyRainVerdict: ZonedPool = mapOf(
         T  to listOf(
             "Heavy rain. Get covered — properly covered.",
             "Serious rain today. Waterproofing required.",
@@ -471,7 +569,7 @@ private object Pools {
         )
     )
 
-    val rainVerdict: ZonedPool = mapOf(
+    override val rainVerdict: ZonedPool = mapOf(
         T  to listOf(
             "Carry an umbrella. Rain likely.",
             "Chance of rain. Better covered than not.",
@@ -509,7 +607,7 @@ private object Pools {
         )
     )
 
-    val drizzleVerdict: ZonedPool = mapOf(
+    override val drizzleVerdict: ZonedPool = mapOf(
         T  to listOf(
             "Light rain out there. Might want an umbrella.",
             "Drizzle today — carry something just in case.",
@@ -547,7 +645,7 @@ private object Pools {
         )
     )
 
-    val snowVerdict: ZonedPool = mapOf(
+    override val snowVerdict: ZonedPool = mapOf(
         T  to listOf(
             "Snow. This is historic. Also dress like it's an emergency.",
             "SNOW. Wear everything warm you own.",
@@ -585,7 +683,7 @@ private object Pools {
         )
     )
 
-    val veryWindyVerdict: ZonedPool = mapOf(
+    override val veryWindyVerdict: ZonedPool = mapOf(
         T  to listOf(
             "Dangerous winds today. Stay inside if you can.",
             "Very strong winds. Not a good day to be out.",
@@ -623,7 +721,7 @@ private object Pools {
         )
     )
 
-    val windyVerdict: ZonedPool = mapOf(
+    override val windyVerdict: ZonedPool = mapOf(
         T  to listOf(
             "Gusty out there today. Not great for being outside.",
             "Strong winds today. Worth noting.",
@@ -661,7 +759,7 @@ private object Pools {
         )
     )
 
-    val hotVerdict: ZonedPool = mapOf(
+    override val hotVerdict: ZonedPool = mapOf(
         T  to listOf(
             "Nothing to grab. Hot as always.",
             "Same as yesterday. You know the drill.",
@@ -699,7 +797,7 @@ private object Pools {
         )
     )
 
-    val warmVerdict: ZonedPool = mapOf(
+    override val warmVerdict: ZonedPool = mapOf(
         T  to listOf(
             "Surprisingly cool today. You might want a light layer.",
             "A little on the cooler side — bring something thin.",
@@ -737,7 +835,7 @@ private object Pools {
         )
     )
 
-    val lightJacketVerdict: ZonedPool = mapOf(
+    override val lightJacketVerdict: ZonedPool = mapOf(
         T  to listOf(
             "Cold day. Jacket or at least layers.",
             "Chilly for you. Don't underestimate it.",
@@ -775,7 +873,7 @@ private object Pools {
         )
     )
 
-    val jacketVerdict: ZonedPool = mapOf(
+    override val jacketVerdict: ZonedPool = mapOf(
         T  to listOf(
             "Extremely cold today. Full jacket, layers underneath.",
             "This is genuinely cold weather. Dress accordingly.",
@@ -813,7 +911,7 @@ private object Pools {
         )
     )
 
-    val bundleUpVerdict: ZonedPool = mapOf(
+    override val bundleUpVerdict: ZonedPool = mapOf(
         T  to listOf(
             "This is an emergency by your standards. Everything warm you own.",
             "Genuinely freezing for your climate. Pile on the layers.",
@@ -853,7 +951,7 @@ private object Pools {
 
     // ── Mood line pools ───────────────────────────────────────────────────────
 
-    val stormMood: ZonedPool = mapOf(
+    override val stormMood: ZonedPool = mapOf(
         T  to listOf(
             "Dangerous out there. Don't test it.",
             "This is not the weather to go out in. Stay inside.",
@@ -886,7 +984,7 @@ private object Pools {
         )
     )
 
-    val heavyRainMood: ZonedPool = mapOf(
+    override val heavyRainMood: ZonedPool = mapOf(
         T  to listOf(
             "The sky means business today.",
             "Heavy rain incoming. Have a plan.",
@@ -919,7 +1017,7 @@ private object Pools {
         )
     )
 
-    val rainMood: ZonedPool = mapOf(
+    override val rainMood: ZonedPool = mapOf(
         T  to listOf(
             "Rain on the way. Cover yourself.",
             "Wet out there. You know the drill.",
@@ -952,7 +1050,7 @@ private object Pools {
         )
     )
 
-    val drizzleMood: ZonedPool = mapOf(
+    override val drizzleMood: ZonedPool = mapOf(
         T  to listOf(
             "Light rain out there. Might want an umbrella.",
             "Drizzle today. Better prepared than not.",
@@ -985,7 +1083,7 @@ private object Pools {
         )
     )
 
-    val snowMood: ZonedPool = mapOf(
+    override val snowMood: ZonedPool = mapOf(
         T  to listOf(
             "This is genuinely unusual. Stay warm and be careful.",
             "Snow day — an event, really. Enjoy it carefully.",
@@ -1018,7 +1116,7 @@ private object Pools {
         )
     )
 
-    val windMood: ZonedPool = mapOf(
+    override val windMood: ZonedPool = mapOf(
         T  to listOf(
             "Not ideal out there. Stay careful.",
             "Wind's intense today. More than you're used to.",
@@ -1052,7 +1150,7 @@ private object Pools {
         )
     )
 
-    val breezeMood: ZonedPool = mapOf(
+    override val breezeMood: ZonedPool = mapOf(
         T  to listOf(
             "Breezy out there. A nice change, honestly.",
             "Light wind — refreshing today.",
@@ -1085,7 +1183,7 @@ private object Pools {
         )
     )
 
-    val allClearWarmMood: ZonedPool = mapOf(
+    override val allClearWarmMood: ZonedPool = mapOf(
         T  to listOf(
             "Hot and clear. Classic.",
             "Another beautiful day. Go enjoy it.",
@@ -1119,7 +1217,7 @@ private object Pools {
         )
     )
 
-    val allClearNeutralMood: ZonedPool = mapOf(
+    override val allClearNeutralMood: ZonedPool = mapOf(
         T  to listOf(
             "Hot and clear. Another solid day.",
             "Nothing dramatic. Just go.",
@@ -1153,7 +1251,7 @@ private object Pools {
         )
     )
 
-    val greyMood: ZonedPool = mapOf(
+    override val greyMood: ZonedPool = mapOf(
         T  to listOf(
             "Not the best, not the worst. You'll manage.",
             "Grey and okay. Fine.",

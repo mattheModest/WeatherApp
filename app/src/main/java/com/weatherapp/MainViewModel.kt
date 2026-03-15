@@ -7,6 +7,7 @@ import androidx.datastore.preferences.core.edit
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.weatherapp.data.datastore.PreferenceKeys
+import com.weatherapp.model.personalityCoreFromString
 import com.weatherapp.data.update.UpdateChecker
 import com.weatherapp.data.update.UpdateInfo
 import com.weatherapp.model.WidgetDisplayState
@@ -129,13 +130,23 @@ class MainViewModel @Inject constructor(
     fun onResume() {
         viewModelScope.launch {
             val prefs = dataStore.data.first()
+            val personality = personalityCoreFromString(prefs[PreferenceKeys.KEY_PERSONALITY_CORE])
 
-            val verdicts = prefs[PreferenceKeys.KEY_VERDICT_CANDIDATES]
-                ?.split("|")?.filter { it.isNotEmpty() } ?: emptyList()
+            val verdictKey = when (personality) {
+                com.weatherapp.model.PersonalityCore.FRANK  -> PreferenceKeys.KEY_VERDICT_CANDIDATES
+                com.weatherapp.model.PersonalityCore.KELVIN -> PreferenceKeys.KEY_VERDICT_CANDIDATES_KELVIN
+                com.weatherapp.model.PersonalityCore.GRAVES -> PreferenceKeys.KEY_VERDICT_CANDIDATES_GRAVES
+            }
+            val moodKey = when (personality) {
+                com.weatherapp.model.PersonalityCore.FRANK  -> PreferenceKeys.KEY_MOOD_CANDIDATES
+                com.weatherapp.model.PersonalityCore.KELVIN -> PreferenceKeys.KEY_MOOD_CANDIDATES_KELVIN
+                com.weatherapp.model.PersonalityCore.GRAVES -> PreferenceKeys.KEY_MOOD_CANDIDATES_GRAVES
+            }
+
+            val verdicts = prefs[verdictKey]?.split("|")?.filter { it.isNotEmpty() } ?: emptyList()
             if (verdicts.isNotEmpty()) _pickedVerdict.value = verdicts.random()
 
-            val moods = prefs[PreferenceKeys.KEY_MOOD_CANDIDATES]
-                ?.split("|")?.filter { it.isNotEmpty() } ?: emptyList()
+            val moods = prefs[moodKey]?.split("|")?.filter { it.isNotEmpty() } ?: emptyList()
             if (moods.isNotEmpty()) _pickedMood.value = moods.random()
 
             val shouldRequest = prefs[PreferenceKeys.KEY_SHOULD_REQUEST_NOTIFICATIONS]

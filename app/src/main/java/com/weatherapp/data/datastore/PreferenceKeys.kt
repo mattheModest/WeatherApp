@@ -24,4 +24,11 @@ object PreferenceKeys {
     val KEY_CURRENT_TEMP_C = floatPreferencesKey("current_temp_c")
     val KEY_VERDICT_CANDIDATES = stringPreferencesKey("verdict_candidates")
     val KEY_MOOD_CANDIDATES = stringPreferencesKey("mood_candidates")
+    val KEY_WIDGET_SELECTED_VERDICT = stringPreferencesKey("widget_selected_verdict")
+    val KEY_WIDGET_SELECTED_MOOD = stringPreferencesKey("widget_selected_mood")
+    val KEY_PERSONALITY_CORE = stringPreferencesKey("personality_core")
+    val KEY_VERDICT_CANDIDATES_KELVIN = stringPreferencesKey("verdict_candidates_kelvin")
+    val KEY_MOOD_CANDIDATES_KELVIN = stringPreferencesKey("mood_candidates_kelvin")
+    val KEY_VERDICT_CANDIDATES_GRAVES = stringPreferencesKey("verdict_candidates_graves")
+    val KEY_MOOD_CANDIDATES_GRAVES = stringPreferencesKey("mood_candidates_graves")
 }

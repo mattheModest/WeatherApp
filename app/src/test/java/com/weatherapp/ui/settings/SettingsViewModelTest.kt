@@ -73,6 +73,7 @@ class SettingsViewModelTest {
         every { mockPrefs[PreferenceKeys.KEY_NOTIFICATIONS_ENABLED] } returns notificationsEnabled
         every { mockPrefs[PreferenceKeys.KEY_IS_PREMIUM] } returns isPremium
         every { mockPrefs[PreferenceKeys.KEY_MOOD_LINE] } returns moodLine
+        every { mockPrefs[PreferenceKeys.KEY_PERSONALITY_CORE] } returns null
     }
 
     @Test
@@ -120,6 +121,7 @@ class SettingsViewModelTest {
             every { secondPrefs[PreferenceKeys.KEY_NOTIFICATIONS_ENABLED] } returns false
             every { secondPrefs[PreferenceKeys.KEY_IS_PREMIUM] } returns false
             every { secondPrefs[PreferenceKeys.KEY_MOOD_LINE] } returns ""
+            every { secondPrefs[PreferenceKeys.KEY_PERSONALITY_CORE] } returns null
             every { mockDataStore.data } returns flowOf(secondPrefs)
 
             val viewModel = SettingsViewModel(mockDataStore, mockBillingRepository)

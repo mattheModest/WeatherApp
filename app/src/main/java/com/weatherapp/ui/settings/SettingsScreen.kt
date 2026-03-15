@@ -2,6 +2,7 @@ package com.weatherapp.ui.settings
 
 import android.app.Activity
 import android.content.Intent
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -35,6 +36,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.weatherapp.model.PersonalityCore
 import com.weatherapp.util.UiState
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -87,6 +89,7 @@ fun SettingsScreen(
                         state = state.data,
                         onTempUnitToggled = { viewModel.onTempUnitToggled() },
                         onNotificationsToggled = { viewModel.onNotificationsToggled() },
+                        onPersonalitySelected = { viewModel.onPersonalitySelected(it) },
                         onNavigateToPremium = onNavigateToPremium,
                         onUpgradeTapped = { viewModel.onUpgradeTapped(context as Activity) },
                         onShareMoodCard = {
@@ -111,6 +114,7 @@ private fun SettingsContent(
     state: SettingsState,
     onTempUnitToggled: () -> Unit,
     onNotificationsToggled: () -> Unit,
+    onPersonalitySelected: (PersonalityCore) -> Unit,
     onNavigateToPremium: () -> Unit,
     onUpgradeTapped: () -> Unit,
     onShareMoodCard: () -> Unit
@@ -157,6 +161,23 @@ private fun SettingsContent(
                 checked = state.notificationsEnabled,
                 onCheckedChange = { onNotificationsToggled() }
             )
+        }
+
+        // Personality selector
+        Spacer(modifier = Modifier.height(12.dp))
+        Text(
+            text = "Personality",
+            style = MaterialTheme.typography.titleSmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            modifier = Modifier.padding(bottom = 6.dp)
+        )
+        PersonalityCore.entries.forEach { p ->
+            PersonalityCard(
+                personality = p,
+                isSelected = state.personality == p,
+                onClick = { onPersonalitySelected(p) }
+            )
+            Spacer(modifier = Modifier.height(6.dp))
         }
 
         // Premium card (calm, informational — not a locked door)
@@ -220,6 +241,48 @@ private fun SettingsContent(
             Text(
                 text = "Share Today's Mood",
                 fontSize = 16.sp
+            )
+        }
+    }
+}
+
+@Composable
+private fun PersonalityCard(
+    personality: PersonalityCore,
+    isSelected: Boolean,
+    onClick: () -> Unit
+) {
+    val containerColor = if (isSelected)
+        MaterialTheme.colorScheme.primaryContainer
+    else
+        MaterialTheme.colorScheme.surfaceVariant
+
+    val contentColor = if (isSelected)
+        MaterialTheme.colorScheme.onPrimaryContainer
+    else
+        MaterialTheme.colorScheme.onSurfaceVariant
+
+    val border = if (isSelected)
+        BorderStroke(1.5.dp, MaterialTheme.colorScheme.primary)
+    else
+        null
+
+    Card(
+        onClick = onClick,
+        modifier = Modifier.fillMaxWidth(),
+        colors = CardDefaults.cardColors(containerColor = containerColor),
+        border = border
+    ) {
+        Column(modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp)) {
+            Text(
+                text = personality.displayName,
+                style = MaterialTheme.typography.titleSmall,
+                color = contentColor
+            )
+            Text(
+                text = personality.tagline,
+                fontSize = 13.sp,
+                color = contentColor.copy(alpha = 0.75f)
             )
         }
     }
