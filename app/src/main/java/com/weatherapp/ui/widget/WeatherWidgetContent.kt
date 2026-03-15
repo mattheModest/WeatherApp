@@ -50,53 +50,86 @@ fun WeatherWidgetContent(state: WidgetDisplayState) {
     )
 
     if (isMinimal) {
-        // ── Minimal: single row, full widget = top zone color ──
-        Row(
+        // Minimal: single solid-color row
+        Box(
             modifier = GlanceModifier
                 .fillMaxSize()
                 .background(tokens.topZoneBackground)
                 .clickable(clickAction)
                 .semantics { contentDescription = state.verdict }
-                .padding(horizontal = 12.dp, vertical = 8.dp),
-            verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(
-                text = weatherEmoji(state.weatherState),
-                style = TextStyle(fontSize = 18.sp)
-            )
-            Spacer(modifier = GlanceModifier.width(8.dp))
-            Text(
-                text = state.verdict,
-                style = TextStyle(
-                    color = ColorProvider(tokens.verdictText),
-                    fontSize = 14.sp,
-                    fontWeight = FontWeight.Bold
-                ),
-                maxLines = 2
-            )
+            Row(
+                modifier = GlanceModifier
+                    .fillMaxSize()
+                    .padding(horizontal = 12.dp, vertical = 8.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = weatherEmoji(state.weatherState),
+                    style = TextStyle(fontSize = 18.sp)
+                )
+                Spacer(modifier = GlanceModifier.width(8.dp))
+                Text(
+                    text = state.verdict,
+                    style = TextStyle(
+                        color = ColorProvider(tokens.verdictText),
+                        fontSize = 14.sp,
+                        fontWeight = FontWeight.Bold
+                    ),
+                    maxLines = 2
+                )
+            }
         }
         return
     }
 
-    // ── Full layout: explicit-height top zone + divider + bottom zone ──
-    Column(
+    // ── Full layout — painter's algorithm ──
+    // All background zones are SIBLINGS inside the root Box (FrameLayout).
+    // None are nested inside each other, which is the only reliable way to get
+    // multiple background colors in Glance/RemoteViews.
+    //
+    // Drawing order (bottom → top):
+    //   1. cardBackground   fills the entire widget
+    //   2. accentColor      fills top 74dp  (72dp zone + 2dp divider)
+    //   3. topZoneBackground fills top 72dp  (covers accent, leaving 2dp divider visible)
+    //   4. content Column   transparent, just layout
+    Box(
         modifier = GlanceModifier
             .fillMaxSize()
-            .background(tokens.cardBackground)
             .clickable(clickAction)
             .semantics { contentDescription = buildContentDescription(state) }
     ) {
-        // TOP ZONE — Box (FrameLayout) gives the most reliable background rendering in RemoteViews
+        // Layer 1: bottom-zone / card background (entire widget)
+        Box(
+            modifier = GlanceModifier
+                .fillMaxSize()
+                .background(tokens.cardBackground)
+        ) {}
+
+        // Layer 2: accent divider strip — 74dp tall so 2dp peeks below top zone
+        Box(
+            modifier = GlanceModifier
+                .fillMaxWidth()
+                .height(74.dp)
+                .background(tokens.accentColor)
+        ) {}
+
+        // Layer 3: top-zone background — 72dp, covers accent except the bottom 2dp divider
         Box(
             modifier = GlanceModifier
                 .fillMaxWidth()
                 .height(72.dp)
-                .background(tokens.topZoneBackground),
-            contentAlignment = Alignment.CenterStart
-        ) {
+                .background(tokens.topZoneBackground)
+        ) {}
+
+        // Layer 4: content — no background, sits on top of the painted layers
+        Column(modifier = GlanceModifier.fillMaxSize()) {
+
+            // TOP CONTENT — 72dp, aligns with top zone background
             Row(
                 modifier = GlanceModifier
                     .fillMaxWidth()
+                    .height(72.dp)
                     .padding(horizontal = 14.dp, vertical = 10.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -126,74 +159,67 @@ fun WeatherWidgetContent(state: WidgetDisplayState) {
                     }
                 }
             }
-        }
 
-        // DIVIDER — 2dp accent line, Box for reliable background rendering
-        Box(
-            modifier = GlanceModifier
-                .fillMaxWidth()
-                .height(2.dp)
-                .background(tokens.accentColor)
-        ) {}
+            // 2dp spacer aligns with the accent divider painted in Layer 2
+            Spacer(modifier = GlanceModifier.height(2.dp))
 
-        // BOTTOM ZONE — explicit cardBackground (belt-and-suspenders alongside root Column)
-        Column(
-            modifier = GlanceModifier
-                .fillMaxWidth()
-                .background(tokens.cardBackground)
-                .padding(horizontal = 12.dp, vertical = 8.dp)
-        ) {
-            if (state.moodLine.isNotEmpty()) {
-                Text(
-                    text = state.moodLine,
-                    style = TextStyle(
-                        color = ColorProvider(tokens.secondaryText),
-                        fontSize = 11.sp,
-                        fontStyle = FontStyle.Italic
-                    ),
-                    maxLines = 1
-                )
-                Spacer(modifier = GlanceModifier.height(6.dp))
-            }
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                state.bringItems.take(2).forEachIndexed { index, item ->
-                    if (index > 0) Spacer(modifier = GlanceModifier.width(6.dp))
-                    // Chip
+            // BOTTOM CONTENT — sits on cardBackground from Layer 1
+            Column(
+                modifier = GlanceModifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 12.dp, vertical = 8.dp)
+            ) {
+                if (state.moodLine.isNotEmpty()) {
+                    Text(
+                        text = state.moodLine,
+                        style = TextStyle(
+                            color = ColorProvider(tokens.secondaryText),
+                            fontSize = 11.sp,
+                            fontStyle = FontStyle.Italic
+                        ),
+                        maxLines = 1
+                    )
+                    Spacer(modifier = GlanceModifier.height(6.dp))
+                }
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    state.bringItems.take(2).forEachIndexed { index, item ->
+                        if (index > 0) Spacer(modifier = GlanceModifier.width(6.dp))
+                        Box(
+                            modifier = GlanceModifier
+                                .background(tokens.chipBackground)
+                                .cornerRadius(12.dp)
+                                .padding(horizontal = 8.dp, vertical = 4.dp),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Text(
+                                text = item,
+                                style = TextStyle(
+                                    color = ColorProvider(tokens.chipText),
+                                    fontSize = 11.sp,
+                                    fontWeight = FontWeight.Medium
+                                )
+                            )
+                        }
+                    }
+                    Spacer(modifier = GlanceModifier.width(8.dp))
                     Box(
                         modifier = GlanceModifier
-                            .background(tokens.chipBackground)
-                            .cornerRadius(12.dp)
-                            .padding(horizontal = 8.dp, vertical = 4.dp),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Text(
-                            text = item,
-                            style = TextStyle(
-                                color = ColorProvider(tokens.chipText),
-                                fontSize = 11.sp,
-                                fontWeight = FontWeight.Medium
-                            )
-                        )
-                    }
+                            .width(7.dp)
+                            .height(7.dp)
+                            .cornerRadius(4.dp)
+                            .background(tokens.accentColor)
+                    ) {}
                 }
-                Spacer(modifier = GlanceModifier.width(8.dp))
-                Box(
-                    modifier = GlanceModifier
-                        .width(7.dp)
-                        .height(7.dp)
-                        .cornerRadius(4.dp)
-                        .background(tokens.accentColor)
-                ) {}
-            }
-            if (state.isStale) {
-                Spacer(modifier = GlanceModifier.height(4.dp))
-                Text(
-                    text = formatStaleness(state.lastUpdateEpoch),
-                    style = TextStyle(
-                        color = ColorProvider(tokens.secondaryText),
-                        fontSize = 10.sp
+                if (state.isStale) {
+                    Spacer(modifier = GlanceModifier.height(4.dp))
+                    Text(
+                        text = formatStaleness(state.lastUpdateEpoch),
+                        style = TextStyle(
+                            color = ColorProvider(tokens.secondaryText),
+                            fontSize = 10.sp
+                        )
                     )
-                )
+                }
             }
         }
     }
