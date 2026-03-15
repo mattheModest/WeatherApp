@@ -41,17 +41,18 @@ class VerdictGeneratorTest {
     @Before
     fun setup() {
         generator = VerdictGenerator()
+        // Pin pool selection to index 0 so assertions are deterministic regardless of date.
+        generator.testDateIndex = 0
     }
 
     // --- Temperature band tests ---
 
     @Test
     fun `hot temperature produces no jacket verdict`() {
-        val result = generator.generateVerdict(clearDayHours(peakTempC = 30.0))
-        // All-clear overrides clothing verdict when conditions are clear; force not all-clear with rain
-        val hotRainyHour = listOf(hour(10, tempC = 30.0, precipProb = 0.5))
-        val r = generator.generateVerdict(hotRainyHour)
-        assertEquals("Nothing to grab. Warm all day.", r.verdictText)
+        // precipProb=0.5 adds umbrella to bringList → isAllClear=false → clothing verdict used
+        val hours = listOf(hour(10, tempC = 30.0, precipProb = 0.5))
+        val result = generator.generateVerdict(hours)
+        assertEquals("Nothing to grab. Warm all day.", result.verdictText)
     }
 
     @Test
@@ -165,31 +166,34 @@ class VerdictGeneratorTest {
     // --- Mood line tests ---
 
     @Test
-    fun `storm produces stay-in mood line`() {
+    fun `storm weather code produces storm mood line`() {
         val hours = listOf(hour(10, weatherCode = 95))
         val mood = generator.generateMoodLine(hours, isAllClear = false)
         assertEquals("Stay in if you can. This one means it.", mood)
     }
 
     @Test
-    fun `heavy rain produces proper rain mood line`() {
-        val hours = listOf(hour(10, precipProb = 0.75))
+    fun `heavy rain weather code produces heavy rain mood line`() {
+        // WMO 63 = moderate rain
+        val hours = listOf(hour(10, weatherCode = 63))
         val mood = generator.generateMoodLine(hours, isAllClear = false)
         assertEquals("Proper rain today. You'll want that umbrella.", mood)
     }
 
     @Test
-    fun `moderate rain produces cosy mood line`() {
-        val hours = listOf(hour(10, precipProb = 0.45))
+    fun `rain weather code produces rain mood line`() {
+        // WMO 61 = slight rain
+        val hours = listOf(hour(10, weatherCode = 61))
         val mood = generator.generateMoodLine(hours, isAllClear = false)
         assertEquals("Good day to stay cosy — or just embrace the drizzle.", mood)
     }
 
     @Test
-    fun `high wind produces breezy mood line`() {
+    fun `high wind produces wind mood line`() {
+        // 55 km/h → WINDY condition → windMood pool
         val hours = listOf(hour(10, windKmh = 55.0))
         val mood = generator.generateMoodLine(hours, isAllClear = false)
-        assertEquals("Breezy today. Tie your hat down.", mood)
+        assertEquals("Don't bother with an umbrella, it'll just flip.", mood)
     }
 
     @Test
@@ -207,7 +211,7 @@ class VerdictGeneratorTest {
     }
 
     @Test
-    fun `overcast non-clear produces grey but manageable mood line`() {
+    fun `overcast non-clear produces grey mood line`() {
         val hours = listOf(hour(10, precipProb = 0.1, weatherCode = 3))
         val mood = generator.generateMoodLine(hours, isAllClear = false)
         assertEquals("Grey but manageable. You've got this.", mood)

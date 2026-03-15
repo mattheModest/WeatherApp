@@ -1,9 +1,6 @@
 package com.weatherapp.ui.onboarding
 
 import android.Manifest
-import android.appwidget.AppWidgetManager
-import android.content.ComponentName
-import android.os.Build
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts.RequestPermission
 import androidx.compose.foundation.layout.Arrangement
@@ -33,9 +30,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.weatherapp.ui.widget.WeatherWidgetReceiver
 import com.weatherapp.util.UiState
-import timber.log.Timber
 
 @Composable
 fun OnboardingScreen(
@@ -93,14 +88,6 @@ fun OnboardingScreen(
                         },
                         onManualLocationEntered = { location -> viewModel.onManualLocationEntered(location) },
                         onOnboardingComplete = {
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                                val appWidgetManager = AppWidgetManager.getInstance(context)
-                                val provider = ComponentName(context, WeatherWidgetReceiver::class.java)
-                                if (appWidgetManager.isRequestPinAppWidgetSupported) {
-                                    appWidgetManager.requestPinAppWidget(provider, null, null)
-                                    Timber.d("OnboardingScreen: widget pin requested")
-                                }
-                            }
                             onOnboardingComplete()
                         }
                     )

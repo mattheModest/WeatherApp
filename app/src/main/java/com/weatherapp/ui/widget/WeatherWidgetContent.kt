@@ -40,7 +40,11 @@ import com.weatherapp.ui.theme.WeatherDesignTokens
 @Composable
 fun WeatherWidgetContent(state: WidgetDisplayState) {
     val size = LocalSize.current
-    val isMinimal = size.height < 110.dp
+    // 80dp threshold: only use minimal layout for truly tiny placements (1 cell).
+    // Previous 110dp threshold matched the minimum height exactly and triggered
+    // on any rounding, causing full-size widgets to always show minimal layout.
+    val isMinimal = size.height < 80.dp
+    val isMedium = size.height < 160.dp  // 4×1 range: show top zone only, no chips/mood
     val context = LocalContext.current
     val isDark = isSystemInDarkTheme(context)
     val tokens = WeatherDesignTokens.getTokens(state.weatherState, isDark)
@@ -78,6 +82,107 @@ fun WeatherWidgetContent(state: WidgetDisplayState) {
                     ),
                     maxLines = 2
                 )
+            }
+        }
+        return
+    }
+
+    if (isMedium) {
+        // Medium (4×1): painter's algorithm two-zone, 50/50 split based on actual widget height.
+        // Using LocalSize.current to compute zone heights dynamically so spacing is equal
+        // regardless of how tall the launcher places the widget.
+        val topHeight = size.height / 2
+        val bottomHeight = size.height / 2
+        Box(
+            modifier = GlanceModifier
+                .fillMaxSize()
+                .clickable(clickAction)
+                .semantics { contentDescription = buildContentDescription(state) }
+        ) {
+            // Layer 1: card background (entire widget)
+            Box(modifier = GlanceModifier.fillMaxSize().background(tokens.cardBackground)) {}
+            // Layer 2: accent divider strip (topHeight + 2dp so 2dp peeks below top zone)
+            Box(modifier = GlanceModifier.fillMaxWidth().height(topHeight + 2.dp).background(tokens.accentColor)) {}
+            // Layer 3: top zone (40% of widget height)
+            Box(modifier = GlanceModifier.fillMaxWidth().height(topHeight).background(tokens.topZoneBackground)) {}
+            // Layer 4: content
+            Column(modifier = GlanceModifier.fillMaxSize()) {
+                // TOP: emoji + verdict — 40% of height
+                Row(
+                    modifier = GlanceModifier
+                        .fillMaxWidth()
+                        .height(topHeight)
+                        .padding(horizontal = 12.dp, vertical = 8.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(text = weatherEmoji(state.weatherState), style = TextStyle(fontSize = 30.sp))
+                    Spacer(modifier = GlanceModifier.width(8.dp))
+                    Text(
+                        text = state.verdict,
+                        style = TextStyle(
+                            color = ColorProvider(tokens.verdictText),
+                            fontSize = 19.sp,
+                            fontWeight = FontWeight.Bold
+                        ),
+                        maxLines = 1
+                    )
+                }
+                // 2dp spacer for the accent divider
+                Spacer(modifier = GlanceModifier.height(2.dp))
+                // BOTTOM: mood line + chips — tiered sizes: 13sp → 10sp
+                Row(
+                    modifier = GlanceModifier
+                        .fillMaxWidth()
+                        .height(bottomHeight - 2.dp)
+                        .padding(horizontal = 12.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Column {
+                        if (state.moodLine.isNotEmpty()) {
+                            Text(
+                                text = state.moodLine,
+                                style = TextStyle(
+                                    color = ColorProvider(tokens.secondaryText),
+                                    fontSize = 13.sp,
+                                    fontStyle = FontStyle.Italic
+                                ),
+                                maxLines = 1
+                            )
+                            Spacer(modifier = GlanceModifier.height(4.dp))
+                        }
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            state.bringItems.take(2).forEachIndexed { index, item ->
+                                if (index > 0) Spacer(modifier = GlanceModifier.width(6.dp))
+                                Box(
+                                    modifier = GlanceModifier
+                                        .background(tokens.chipBackground)
+                                        .cornerRadius(10.dp)
+                                        .padding(horizontal = 6.dp, vertical = 3.dp),
+                                    contentAlignment = Alignment.Center
+                                ) {
+                                    Text(
+                                        text = item,
+                                        style = TextStyle(
+                                            color = ColorProvider(tokens.chipText),
+                                            fontSize = 10.sp,
+                                            fontWeight = FontWeight.Medium
+                                        )
+                                    )
+                                }
+                            }
+                            if (state.bestWindow != null) {
+                                Spacer(modifier = GlanceModifier.width(8.dp))
+                                Text(
+                                    text = "Good window: ${state.bestWindow}",
+                                    style = TextStyle(
+                                        color = ColorProvider(tokens.accentColor),
+                                        fontSize = 10.sp
+                                    )
+                                )
+                            }
+                        }
+                    }
+                }
             }
         }
         return

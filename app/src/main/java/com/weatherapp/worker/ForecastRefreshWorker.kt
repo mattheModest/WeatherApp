@@ -81,8 +81,11 @@ class ForecastRefreshWorker @AssistedInject constructor(
                 val comfortOffset = if (location != null) {
                     VerdictGenerator.computeComfortOffset(location.first, LocalDate.now().monthValue)
                 } else 0.0
+                val climateZone = if (location != null) {
+                    VerdictGenerator.climateZoneFromAbsLat(kotlin.math.abs(location.first))
+                } else com.weatherapp.model.ClimateZone.TEMPERATE
 
-                val verdictResult = verdictGenerator.generateVerdict(todayHours, comfortOffset)
+                val verdictResult = verdictGenerator.generateVerdict(todayHours, comfortOffset, climateZone)
 
                 val nowSec = System.currentTimeMillis() / 1000L
                 val currentTempC = todayHours.minByOrNull { kotlin.math.abs(it.hourEpoch - nowSec) }?.temperatureC?.toFloat()

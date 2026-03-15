@@ -4,12 +4,18 @@ import android.content.Context
 import androidx.glance.GlanceId
 import androidx.glance.appwidget.GlanceAppWidget
 import androidx.glance.appwidget.GlanceAppWidgetManager
+import androidx.glance.appwidget.SizeMode
 import androidx.glance.appwidget.provideContent
 import com.weatherapp.data.datastore.weatherDataStore
 import com.weatherapp.model.WidgetDisplayState
 import timber.log.Timber
 
 class WeatherWidget : GlanceAppWidget() {
+
+    // SizeMode.Exact reports the actual placed size so LocalSize.current is reliable.
+    // Default SizeMode.Single can report wrong/rounded dimensions, causing the
+    // minimal-layout threshold to fire even for full-size widgets.
+    override val sizeMode = SizeMode.Exact
 
     override suspend fun provideGlance(context: Context, id: GlanceId) {
         val rawState = context.applicationContext.weatherDataStore.readWidgetDisplayState()
