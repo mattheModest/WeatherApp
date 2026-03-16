@@ -89,7 +89,8 @@ fun WeatherAppContent(mainViewModel: MainViewModel) {
 
     AdaptiveSkyTheme(
         weatherState = displayState.weatherState,
-        darkTheme = isSystemInDarkTheme()
+        darkTheme = isSystemInDarkTheme(),
+        visualTheme = visualTheme
     ) {
         NavHost(
             navController = navController,

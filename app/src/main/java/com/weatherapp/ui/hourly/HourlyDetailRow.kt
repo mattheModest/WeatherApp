@@ -84,7 +84,7 @@ fun HourlyDetailRow(
             text = row.temperatureDisplay,
             fontSize = 16.sp,
             fontWeight = FontWeight.Bold,
-            color = MaterialTheme.colorScheme.primary,
+            color = MaterialTheme.colorScheme.onSurface,
             textAlign = TextAlign.End,
             modifier = Modifier.padding(end = 16.dp)
         )
