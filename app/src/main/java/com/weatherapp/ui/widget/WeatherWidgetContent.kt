@@ -48,6 +48,11 @@ fun WeatherWidgetContent(state: WidgetDisplayState, visualTheme: VisualTheme = V
     val context = LocalContext.current
     val isDark = isSystemInDarkTheme(context)
     val tokens = visualTheme.toWidgetTokens(state.weatherState, isDark)
+    // Only use the painter's-algorithm two-zone split when topZoneBackground is actually opaque.
+    // Themes like INK, UTILITY, CHALK use near-transparent topZoneBackground (3–6% alpha) —
+    // the solid accentColor box behind it bleeds through and looks garish (e.g. neon green).
+    // For those themes, a single solid cardBackground matches the in-app card preview.
+    val useZonedLayout = tokens.topZoneBackground.alpha >= 0.5f
 
     // Per-theme font family for Glance
     val verdictFont: FontFamily? = when (visualTheme) {
@@ -73,7 +78,7 @@ fun WeatherWidgetContent(state: WidgetDisplayState, visualTheme: VisualTheme = V
         Box(
             modifier = GlanceModifier
                 .fillMaxSize()
-                .background(tokens.topZoneBackground)
+                .background(if (useZonedLayout) tokens.topZoneBackground else tokens.cardBackground)
                 .clickable(clickAction)
                 .semantics { contentDescription = state.verdict }
         ) {
@@ -113,8 +118,10 @@ fun WeatherWidgetContent(state: WidgetDisplayState, visualTheme: VisualTheme = V
                 .semantics { contentDescription = buildContentDescription(state) }
         ) {
             Box(modifier = GlanceModifier.fillMaxSize().background(tokens.cardBackground)) {}
-            Box(modifier = GlanceModifier.fillMaxWidth().height(topHeight + 2.dp).background(tokens.accentColor)) {}
-            Box(modifier = GlanceModifier.fillMaxWidth().height(topHeight).background(tokens.topZoneBackground)) {}
+            if (useZonedLayout) {
+                Box(modifier = GlanceModifier.fillMaxWidth().height(topHeight + 2.dp).background(tokens.accentColor)) {}
+                Box(modifier = GlanceModifier.fillMaxWidth().height(topHeight).background(tokens.topZoneBackground)) {}
+            }
             Column(modifier = GlanceModifier.fillMaxSize()) {
                 Row(
                     modifier = GlanceModifier
@@ -231,19 +238,21 @@ fun WeatherWidgetContent(state: WidgetDisplayState, visualTheme: VisualTheme = V
                 .background(tokens.cardBackground)
         ) {}
 
-        Box(
-            modifier = GlanceModifier
-                .fillMaxWidth()
-                .height(74.dp)
-                .background(tokens.accentColor)
-        ) {}
+        if (useZonedLayout) {
+            Box(
+                modifier = GlanceModifier
+                    .fillMaxWidth()
+                    .height(74.dp)
+                    .background(tokens.accentColor)
+            ) {}
 
-        Box(
-            modifier = GlanceModifier
-                .fillMaxWidth()
-                .height(72.dp)
-                .background(tokens.topZoneBackground)
-        ) {}
+            Box(
+                modifier = GlanceModifier
+                    .fillMaxWidth()
+                    .height(72.dp)
+                    .background(tokens.topZoneBackground)
+            ) {}
+        }
 
         Column(modifier = GlanceModifier.fillMaxSize()) {
 
