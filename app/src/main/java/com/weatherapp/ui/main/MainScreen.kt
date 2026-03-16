@@ -261,6 +261,11 @@ private fun WeatherCard(displayState: WidgetDisplayState, style: VisualThemeStyl
         Column(
             modifier = Modifier
                 .fillMaxWidth()
+                .then(
+                    if (style.bottomZoneBackground != androidx.compose.ui.graphics.Color.Transparent)
+                        Modifier.background(style.bottomZoneBackground)
+                    else Modifier
+                )
                 .padding(horizontal = 16.dp, vertical = 14.dp),
             verticalArrangement = Arrangement.spacedBy(10.dp)
         ) {

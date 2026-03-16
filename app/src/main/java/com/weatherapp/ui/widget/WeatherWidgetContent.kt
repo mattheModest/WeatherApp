@@ -76,6 +76,13 @@ fun WeatherWidgetContent(state: WidgetDisplayState, visualTheme: VisualTheme = V
     val showTitlebar = visualTheme == VisualTheme.SUN_STAINED_BEIGE
     // Titlebar adds ~22dp above the verdict row; grow the top zone to match
     val topZoneHeight = if (showTitlebar) 94.dp else 72.dp
+    // Bottom zone darkening — for non-zoned themes that need a visible top/bottom split
+    val bottomZoneOverlay: Color = when (visualTheme) {
+        VisualTheme.INK_EDITORIAL -> Color(0x47000000)
+        VisualTheme.UTILITY_CHIC  -> Color(0x29000000)
+        VisualTheme.CHALK_SLATE   -> Color(0x38000000)
+        else                      -> Color.Transparent
+    }
 
     val clickAction = actionStartActivity<MainActivity>(
         actionParametersOf(ActionParameters.Key<Boolean>("open_hourly") to true)
@@ -125,6 +132,11 @@ fun WeatherWidgetContent(state: WidgetDisplayState, visualTheme: VisualTheme = V
                 .semantics { contentDescription = buildContentDescription(state) }
         ) {
             Box(modifier = GlanceModifier.fillMaxSize().background(tokens.cardBackground)) {}
+            if (!useZonedLayout && bottomZoneOverlay != Color.Transparent) {
+                // Non-zoned themes: full dark overlay then cover top half back to cardBackground
+                Box(modifier = GlanceModifier.fillMaxSize().background(bottomZoneOverlay)) {}
+                Box(modifier = GlanceModifier.fillMaxWidth().height(topHeight).background(tokens.cardBackground)) {}
+            }
             if (showTopEdgeStripe) {
                 Box(modifier = GlanceModifier.fillMaxWidth().height(3.dp).background(tokens.accentColor)) {}
             }
@@ -268,6 +280,11 @@ fun WeatherWidgetContent(state: WidgetDisplayState, visualTheme: VisualTheme = V
                 .fillMaxSize()
                 .background(tokens.cardBackground)
         ) {}
+
+        if (!useZonedLayout && bottomZoneOverlay != Color.Transparent) {
+            Box(modifier = GlanceModifier.fillMaxSize().background(bottomZoneOverlay)) {}
+            Box(modifier = GlanceModifier.fillMaxWidth().height(topZoneHeight).background(tokens.cardBackground)) {}
+        }
 
         if (showTopEdgeStripe) {
             Box(modifier = GlanceModifier.fillMaxWidth().height(3.dp).background(tokens.accentColor)) {}

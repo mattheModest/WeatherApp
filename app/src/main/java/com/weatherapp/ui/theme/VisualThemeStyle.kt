@@ -31,6 +31,8 @@ data class VisualThemeStyle(
     val topEdgeStripeColor: Color = Color.Transparent,
     // UTILITY_CHIC: static live badge (dot + LIVE label)
     val showLiveBadge: Boolean = false,
+    // Bottom zone background — solid or semi-transparent overlay making bottom zone distinct from top
+    val bottomZoneBackground: Color = Color.Transparent,
     // EIGHT_BIT: ASCII weather symbols + pixel indicator
     val useAsciiWeather: Boolean = false,
     val showPixelIndicator: Boolean = false,
@@ -124,27 +126,30 @@ fun VisualTheme.toStyle(weatherState: WeatherState, isDark: Boolean): VisualThem
         titlebarTextColor = Color(0xFFE0C888),
     )
     VisualTheme.INK_EDITORIAL -> VisualThemeStyle(
-        tokens             = inkTokens,
-        verdictWeight      = FontWeight.Bold,
-        cardCornerRadius   = 14.dp,
-        chipCornerRadius   = 3.dp,
-        hasTopEdgeStripe   = true,
-        topEdgeStripeColor = Color(0xFFFBBF24),
+        tokens               = inkTokens,
+        verdictWeight        = FontWeight.Bold,
+        cardCornerRadius     = 14.dp,
+        chipCornerRadius     = 3.dp,
+        hasTopEdgeStripe     = true,
+        topEdgeStripeColor   = Color(0xFFFBBF24),
+        bottomZoneBackground = Color(0x47000000),   // 28% black — bottom visibly darker
     )
     VisualTheme.UTILITY_CHIC -> VisualThemeStyle(
-        tokens           = utilityTokens,
-        metaFontFamily   = AppFonts.monospace,
-        cardCornerRadius = 14.dp,
-        chipCornerRadius = 3.dp,
-        showLiveBadge    = true,
+        tokens               = utilityTokens,
+        metaFontFamily       = AppFonts.monospace,
+        cardCornerRadius     = 14.dp,
+        chipCornerRadius     = 3.dp,
+        showLiveBadge        = true,
+        bottomZoneBackground = Color(0x29000000),   // 16% black — subtle bottom darkening
     )
     VisualTheme.CHALK_SLATE -> VisualThemeStyle(
-        tokens           = chalkTokens,
-        titleFontFamily  = AppFonts.handwriting,
-        metaFontFamily   = AppFonts.handwriting,
-        verdictWeight    = FontWeight.Bold,
-        cardCornerRadius = 4.dp,
-        chipCornerRadius = 0.dp,
+        tokens               = chalkTokens,
+        titleFontFamily      = AppFonts.handwriting,
+        metaFontFamily       = AppFonts.handwriting,
+        verdictWeight        = FontWeight.Bold,
+        cardCornerRadius     = 4.dp,
+        chipCornerRadius     = 0.dp,
+        bottomZoneBackground = Color(0x38000000),   // 22% black — bottom visibly darker
     )
     VisualTheme.NEO_BRUTALISM -> VisualThemeStyle(
         tokens           = neoBrutalismTokens,
