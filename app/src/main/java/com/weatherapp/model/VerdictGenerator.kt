@@ -64,7 +64,8 @@ class VerdictGenerator {
     }
 
     private fun pick(pool: ZonedPool, zone: ClimateZone): String {
-        val list = pool[zone] ?: pool[ClimateZone.TEMPERATE]!!
+        val list = pool[zone] ?: pool[ClimateZone.TEMPERATE] ?: return "Checking the forecast..."
+        if (list.isEmpty()) return "Checking the forecast..."
         val index = testDateIndex ?: (LocalDate.now().toEpochDay() % list.size).toInt()
         return list[index]
     }
@@ -241,7 +242,7 @@ class VerdictGenerator {
     }
 
     private fun getCandidates(pool: ZonedPool, zone: ClimateZone): List<String> =
-        pool[zone] ?: pool[ClimateZone.TEMPERATE]!!
+        pool[zone] ?: pool[ClimateZone.TEMPERATE] ?: emptyList()
 
     private fun getClothingCandidates(
         hourlyData: List<ForecastHour>,

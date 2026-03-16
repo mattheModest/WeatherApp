@@ -3,8 +3,10 @@ package com.weatherapp.ui.widget
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import com.weatherapp.data.datastore.PreferenceKeys
+import com.weatherapp.model.PersonalityCore
 import com.weatherapp.model.WeatherState
 import com.weatherapp.model.WidgetDisplayState
+import com.weatherapp.model.personalityCoreFromString
 import kotlinx.coroutines.flow.first
 
 /**
@@ -13,13 +15,26 @@ import kotlinx.coroutines.flow.first
  * (where it's driven reactively by DataStore.data.collect).
  */
 fun buildWidgetDisplayState(prefs: Preferences): WidgetDisplayState {
-    val verdictCandidates = prefs[PreferenceKeys.KEY_VERDICT_CANDIDATES]
+    val personality = personalityCoreFromString(prefs[PreferenceKeys.KEY_PERSONALITY_CORE])
+
+    val verdictKey = when (personality) {
+        PersonalityCore.FRANK  -> PreferenceKeys.KEY_VERDICT_CANDIDATES
+        PersonalityCore.KELVIN -> PreferenceKeys.KEY_VERDICT_CANDIDATES_KELVIN
+        PersonalityCore.GRAVES -> PreferenceKeys.KEY_VERDICT_CANDIDATES_GRAVES
+    }
+    val moodKey = when (personality) {
+        PersonalityCore.FRANK  -> PreferenceKeys.KEY_MOOD_CANDIDATES
+        PersonalityCore.KELVIN -> PreferenceKeys.KEY_MOOD_CANDIDATES_KELVIN
+        PersonalityCore.GRAVES -> PreferenceKeys.KEY_MOOD_CANDIDATES_GRAVES
+    }
+
+    val verdictCandidates = prefs[verdictKey]
         ?.split("|")?.filter { it.isNotEmpty() } ?: emptyList()
     val verdictText = prefs[PreferenceKeys.KEY_WIDGET_SELECTED_VERDICT]?.takeIf { it.isNotEmpty() }
         ?: verdictCandidates.randomOrNull()
         ?: prefs[PreferenceKeys.KEY_WIDGET_VERDICT] ?: ""
 
-    val moodCandidates = prefs[PreferenceKeys.KEY_MOOD_CANDIDATES]
+    val moodCandidates = prefs[moodKey]
         ?.split("|")?.filter { it.isNotEmpty() } ?: emptyList()
     val moodLine = prefs[PreferenceKeys.KEY_WIDGET_SELECTED_MOOD]?.takeIf { it.isNotEmpty() }
         ?: moodCandidates.randomOrNull()

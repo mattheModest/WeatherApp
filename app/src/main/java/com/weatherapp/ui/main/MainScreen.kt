@@ -428,12 +428,23 @@ private fun ForecastCard(
                 }
             }
             is UiState.Success -> {
-                state.data.forEachIndexed { index, row ->
-                    HourlyDetailRow(row = row)
-                    if (index < state.data.lastIndex) {
-                        HorizontalDivider(
-                            color = tokens.chipBackground.copy(alpha = 0.25f)
-                        )
+                if (state.data.isEmpty()) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(24.dp),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text("No forecast available", fontSize = 14.sp, color = tokens.secondaryText)
+                    }
+                } else {
+                    state.data.forEachIndexed { index, row ->
+                        HourlyDetailRow(row = row)
+                        if (index < state.data.lastIndex) {
+                            HorizontalDivider(
+                                color = tokens.chipBackground.copy(alpha = 0.25f)
+                            )
+                        }
                     }
                 }
             }
