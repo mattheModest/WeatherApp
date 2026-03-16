@@ -1,0 +1,89 @@
+name: Cloudflare Worker Health
+
+on:
+  schedule:
+    - cron: '0 */6 * * *'   # every 6 hours
+  workflow_dispatch:          # manual trigger
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+
+    steps:
+      - name: Ping worker
+        id: ping
+        run: |
+          DATE=$(date -u +%Y-%m-%d)
+          STATUS=$(curl -s -o /dev/null -w "%{http_code}" \
+            "https://weatherapp-worker.siegen2265.workers.dev/forecast?lat_grid=51.5&lon_grid=-0.1&date=$DATE" \
+            --max-time 15)
+          echo "status=$STATUS" >> $GITHUB_OUTPUT
+          echo "Worker responded: $STATUS"
+
+      - name: Open issue if unhealthy
+        if: steps.ping.outputs.status != '200'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const title = 'Cloudflare Worker health check failed';
+            const { data: issues } = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              labels: 'worker-down'
+            });
+            if (issues.some(i => i.title === title)) {
+              console.log('Issue already open — skipping duplicate');
+              return;
+            }
+            await github.rest.issues.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title,
+              body: [
+                '## Cloudflare Worker is unreachable',
+                '',
+                `**HTTP status:** \`${{ steps.ping.outputs.status }}\``,
+                `**Checked at:** ${new Date().toUTCString()}`,
+                '',
+                '### Impact',
+                'ForecastRefreshWorker will fail silently. Users will see the staleness indicator ("Last updated Xm ago") on their widget.',
+                '',
+                '### Fix',
+                '1. Go to [Cloudflare Dashboard → Workers](https://dash.cloudflare.com) → `weatherapp-worker`',
+                '2. Check the worker logs for errors',
+                '3. Re-deploy if needed: `cd cloudflare-worker && wrangler deploy`',
+                '',
+                '_This issue was opened automatically by the worker health check workflow._'
+              ].join('\n'),
+              labels: ['worker-down']
+            });
+
+      - name: Close resolved issue if healthy
+        if: steps.ping.outputs.status == '200'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const title = 'Cloudflare Worker health check failed';
+            const { data: issues } = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              labels: 'worker-down'
+            });
+            for (const issue of issues.filter(i => i.title === title)) {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issue.number,
+                body: `Worker is healthy again (HTTP 200). Auto-closing. Checked at ${new Date().toUTCString()}.`
+              });
+              await github.rest.issues.update({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: issue.number,
+                state: 'closed'
+              });
+            }
