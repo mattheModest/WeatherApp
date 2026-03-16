@@ -11,430 +11,430 @@ internal object KelvinPools : PoolSet {
 
     override val stormVerdict: ZonedPool = mapOf(
         TR to listOf(
-            "ITCZ convective cell overhead. Towering cumulonimbus, lightning, intense rainfall. This is a tropical thunderstorm. Stay inside.",
-            "Squall line development. Tropical convective instability producing rapid-onset severe weather. Do not attempt to wait this out.",
-            "Mesoscale convective system. Tropical variety. Rainfall rates can exceed 50mm/hr. The atmosphere is entirely in charge right now.",
-            "Deep convection triggered by tropical surface heating. Lightning, thunder, and heavy rain simultaneously. Inside is the only answer."
+            "ITCZ storm cell. Heavy lightning and rainfall. Stay inside.",
+            "Squall line. Tropical convective instability. Stay inside.",
+            "Mesoscale convective system. Rates exceed 50mm/hr. Inside.",
+            "Deep tropical convection. Lightning and heavy rain. Inside."
         ),
         ST to listOf(
-            "Thunderstorm cell. Subtropical convective trigger. Low dewpoint meets surface heating and this is what happens. Stay in.",
-            "Severe convective activity. The subtropical atmosphere has accumulated enough instability to express itself violently. Inside.",
-            "Summer thunderstorm: classic subtropical heat-driven convection. The CAPE values made this inevitable. Lightning risk is real.",
-            "Intense convective storm. Subtropical high has broken down today and the atmosphere is releasing the energy. Shelter."
+            "Thunderstorm cell. Subtropical convective trigger. Stay in.",
+            "Severe convection. Subtropical instability released. Inside.",
+            "Subtropical thunderstorm. High CAPE. Lightning risk is real.",
+            "Intense convective storm. Subtropical energy releasing. Shelter."
         ),
         TE to listOf(
-            "Active thunderstorm cell overhead. Lightning frequency is significant. Stay in.",
-            "Cumulonimbus development with electrical activity. The atmosphere has right of way today.",
-            "Severe convective activity in progress. Inside is the correct answer right now.",
-            "Mesoscale convective system producing thunder and lightning. This is a real storm."
+            "Active thunderstorm overhead. Lightning significant. Stay in.",
+            "Cumulonimbus with lightning. Atmosphere has right of way.",
+            "Severe convective activity. Inside is the correct answer now.",
+            "Mesoscale system. Thunder and lightning. This is a real storm."
         ),
         OC to listOf(
-            "Extratropical cyclone with embedded thunderstorms. The Atlantic fetch has delivered significant energy to this system.",
-            "Explosive cyclogenesis event. Pressure dropping fast, convective cells developing. This is beyond umbrella territory.",
-            "Deep low pressure with convective activity. Maritime storm conditions. Sustained gales and electrical activity.",
-            "Severe maritime storm. The low tracking in from the west has intensified beyond forecast. Stay indoors."
+            "Extratropical cyclone with storms. Atlantic fetch serious.",
+            "Explosive cyclogenesis. Pressure dropping fast. Stay inside.",
+            "Deep low with convective cells. Maritime gales and lightning.",
+            "Severe maritime storm. Low intensified past forecast. Inside."
         ),
         NO to listOf(
-            "Polar front cyclone with convective cores. These are rare this far north, and serious. Stay inside.",
-            "Severe Nordic storm. Low pressure from the Norwegian Sea is delivering the full Atlantic energy budget today.",
-            "Arctic cyclone making landfall. Wind, lightning, heavy precipitation. The polar vortex is not being subtle.",
-            "Extratropical bomb cyclone. Rapid intensification overnight produced severe conditions. Do not go out."
+            "Polar front cyclone. Convective cores. Rare. Stay inside.",
+            "Severe Nordic storm. Norwegian Sea low. Full energy budget.",
+            "Arctic cyclone. Wind, lightning, heavy precipitation. Inside.",
+            "Extratropical bomb cyclone. Rapid intensification. Stay out."
         )
     )
 
     override val heavyRainVerdict: ZonedPool = mapOf(
         TR to listOf(
-            "Monsoon-intensity rainfall. 30-50mm/hr. Tropical precipitation rates overwhelm standard waterproofing. Full gear required.",
-            "Convective downpour, tropical intensity. This is not midlatitude rain. Precipitation rates are extreme. Waterproof everything.",
-            "Heavy tropical rainfall event. ITCZ position and high moisture content combine for intense accumulation. Serious waterproofing needed.",
-            "Tropical rainfall: high intensity. Drainage will be overwhelmed in minutes at these rates. Gear up fully or stay in."
+            "Monsoon rainfall. 30-50mm/hr. Full waterproofing required.",
+            "Convective downpour, tropical intensity. Waterproof everything.",
+            "Heavy tropical rainfall. ITCZ moisture. High rates. Gear up.",
+            "Tropical rainfall: high intensity. Drainage overwhelmed. Gear."
         ),
         ST to listOf(
-            "Subtropical heavy rain event. Moisture-laden air and convective instability producing 20-40mm/hr. Full waterproofing required.",
-            "Intense convective rainfall, subtropical system. Rates are well beyond what umbrellas manage. Waterproof jacket essential.",
-            "Heavy rain. Subtropical convective trigger. Falling faster than drainage can clear. Full waterproofing, not just an umbrella.",
-            "High precipitation rate. Subtropical storm moisture is significant. This isn't commuter drizzle. Proper gear today."
+            "Subtropical heavy rain. 20-40mm/hr. Full waterproofing needed.",
+            "Intense convective rainfall. Beyond umbrella range. Jacket.",
+            "Heavy subtropical rain. Waterproofing, not just an umbrella.",
+            "High precipitation. Subtropical moisture. Proper gear today."
         ),
         TE to listOf(
-            "Convective rainfall event, 20-30mm/hr. An umbrella won't cut it alone. Full waterproofing.",
-            "High precipitation intensity. Mesoscale convective system overhead. Waterproof everything.",
-            "Rainfall intensity: heavy. 15-25mm/hr accumulation. Jacket required, umbrella insufficient alone.",
-            "Cumulonimbus discharge event. High rainfall rate. Proper gear or stay inside."
+            "Convective rainfall, 20-30mm/hr. Full waterproofing needed.",
+            "High intensity. Mesoscale convective system overhead. Gear.",
+            "Heavy rainfall: 15-25mm/hr. Jacket required. No umbrella.",
+            "Cumulonimbus discharge. High rate. Gear up or stay inside."
         ),
         OC to listOf(
-            "Frontal heavy rain, maritime origin. Atlantic air mass carrying significant moisture content. Waterproof jacket mandatory.",
-            "Warm conveyor belt associated with Atlantic low. Rainfall rates 15-30mm/hr. Umbrella alone is insufficient today.",
-            "Persistent heavy rain from maritime front. The system is slow-moving. This continues for hours. Full waterproofing.",
-            "Orographic enhancement on the windward side today. Rainfall rates are elevated. Waterproof gear essential."
+            "Frontal heavy rain, maritime origin. Waterproof jacket mandatory.",
+            "Atlantic warm conveyor belt. 15-30mm/hr. Umbrella insufficient.",
+            "Persistent heavy rain from maritime front. Full waterproofing.",
+            "Orographic enhancement today. Rainfall rates elevated. Gear up."
         ),
         NO to listOf(
-            "Heavy precipitation from polar front system. Near-freezing temperatures make this worse than it sounds. Full waterproofing.",
-            "Cold heavy rain, possible sleet mix. Nordic frontal system delivering significant precipitation. Full waterproof kit.",
-            "Rain and sleet mix at these temperatures. Waterproof and insulating layers both needed simultaneously.",
-            "Heavy precipitation event. Liquid phase, but barely. Wind chill makes the felt temperature significantly worse. Gear up."
+            "Heavy rain from polar front. Near-freezing. Full waterproofing.",
+            "Cold heavy rain, possible sleet. Nordic front. Full kit.",
+            "Rain and sleet mix. Waterproof and insulating layers both needed.",
+            "Heavy precipitation. Liquid phase, barely. Wind chill adds to it."
         )
     )
 
     override val rainVerdict: ZonedPool = mapOf(
         TR to listOf(
-            "Afternoon convective shower. Textbook tropical pattern. Umbrella required; this is warm, heavy, and brief but serious.",
-            "Tropical rainfall, moderate intensity. High humidity means the rain feels heavier than it measures. Umbrella.",
-            "Convective rain shower, ITCZ proximity. 5-15mm/hr. A real umbrella situation, not a hood situation.",
-            "Tropical frontal rain band. Warm and wet, consistent precipitation. Umbrella or waterproof layer."
+            "Convective shower. Tropical pattern. Umbrella; warm and heavy.",
+            "Tropical rainfall. High humidity amplifies the feel. Umbrella.",
+            "Convective rain, ITCZ proximity. Umbrella, not a hood situation.",
+            "Tropical frontal rain band. Warm and wet. Umbrella or jacket."
         ),
         ST to listOf(
-            "Subtropical rain event. Possibly the only real rain this month. 5-10mm/hr, consistent. Umbrella.",
-            "Subtropical cyclone moisture reaching the area. More organised than a tropical shower. Umbrella and light jacket.",
-            "Rain from subtropical trough. Not heavy, not brief. Consistent rainfall for several hours. Umbrella.",
-            "Organised rain band in subtropical regime. Steady 4-8mm/hr. Umbrella or waterproof layer today."
+            "Subtropical rain. 5-10mm/hr, consistent. Umbrella.",
+            "Subtropical cyclone moisture reaching area. Umbrella and jacket.",
+            "Rain from subtropical trough. Consistent rainfall. Umbrella.",
+            "Organised rain band, subtropical. 4-8mm/hr. Umbrella today."
         ),
         TE to listOf(
-            "Frontal precipitation, moderate intensity. 5-10mm/hr. Umbrella strongly advised.",
-            "Warm front rain band. Steady rainfall. This isn't a passing shower. Proper waterproofing.",
-            "Organised rainfall, 4-8mm/hr. Classic midlatitude cyclone activity. Umbrella.",
-            "Low pressure front delivering consistent rain. Umbrella or waterproof jacket."
+            "Frontal precipitation. 5-10mm/hr. Umbrella strongly advised.",
+            "Warm front rain band. Steady rainfall. Proper waterproofing.",
+            "Organised rainfall, 4-8mm/hr. Classic midlatitude. Umbrella.",
+            "Low front delivering consistent rain. Umbrella or jacket."
         ),
         OC to listOf(
-            "Atlantic frontal system delivering moderate rainfall. This is the oceanic baseline. Expect it to be persistent.",
-            "Maritime frontal rain. Characteristic of Atlantic airflow. Not heavy, but steady and thorough. Umbrella.",
-            "Frontal rain from approaching Atlantic low. 5-10mm/hr, will continue for some time. Umbrella and waterproof layer.",
-            "Oceanic air mass producing organised rainfall. The weather system is slow-moving. Umbrella is the right call."
+            "Atlantic frontal system. Persistent rain. Umbrella.",
+            "Maritime frontal rain. Atlantic airflow. Steady. Umbrella.",
+            "Atlantic low approaching. 5-10mm/hr. Umbrella + waterproof.",
+            "Oceanic air mass, organised rainfall. Slow-moving. Umbrella."
         ),
         NO to listOf(
-            "Cold frontal rain, possibly mixed with sleet at elevation. Nordic precipitation is efficient. Dress for it. Umbrella.",
-            "Polar front delivering cold rain. Wind chill makes this feel significantly worse than the thermometer suggests. Umbrella.",
-            "Cold rain, sustained. The polar air mass is not warming this. Waterproof and warm layers both needed.",
-            "Frontal rain in cold air. Not snowing, but near enough that layers matter. Umbrella and jacket."
+            "Cold frontal rain, possible sleet at elevation. Umbrella.",
+            "Polar front cold rain. Wind chill makes it worse. Umbrella.",
+            "Cold rain, sustained. Wind chill present. Waterproof and warm.",
+            "Frontal rain in cold air. Umbrella and jacket both needed."
         )
     )
 
     override val drizzleVerdict: ZonedPool = mapOf(
         TR to listOf(
-            "Fine droplet precipitation. Residual from convective clearing. Officially drizzle by classification. Light coverage.",
-            "Post-convective drizzle. The main event has passed; what's left is sub-millimeter droplets. Hood is sufficient.",
-            "Tropical mist. ITCZ humidity is high enough that moisture precipitates without significant convection. Light layer.",
-            "Drizzle from maritime tropical air. The water content is there, but the dynamics aren't. Hood optional."
+            "Post-convective drizzle. Sub-millimeter droplets. Light layer.",
+            "Residual convective drizzle. Main event passed. Hood sufficient.",
+            "Tropical mist. ITCZ humidity. Fine precipitation. Light layer.",
+            "Drizzle from maritime tropical air. Minimal dynamics. Hood."
         ),
         ST to listOf(
-            "Orographic drizzle. Moist air forced over terrain, fine droplets on the windward side. Light jacket.",
-            "Subtropical stratus drizzle. The inversion layer trapping moisture overhead produces this fine precipitation. Hood.",
-            "Drizzle. Advection fog event producing precipitation. Sub-millimeter droplets, low intensity. Light coverage.",
-            "Fine drizzle from subtropical marine layer. Low cloud base, persistent moisture. Hood is sufficient."
+            "Orographic drizzle. Fine drops on windward side. Light jacket.",
+            "Subtropical stratus drizzle. Inversion layer overhead. Hood.",
+            "Advection fog producing fine precipitation. Sub-millimeter.",
+            "Fine drizzle from subtropical marine layer. Hood sufficient."
         ),
         TE to listOf(
-            "Droplet diameter under 0.5mm. Technically mist by classification. Hood optional.",
-            "Precipitation rate under 1mm/hr. This barely qualifies as rain. Light coverage.",
-            "Orographic drizzle. You'll feel it but won't get soaked. Hood recommended.",
-            "Fine precipitation particles. Accumulation negligible. Light jacket with coverage is sufficient."
+            "Droplet diameter under 0.5mm. Technically mist. Hood optional.",
+            "Precipitation rate under 1mm/hr. Barely qualifies. Light layer.",
+            "Orographic drizzle. Feel it but won't get soaked. Hood.",
+            "Fine precipitation. Negligible accumulation. Light jacket."
         ),
         OC to listOf(
-            "Classic maritime drizzle. The north Atlantic specialises in this. Persistent, fine, and pervasive. Hood strongly recommended.",
-            "Oceanic drizzle. Advection of saturated marine air producing fine precipitation. You won't get soaked, but you'll get wet.",
-            "Stratus drizzle, maritime origin. This is the defining precipitation type of Atlantic coastal climates. Hood required.",
-            "Fine drizzle from marine stratus. Technically minimal precipitation. Practically: everything will be damp. Hood up."
+            "Classic maritime drizzle. Persistent, fine, pervasive. Hood up.",
+            "Oceanic drizzle. Saturated marine air. Won't soak, but will wet.",
+            "Stratus drizzle, maritime. Atlantic coastal baseline. Hood.",
+            "Fine drizzle from marine stratus. Everything gets damp. Hood up."
         ),
         NO to listOf(
-            "Cold drizzle, near-freezing. More unpleasant than the precipitation rate suggests due to temperature. Hat and light waterproofing.",
-            "Nordic drizzle. Cold and persistent. At these temperatures, even light moisture is uncomfortable without coverage.",
-            "Fine precipitation in cold air. The droplets are sub-millimeter but the cold amplifies the unpleasantness. Light waterproofing.",
-            "Near-freezing drizzle. Accumulation is low but chill factor makes this worse than its precipitation rate implies."
+            "Cold drizzle, near-freezing. Hat and light waterproofing needed.",
+            "Nordic drizzle. Cold and persistent. Light moisture still bites.",
+            "Fine precipitation in cold air. Cold amplifies discomfort.",
+            "Near-freezing drizzle. Low accumulation; chill makes it worse."
         )
     )
 
     override val snowVerdict: ZonedPool = mapOf(
         TR to listOf(
-            "Frozen precipitation at tropical latitude. This requires significant upper-level cold intrusion. Rare event. Layers and caution.",
-            "Snow: highly anomalous at this latitude. Upper troposphere cold air advection has created surface freezing. Full cold gear.",
-            "Unusual snow event. Upper-level trough creating below-freezing temperatures at the surface. Geologically rare here.",
-            "Surface snowfall in the tropics. Upper-level cold intrusion event. Significant. Layers, warm footwear, exercise caution."
+            "Snow at tropical latitude. Cold intrusion event. Layer up.",
+            "Snow here: upper-troposphere cold advection. Full cold gear.",
+            "Unusual snow event. Cold air trough at surface. Layer up.",
+            "Surface snowfall in tropics. Cold intrusion. Warm gear required."
         ),
         ST to listOf(
-            "Winter snow event. Subtropical cold snap. Arctic outbreak has pushed the freezing level to the surface. Warm layers.",
-            "Anomalous snowfall for this region. Cold air advection from polar origins has created freezing surface conditions. Bundle up.",
-            "Snow: a genuine meteorological event at this latitude. Cold outbreak, measurable accumulation possible. Full winter preparation.",
-            "Subtropical snowfall. This doesn't happen often, which is why it's disrupting everything. Full winter kit."
+            "Winter snow event. Arctic outbreak reached surface. Warm layers.",
+            "Anomalous snowfall. Polar cold air advection. Bundle up fully.",
+            "Snow at this latitude: accumulation possible. Full winter layer.",
+            "Subtropical snowfall. Unusual and disruptive. Full winter kit."
         ),
         TE to listOf(
-            "Frozen precipitation event. Dendritic crystal formation. 2-5cm accumulation expected. Warm layers, watch your footing.",
-            "Snow. Water in its most structurally interesting phase. Surface temperatures at or below 0°C.",
-            "Solid precipitation. Ice crystal aggregation producing measurable accumulation. Full winter kit.",
-            "Snowfall event underway. Traction advisable. Proper winter layers."
+            "Frozen precipitation. 2-5cm accumulation expected. Watch footing.",
+            "Snow. Water in its most structurally interesting phase. Layer.",
+            "Solid precipitation. Ice crystal aggregation. Full winter kit.",
+            "Snowfall underway. Traction advisable. Proper winter layers."
         ),
         OC to listOf(
-            "Snow from maritime polar air mass. Cold enough aloft, mild enough at surface to mean variable precipitation type. Watch for ice.",
-            "Oceanic snow event. Maritime temperatures often cause snow/rain/sleet mix. Waterproof and warm layers simultaneously.",
-            "Cold front with snow. The maritime influence means it may transition to sleet or rain. Full waterproof winter kit.",
-            "Snow, maritime polar airmass. Surface temperatures hovering around 0°C. Any accumulation will also be wet and heavy."
+            "Maritime polar snow. Variable precipitation type. Watch for ice.",
+            "Oceanic snow. Maritime temps mean snow/rain/sleet mix. Layer.",
+            "Cold front with snow. May shift to sleet. Waterproof winter kit.",
+            "Snow, maritime polar air. Near 0°C surface. Heavy and wet."
         ),
         NO to listOf(
-            "Arctic snowfall. This is not the maritime variety. Cold, dry, light powder with measurable accumulation. Full winter system.",
-            "Polar snowfall event. Wind chill is pushing felt temperature well below air temperature. Every layer counts.",
-            "Snow: the Nordic standard. Proper winter gear. Base layer, insulation, shell. Ice under fresh snow is the real risk.",
-            "Significant snowfall from polar air mass. Accumulation expected. Traction aids advisable. Full winter preparation."
+            "Arctic snowfall. Cold, dry powder with accumulation. Layer.",
+            "Polar snowfall. Wind chill well below air temp. Every layer.",
+            "Nordic snow standard. Base, insulation, shell. Ice is the risk.",
+            "Significant snowfall from polar air. Traction aids advisable."
         )
     )
 
     override val veryWindyVerdict: ZonedPool = mapOf(
         TR to listOf(
-            "Tropical cyclone-proximity winds or squall line passage. Sustained winds at gale force. Do not be outside.",
-            "Extreme wind event for tropical latitude. Deep low pressure or squall line producing dangerous conditions. Inside.",
-            "Gale-force tropical winds. Whether squall or system edge, these are hazardous. Minimize all outdoor exposure.",
-            "Severe tropical wind event. 65+ km/h. The only sensible response is to remain inside."
+            "Cyclone-proximity or squall line winds. Gale force. Stay in.",
+            "Extreme wind for tropical latitude. Dangerous conditions. Inside.",
+            "Gale-force tropical winds. Hazardous. Minimize outdoor exposure.",
+            "Severe tropical wind. 65+ km/h. The only answer: stay inside."
         ),
         ST to listOf(
-            "Subtropical cyclone or intense low producing gale conditions. These systems intensify rapidly. Stay in.",
-            "Gale-force winds from subtropical low pressure. The system is compact and intense. Outdoor exposure: inadvisable.",
-            "Near-gale conditions from subtropical storm system. 65+ km/h sustained. Buildings are the right place to be.",
-            "Severe wind event. Subtropical dynamics have produced gale-force conditions. Minimize outdoor time."
+            "Subtropical cyclone producing gale conditions. Stay in.",
+            "Gale-force winds from subtropical low. Stay inside.",
+            "Near-gale from subtropical storm. 65+ km/h. Be inside.",
+            "Severe wind. Subtropical gale conditions. Minimize outdoor time."
         ),
         TE to listOf(
-            "Near-gale conditions, Beaufort 8. Wind speeds above 65km/h. Minimize outdoor exposure.",
-            "Severe wind event. The kind that closes bridges and grounds small aircraft.",
-            "Gale-force sustained winds. 65+ km/h. Outdoor exposure should be purposeful and brief.",
-            "Wind gusts to gale force. Not a day to be cavalier about outdoor plans."
+            "Near-gale, Beaufort 8. Winds above 65km/h. Minimize exposure.",
+            "Severe wind. The kind that closes bridges and grounds aircraft.",
+            "Gale-force winds. 65+ km/h. Outdoor time should be brief.",
+            "Wind gusts to gale force. Not a day to be outside casually."
         ),
         OC to listOf(
-            "Atlantic gale. The fetch across open ocean has accelerated this system beyond most land-based wind events. Stay in.",
-            "Deep Atlantic cyclone producing near-gale conditions. Gusts will exceed the sustained figure significantly. Inside.",
-            "Severe oceanic storm reaching the coast. Wind speed aloft is translating to surface gusts well above 65km/h.",
-            "Maritime gale. The unobstructed Atlantic fetch means this is more intense than equivalent inland events."
+            "Atlantic gale. Ocean fetch accelerated this system. Stay in.",
+            "Deep Atlantic cyclone. Gusts exceed sustained figure. Inside.",
+            "Severe oceanic storm at coast. Gusts well above 65km/h.",
+            "Maritime gale. Unobstructed Atlantic fetch. Intense. Stay in."
         ),
         NO to listOf(
-            "Polar vortex displacement event producing severe Arctic winds. This is a genuine meteorological hazard. Stay inside.",
-            "Arctic gale from Norwegian Low pressure system. Wind chill at these speeds creates immediate frostbite risk outdoors.",
-            "Severe Nordic wind event. 65+ km/h in sub-zero air. Wind chill makes felt temperature extremely dangerous.",
-            "Arctic gale conditions. The combination of speed and temperature is hazardous. Do not be outside."
+            "Polar vortex displacement. Severe Arctic winds. Stay inside.",
+            "Arctic gale from Norwegian Low. Frostbite risk at these speeds.",
+            "Severe Nordic wind. 65+ km/h in sub-zero air. Stay inside.",
+            "Arctic gale. Speed and temperature combined. Do not go out."
         )
     )
 
     override val windyVerdict: ZonedPool = mapOf(
         TR to listOf(
-            "Trade wind strengthening or tropical trough producing significant surface winds. Umbrella use inadvisable. Windproof layer.",
-            "Organised wind event for the tropics. Likely trade wind surge or squall approach. Skip the umbrella. Secure loose items.",
-            "Elevated tropical surface winds. Not squall-level, but aerodynamic drag will be noticeable. Windproof outer layer.",
-            "Strong trade winds or approaching system. 40-65km/h. Umbrella is impractical today."
+            "Trade wind surge or tropical trough. Umbrella impractical. Layer.",
+            "Organised tropical wind. Squall approach likely. Windproof layer.",
+            "Elevated tropical winds. Drag noticeable. Windproof outer layer.",
+            "Strong trade winds or system. 40-65km/h. Skip the umbrella."
         ),
         ST to listOf(
-            "Subtropical pressure gradient producing notable surface winds. Umbrella impractical at these speeds. Windproof layer.",
-            "Strong gradient winds from subtropical high edge. 40-65km/h gusts expected. Windproof layer instead of umbrella.",
-            "Significant wind event for the region. Synoptic pressure gradient strong today. Windproof outer layer.",
-            "Strong winds: subtropical trough/high interface. Umbrella viability threshold exceeded. Windproof jacket."
+            "Subtropical pressure gradient. Umbrella impractical. Windproof.",
+            "Gradient winds from subtropical high edge. 40-65km/h. Windproof.",
+            "Significant wind for the region. Strong pressure gradient today.",
+            "Subtropical trough/high interface. Umbrella exceeded. Windproof."
         ),
         TE to listOf(
-            "40-65km/h sustained winds. Above umbrella viability threshold. Skip it. Windproof layer.",
-            "Strong gradient winds. Gusts likely. Loose objects will move. Secure anything you value.",
-            "Synoptic-scale wind event. Umbrella is a liability at these speeds. Windproof outer layer.",
-            "Significant surface winds. Aerodynamic drag becomes a real factor in your commute today."
+            "40-65km/h sustained. Above umbrella viability. Windproof layer.",
+            "Strong gradient winds. Gusts likely. Secure what you value.",
+            "Synoptic wind event. Umbrella is a liability. Windproof layer.",
+            "Significant surface winds. Aerodynamic drag a factor today."
         ),
         OC to listOf(
-            "Atlantic-driven surface winds, 40-65km/h. The oceanic fetch amplifies these compared to inland equivalents. Windproof layer.",
-            "Strong maritime gradient winds. The pressure differential across the low is steep. Umbrella is not viable today.",
-            "Oceanic wind event. Sustained flow from the Atlantic is producing gusty conditions onshore. Skip the umbrella.",
-            "Maritime wind strengthening ahead of Atlantic system. 40-65km/h range. Secure loose items; windproof layer."
+            "Atlantic winds, 40-65km/h. Oceanic fetch amplifies them. Layer.",
+            "Maritime gradient: steep pressure differential. No umbrella.",
+            "Oceanic wind. Atlantic flow producing gusty onshore conditions.",
+            "Maritime wind ahead of Atlantic system. 40-65km/h. Windproof."
         ),
         NO to listOf(
-            "Nordic wind event, possibly with embedded Arctic air. 40-65km/h, felt temperature significantly below actual. Windproof shell.",
-            "Strong polar-origin winds. The wind chill factor at these speeds and temperatures is the real story. Windproof layer.",
-            "Arctic surface winds, 40-65km/h. Wind chill makes this feel 8-12°C colder than air temperature. Windproof gear.",
-            "Significant Nordic wind. Cold air advection amplifying the chill beyond what the thermometer indicates. Windproof shell."
+            "Nordic wind with Arctic air. 40-65km/h. Windproof shell needed.",
+            "Strong polar-origin winds. Wind chill is the real story. Layer.",
+            "Arctic winds, 40-65km/h. Wind chill 8-12°C below air temp.",
+            "Significant Nordic wind. Cold advection amplifies chill. Layer."
         )
     )
 
     override val hotVerdict: ZonedPool = mapOf(
         TR to listOf(
-            "Tropical heat: ambient temperature well above 30°C with relative humidity 70-90%. Heat index exceeds 40°C. Hydration is critical.",
-            "Extreme heat index conditions. The combination of tropical temperature and humidity overwhelms evaporative cooling. Stay hydrated.",
-            "High heat and humidity day. Wet-bulb temperature approaching dangerous thresholds. Limit outdoor exertion, drink water constantly.",
-            "Tropical thermal load: temperature 32°C+, humidity extreme. Your body will struggle to cool via evaporation. Water is essential."
+            "Tropical heat. 30°C+ with 70-90% humidity. Heat index 40°C+.",
+            "Extreme heat index. Tropical temp and humidity crush evaporative.",
+            "High heat and humidity. Wet-bulb near danger zone. Drink water.",
+            "Tropical thermal load: 32°C+, extreme humidity. Water essential."
         ),
         ST to listOf(
-            "Subtropical heat. High temperature, elevated UV index. The Hadley cell descending air produces clear skies and intense solar radiation.",
-            "Dry heat conditions from subtropical high pressure. UV index is extreme. Sunscreen is not a suggestion.",
-            "High solar irradiance under subtropical high. Temperature above 35°C possible. SPF, hat, hydration. The data demands it.",
-            "Subtropical heat: elevated UV, low humidity, intense insolation. Felt heat from direct radiation is significant. Protect yourself."
+            "Subtropical heat. High UV from Hadley cell descending dry air.",
+            "Dry heat from subtropical high. UV extreme. Sunscreen mandatory.",
+            "High solar irradiance. 35°C possible. SPF, hat, hydration needed.",
+            "Subtropical heat: extreme UV, intense insolation. Protect."
         ),
         TE to listOf(
-            "High solar irradiance, ambient temperature above 28°C. UV index elevated. Sunscreen is not optional.",
-            "Significant thermal load today. Hydrate more than you think you need to. That's the science.",
-            "Dry heat conditions, elevated UV. Light breathable layers and SPF. The data demands it.",
-            "Temperature in the upper 20s. Thermodynamically, your cooling mechanisms will be active all day."
+            "Above 28°C. UV index elevated. Sunscreen is not optional.",
+            "Significant thermal load. Hydrate more than you think you need.",
+            "Dry heat, elevated UV. Light breathable layers and SPF.",
+            "Upper 20s. Your cooling mechanisms will be active all day."
         ),
         OC to listOf(
-            "Maritime heatwave event. Unusual for this climate. Blocking high has suppressed Atlantic advection. UV still elevated. Sunscreen.",
-            "Anomalously warm for oceanic climate. The blocking anticyclone has removed the usual maritime cooling. Hydrate and use SPF.",
-            "Warm maritime day above 28°C. Relatively rare here. High UV under clear skies. Sunscreen still matters.",
-            "Oceanic heat event. The usual maritime moderation is absent today. Treat this as a proper hot day. Water and SPF."
+            "Maritime heatwave. Blocking high suppressed Atlantic cooling.",
+            "Anomalously warm. Anticyclone removed maritime cooling. SPF.",
+            "Warm maritime day, 28°C+. High UV under clear skies. Sunscreen.",
+            "Oceanic heat. Maritime moderation absent today. Water and SPF."
         ),
         NO to listOf(
-            "Nordic heat event. Above 25°C at this latitude is climatologically significant. UV intensity is elevated despite the latitude.",
-            "Warm Nordic day. The midnight sun effect means UV exposure accumulates over extended daylight hours. Sunscreen.",
-            "Anomalously warm for high latitude. High pressure with extended daylight producing above-25°C surface temperatures. SPF essential.",
-            "Hot by Nordic standards. The body adapts to cold and this genuinely impacts heat tolerance. Hydrate more than usual."
+            "Nordic heat event. Above 25°C is significant here. UV elevated.",
+            "Warm Nordic day. Extended daylight means UV accumulates. SPF.",
+            "Anomalously warm. Extended daylight producing 25°C+. SPF.",
+            "Hot by Nordic standards. Cold adaptation affects heat tolerance."
         )
     )
 
     override val warmVerdict: ZonedPool = mapOf(
         TR to listOf(
-            "Moderate tropical conditions. The brief window between morning cool and afternoon heat. Thermally comfortable for now.",
-            "Trade wind cooling keeping temperatures in the comfortable range. Enjoy the thermal moderation.",
-            "20-27°C in the tropics: this is the pleasant shoulder period before the heat builds. No special gear required.",
-            "Comfortable tropical morning/evening conditions. The heat index is manageable at these humidity levels."
+            "Moderate tropical conditions. Brief window before heat builds.",
+            "Trade wind cooling keeping temps comfortable. Enjoy moderation.",
+            "20-27°C in tropics: pleasant shoulder before the heat. All good.",
+            "Comfortable tropical conditions. Heat index manageable right now."
         ),
         ST to listOf(
-            "Optimal subtropical conditions. 20-27°C under the subtropical high. The best this climate reliably offers.",
-            "Warm and clear. The subtropical atmosphere is in its most pleasant configuration today.",
-            "Ideal subtropical conditions. Temperature comfortable, UV manageable, no precipitation mechanism. Clean forecast.",
-            "20-27°C, low humidity under subtropical high pressure. The conditions are, by most metrics, excellent."
+            "Optimal subtropical. 20-27°C under the high. Clean day.",
+            "Warm and clear. Subtropical atmosphere in its best configuration.",
+            "Ideal subtropical: comfortable, manageable UV, no rain today.",
+            "20-27°C, low humidity under subtropical high. Excellent."
         ),
         TE to listOf(
-            "20-27°C sits comfortably within the human thermoneutral zone. Conditions are, by most metrics, ideal.",
-            "Mild thermal conditions, clear sky. The meteorological word for this is 'fine.'",
-            "Optimal temperature range for outdoor activity. The body handles this effortlessly.",
-            "Clean forecast. Comfortable thermal conditions. No atmospheric drama."
+            "20-27°C: squarely in the human thermoneutral zone. Ideal.",
+            "Mild thermal conditions, clear sky. The met word is fine.",
+            "Optimal temperature range. Body handles this effortlessly.",
+            "Clean forecast. Comfortable thermal conditions. No drama."
         ),
         OC to listOf(
-            "Warm maritime day. The Atlantic airflow is providing moderated warmth. The oceanic climate's optimal expression.",
-            "Good conditions by oceanic standards. 20-27°C, maritime air, no active fronts. Uncommon and worth appreciating.",
-            "Warm and clear. The maritime atmosphere is cooperating. No layering needed.",
-            "Optimal oceanic conditions. Atlantic moderation producing comfortable temperatures. No precipitation signature."
+            "Warm maritime day. Atlantic airflow providing moderated warmth.",
+            "Good oceanic conditions. 20-27°C, no active fronts. Uncommon.",
+            "Warm and clear. Maritime atmosphere cooperating. No layers.",
+            "Optimal oceanic conditions. Atlantic moderation. No rain."
         ),
         NO to listOf(
-            "Warm Nordic day. Above 20°C at this latitude represents genuine climatological warmth. The conditions are good.",
-            "Good summer conditions. The Nordic summer thermal peak is brief. This is it. Enjoy the thermoneutral zone.",
-            "Warm day for the latitude. Sun angle is lower but daylight duration compensates. Comfortable and clear.",
-            "20-27°C in the Nordic zone: this is peak summer. The data looks genuinely pleasant today."
+            "Warm Nordic day. Above 20°C: genuine climatological warmth.",
+            "Good summer conditions. Nordic thermal peak is brief. This is it.",
+            "Warm for the latitude. Daylight duration compensates. Clear.",
+            "20-27°C in the Nordic zone: peak summer. Data looks good."
         )
     )
 
     override val lightJacketVerdict: ZonedPool = mapOf(
         TR to listOf(
-            "Cool by tropical standards. Below 20°C means either elevation or an unusual cold air intrusion. Light layer advisable.",
-            "Sub-20°C in the tropics represents a genuine cold anomaly. Light jacket for comfort, especially at elevation.",
-            "Tropical cool spell. The air mass is anomalously cold for this latitude. A light layer is warranted.",
-            "12-19°C at tropical latitude: upper-level cold intrusion or highland cooling. Light jacket."
+            "Cool by tropical standards. Unusual cold intrusion. Light layer.",
+            "Sub-20°C in tropics: genuine cold anomaly. Light jacket needed.",
+            "Tropical cool spell. Anomalously cold air mass. Light layer.",
+            "12-19°C at tropical latitude: cold intrusion. Light jacket."
         ),
         ST to listOf(
-            "Cool subtropical day. 12-19°C is the cool end of the subtropical range. A light jacket handles it.",
-            "Subtropical cool spell. The usual warmth has been displaced by cold air advection from higher latitudes. Light layer.",
-            "12-19°C in the subtropical zone. Cooler than average. Light jacket and you're covered.",
-            "Cool subtropical air mass. Below the thermoneutral zone for most. Light jacket is the correct response."
+            "Cool subtropical day. 12-19°C is the cool end here. Light jacket.",
+            "Subtropical cool spell. Cold advection from higher latitudes.",
+            "12-19°C in subtropical zone. Cooler than average. Light jacket.",
+            "Cool subtropical air mass. Below thermoneutral zone. Layer."
         ),
         TE to listOf(
-            "12-19°C. The crossover point where jacket becomes advisable. Below the thermoneutral zone for most.",
+            "12-19°C. Crossover point where jacket becomes advisable.",
             "Cool ambient conditions. The physiology recommends a light layer.",
-            "Mild but cool. Human body starts active heat conservation below 18°C. Light jacket.",
-            "12-19°C with light wind. A light layer handles this comfortably. Wind chill will make it feel cooler."
+            "Mild but cool. Heat conservation starts below 18°C. Light jacket.",
+            "12-19°C with light wind. Wind chill will make it feel cooler."
         ),
         OC to listOf(
-            "Cool maritime day. The oceanic temperature moderation keeps it from being cold, but 12-19°C is jacket territory.",
-            "Maritime cool. The Atlantic airflow is providing its characteristic mild-but-cool conditions. Light jacket.",
-            "12-19°C under oceanic influence. The persistent dampness amplifies the chill slightly. Light waterproof layer ideal.",
-            "Cool oceanic conditions. Maritime air keeps extreme cold away, but a light layer is warranted at 12-19°C."
+            "Cool maritime day. 12-19°C is jacket territory here.",
+            "Maritime cool. Atlantic mild-but-cool conditions. Light jacket.",
+            "12-19°C oceanic. Dampness adds chill. Light waterproof layer.",
+            "Cool oceanic conditions. Light layer warranted at 12-19°C."
         ),
         NO to listOf(
-            "Mild Nordic day. 12-19°C here often comes with wind that pushes the felt temperature 3-5°C lower. Light jacket essential.",
-            "Cool to the Nordic baseline. A light jacket is routine equipment in this climate. It's warranted today.",
-            "12-19°C in the Nordic zone. Wind chill factor makes this feel colder than the thermometer suggests. Layer up.",
-            "Light jacket weather. The Nordic version, where wind chill makes the temperature figure somewhat optimistic."
+            "Mild Nordic day. 12-19°C with wind feels 3-5°C colder. Jacket.",
+            "Cool to the Nordic baseline. Light jacket is routine here.",
+            "12-19°C in Nordic zone. Wind chill makes it feel colder. Layer.",
+            "Light jacket weather. Nordic wind chill makes temp optimistic."
         )
     )
 
     override val jacketVerdict: ZonedPool = mapOf(
         TR to listOf(
-            "Cold by tropical standards. Sub-12°C at this latitude indicates significant cold air intrusion or high elevation. Jacket.",
-            "5-11°C in the tropics: highly anomalous cold event or significant elevation. Full jacket, people are not adapted to this here.",
-            "Unusually cold tropical day. The cold air mass has origin far outside this climate zone. Jacket required.",
-            "Sub-12°C at tropical latitude. Cold air intrusion event. The local population will feel this acutely. Jacket."
+            "Cold by tropical standards. Cold intrusion or elevation. Jacket.",
+            "5-11°C in tropics: anomalous cold or elevation. Full jacket.",
+            "Unusually cold tropical day. Cold air mass outside zone. Jacket.",
+            "Sub-12°C at tropical latitude. Cold intrusion. Jacket required."
         ),
         ST to listOf(
-            "Cold subtropical day. 5-11°C indicates a genuine Arctic or polar outbreak has reached these latitudes. Jacket needed.",
-            "Subtropical cold snap. Cold air advection from polar origins has pushed temperatures into jacket territory.",
-            "Cold: 5-11°C in a subtropical climate. This happens, but it's notable. Jacket, possibly more.",
-            "Polar outbreak reaching subtropical latitude. 5-11°C. Much colder than baseline. Jacket."
+            "Cold subtropical day. 5-11°C means Arctic outbreak reached here.",
+            "Subtropical cold snap. Polar air advection into jacket territory.",
+            "Cold: 5-11°C in subtropical climate. Notable. Jacket needed.",
+            "Polar outbreak to subtropical latitude. 5-11°C. Jacket needed."
         ),
         TE to listOf(
-            "5-11°C. Cold enough for active thermogenesis. Wind chill pushes felt temperature 3-5°C lower. Jacket.",
-            "Single digits. The body works harder to stay warm. Let the jacket help.",
-            "Below 12°C, cold becomes genuinely noticeable. Jacket and layers if you're out for a while.",
-            "Temperature 5-11°C. Core temperature management is relevant at this level. Jacket."
+            "5-11°C. Wind chill pushes felt temperature 3-5°C lower. Jacket.",
+            "Single digits. Body works harder to stay warm. Let jacket help.",
+            "Below 12°C. Jacket and layers if you're out for a while.",
+            "Temperature 5-11°C. Core temperature management is relevant."
         ),
         OC to listOf(
-            "Cold maritime day. 5-11°C with Atlantic humidity makes this feel colder than equivalent inland temperatures. Jacket.",
-            "Cool oceanic air mass producing single-digit temperatures. The maritime dampness amplifies cold perception. Jacket.",
-            "Jacket weather. The oceanic climate moderates the worst cold but 5-11°C with wind is still cold. Layer up.",
-            "Maritime cold. 5-11°C, likely with wind from the Atlantic. The wind chill makes the jacket essential, not optional."
+            "Cold maritime day. 5-11°C plus humidity feels colder. Jacket.",
+            "Oceanic single digits. Maritime dampness amplifies cold. Jacket.",
+            "Jacket weather. 5-11°C with Atlantic wind is cold. Layer up.",
+            "Maritime cold. 5-11°C with Atlantic wind. Jacket is essential."
         ),
         NO to listOf(
-            "5-11°C is a relatively mild day by Nordic standards. Jacket standard. Wind chill may require more.",
-            "Nordic moderate cold. 5-11°C here is often accompanied by wind that drops felt temperature significantly. Jacket.",
-            "Cold but manageable. The Nordic baseline makes 5-11°C unremarkable, but a jacket remains necessary.",
-            "Jacket weather. Wind chill in the Nordic zone often brings felt temperature 5-8°C below air temperature."
+            "5-11°C: mild by Nordic standards. Jacket. Wind may need more.",
+            "Nordic moderate cold. 5-11°C plus wind drops felt temp. Jacket.",
+            "Cold but manageable. 5-11°C here is unremarkable. Jacket still.",
+            "Jacket weather. Wind chill brings felt temp 5-8°C below air temp."
         )
     )
 
     override val bundleUpVerdict: ZonedPool = mapOf(
         TR to listOf(
-            "Sub-5°C at tropical latitude: this is a severe cold event. The local population is not cold-adapted. Everything warm you have.",
-            "Extreme cold anomaly for tropical climate. Sub-5°C requires full thermal system. The body here is not used to this.",
-            "Near-freezing tropical temperatures. Unusual event. Full layering required. Local infrastructure and populations are not adapted.",
-            "Sub-5°C in the tropics: cold air outbreak of remarkable scale. Full winter layers. The body responds poorly to this level of cold."
+            "Sub-5°C at tropical latitude: severe cold event. Layer up.",
+            "Extreme cold anomaly. Sub-5°C. Full thermal system. Body unready.",
+            "Near-freezing tropical temps. Full layering. Infra unready.",
+            "Sub-5°C in tropics: remarkable cold outbreak. Full winter layers."
         ),
         ST to listOf(
-            "Severe subtropical cold event. Sub-5°C temperatures typically hit subtropical populations harder due to lower cold adaptation.",
-            "Near-freezing conditions in subtropical climate. Full thermal system. Base layer, insulation, outer shell. This is unusual here.",
-            "Cold snap at sub-5°C. Subtropical infrastructure and populations are not designed for this. Layer comprehensively.",
-            "Extreme cold for this latitude. Below 5°C with wind produces dangerous wind chill values. Bundle up completely."
+            "Severe subtropical cold. Sub-5°C hits harder with low adaptation.",
+            "Near-freezing subtropical. Base, insulation, outer shell.",
+            "Cold snap at sub-5°C. Infrastructure not designed for it. Layer.",
+            "Extreme cold for this latitude. Sub-5°C with wind. Bundle up."
         ),
         TE to listOf(
-            "Sub-5°C. Peripheral vasoconstriction kicks in fast. Full thermal system. Base layer, mid layer, outer shell.",
-            "Near-freezing ambient temperature. Wind chill can bring felt temperature 5-8°C lower. Everything you own.",
-            "Cold. Genuinely cold. Base layer, insulating mid-layer, outer shell. The whole system today.",
-            "Below 5°C is where the physiology really earns it. Layer up comprehensively."
+            "Sub-5°C. Vasoconstriction fast. Base, mid layer, outer shell.",
+            "Near-freezing. Wind chill 5-8°C lower. Every layer you own.",
+            "Cold. Genuinely cold. Base, mid, outer shell. Full system.",
+            "Below 5°C: the physiology earns it. Layer up comprehensively."
         ),
         OC to listOf(
-            "Cold maritime day, sub-5°C. The dampness of the Atlantic air amplifies cold penetration. Full thermal system.",
-            "Near-freezing oceanic conditions. Cold and wet is more physiologically demanding than cold and dry. Complete layering.",
-            "Sub-5°C with maritime air. The humidity drives wind chill higher and cold feels more pervasive. Bundle up completely.",
-            "Freezing maritime conditions. Wind, cold, and moisture together require full thermal protection."
+            "Cold maritime sub-5°C. Atlantic dampness amplifies cold. Layer.",
+            "Near-freezing oceanic. Cold and wet demands complete layering.",
+            "Sub-5°C with maritime air. Humidity drives chill. Bundle up.",
+            "Freezing maritime. Wind, cold, moisture. Full thermal protection."
         ),
         NO to listOf(
-            "Sub-5°C: standard Nordic winter temperature. Full polar layering. Base, mid, insulation, shell. Wind chill is the real number.",
-            "Cold Nordic day. The wind chill factor at these temperatures is significant. Full thermal system. Every layer.",
-            "Polar baseline conditions. Below 5°C with any wind produces dangerous wind chill. The full winter kit is not optional.",
-            "Deep cold by any standard. Nordic winters routinely require complete layering systems. Today is one of those days."
+            "Sub-5°C: standard Nordic winter. Base, mid, insulation, shell.",
+            "Cold Nordic day. Wind chill significant. Full thermal system.",
+            "Polar baseline. Sub-5°C with any wind is dangerous. Full kit.",
+            "Deep cold. Nordic winters require complete layering. Today."
         )
     )
 
     override val allClearVerdict: ZonedPool = mapOf(
         TR to listOf(
-            "Clear. The ITCZ has paused. No convective trigger. The tropical sky is delivering a rare calm window.",
-            "Tropical clear day. No convective development forecast. Anticyclonic conditions overhead. Go outside.",
-            "No precipitation mechanism. The tropical atmosphere is uncharacteristically settled. Enjoy this.",
-            "Clear tropical conditions. Stable air mass, no convective instability. The weather is cooperating fully."
+            "Clear. ITCZ has paused. No convective trigger. Go outside.",
+            "Tropical clear day. No convective development forecast. Go out.",
+            "No precipitation mechanism. Tropical atmosphere settled. Enjoy.",
+            "Clear tropical conditions. Stable air mass. Cooperating fully."
         ),
         ST to listOf(
-            "Subtropical high pressure fully dominant. No cloud, no precipitation. The Hadley cell is delivering its signature clear day.",
-            "Clear. The descending dry air of the subtropical anticyclone is doing what it does best. Nothing, which means perfect conditions.",
-            "Classic subtropical high: clear, dry, stable. Zero precipitation probability. Go outside.",
-            "Anticyclonic subsidence producing clear conditions. No atmospheric interference today. You're good."
+            "Subtropical high dominant. No cloud, no rain. Perfect conditions.",
+            "Subtropical anticyclone dry air descending. Nothing to worry.",
+            "Classic subtropical high: clear, dry, stable. Zero rain. Go out.",
+            "Anticyclonic subsidence. Clear conditions. No interference today."
         ),
         TE to listOf(
-            "High pressure doing its job. Zero atmospheric interference today. You're clear.",
-            "Anticyclonic conditions, stable air mass, no precipitation mechanism present. Textbook clear.",
-            "Zero precipitation probability. Dewpoint well below ambient. Conditions are optimal.",
-            "Barometric pressure holding steady. The atmosphere has nothing for you today."
+            "High pressure doing its job. Zero atmospheric interference.",
+            "Anticyclonic, stable, no precipitation mechanism. Textbook clear.",
+            "Zero precipitation probability. Dewpoint well below ambient.",
+            "Barometric pressure steady. Atmosphere has nothing for you today."
         ),
         OC to listOf(
-            "Clear maritime conditions. The Atlantic pressure system is in its favorable configuration. Rare enough to be notable.",
-            "Clear. The oceanic weather machine has paused. No fronts incoming for the next 24 hours. Good day.",
-            "Anticyclonic blocking producing clear skies over the maritime zone. Enjoy this while the Atlantic remains cooperative.",
-            "Clear oceanic day. No frontal activity, no precipitation. The weather system has given you the day off."
+            "Clear maritime conditions. Atlantic in favorable configuration.",
+            "Clear. No fronts incoming for the next 24 hours. Good day.",
+            "Anticyclonic blocking. Clear skies. Atlantic staying cooperative.",
+            "Clear oceanic day. No frontal activity. Weather gave you the day."
         ),
         NO to listOf(
-            "Scandinavian blocking high producing clear Arctic conditions. Cold but clear. The Nordic definition of a perfect winter day.",
-            "Clear. The polar vortex is stable, no fronts incoming. Clear, cold, still. A good Nordic day.",
-            "Arctic clear conditions. High pressure, no precipitation. Extended daylight (summer) or long night (winter), but clear.",
-            "Nordic clear day. Polar high pressure overhead, stable conditions. The atmosphere has nothing to throw at you today."
+            "Scandinavian blocking high. Clear Arctic conditions. Best option.",
+            "Clear. Polar vortex stable, no fronts. Cold, still, and clear.",
+            "Arctic clear. High pressure, no precipitation. Cold but clear.",
+            "Nordic clear day. Polar high overhead. Atmosphere settled today."
         )
     )
 
@@ -442,331 +442,331 @@ internal object KelvinPools : PoolSet {
 
     override val stormMood: ZonedPool = mapOf(
         TR to listOf(
-            "Tropical lightning events involve return stroke currents of 10,000–200,000 amperes. Observe from inside.",
-            "The ITCZ produces more lightning than any other atmospheric feature on earth. Today's storm is a data point.",
-            "This convective system released more energy in an hour than a nuclear weapon. The scale is genuinely impressive.",
-            "Cloud-to-ground lightning in tropical systems averages 3-8 flashes per minute at peak intensity. Worth watching through a window."
+            "Tropical lightning: return strokes reach 200,000 amperes. Inside.",
+            "The ITCZ produces more lightning than any other feature on Earth.",
+            "This convective system released energy of a nuclear weapon.",
+            "Tropical lightning peaks at 3-8 flashes/min. Watch from a window."
         ),
         ST to listOf(
-            "Subtropical thunderstorms have a particular character. They build fast, discharge intensely, and clear fast.",
-            "The convective available potential energy that produced this storm has been building all day. The atmosphere is efficient.",
-            "Summer thunderstorm: spectacular physics. Superheated updrafts, ice formation aloft, electrical discharge. From inside.",
-            "The storm cell will clear in 1-3 hours. The atmosphere is releasing accumulated instability. Watch from safety."
+            "Subtropical thunderstorms: build fast, discharge, clear fast.",
+            "The CAPE producing this storm was building all day. Efficient.",
+            "Superheated updrafts, ice aloft, electrical discharge. Inside.",
+            "The storm cell will clear in 1-3 hours. Watch from safety."
         ),
         TE to listOf(
-            "Thunderstorms are superheated air columns discharging static. Beautiful, actually. From inside.",
-            "The lightning is genuinely impressive. Worth watching from a window.",
-            "Somewhere a meteorologist is very excited about this. You don't have to be.",
-            "Storm cell will pass in 2-4 hours. The atmosphere has right of way until then."
+            "Thunderstorms: superheated air discharging static. Beautiful.",
+            "The lightning is genuinely impressive. Watch from a window.",
+            "Somewhere a meteorologist is very excited about this.",
+            "Storm cell will pass in 2-4 hours. Atmosphere has right of way."
         ),
         OC to listOf(
-            "Atlantic storms are extratropical systems. Wider, longer-lasting, and less lightning-intensive than tropical equivalents.",
-            "The energy in this system comes from the temperature gradient between polar and tropical air. Ocean storms are powerful.",
-            "Maritime storm systems can sustain for days on Atlantic energy. This one has been building across the ocean since yesterday.",
-            "Extratropical cyclones are the Atlantic's primary weather mechanism. This is a significant one. Stay in and appreciate it safely."
+            "Atlantic storms are extratropical: wider, longer, less lightning.",
+            "This energy comes from the polar-tropical temperature gradient.",
+            "Maritime storm systems can sustain for days on Atlantic energy.",
+            "Extratropical cyclones are the Atlantic's primary mechanism."
         ),
         NO to listOf(
-            "Polar cyclones are relatively rare and significant. The atmospheric dynamics here are different from midlatitude systems.",
-            "Arctic storm systems are driven by intense temperature gradients. The wind is the primary hazard here, not lightning.",
-            "Norwegian Sea lows have crossed hundreds of kilometres of open water to get here. They arrive with considerable energy.",
-            "Nordic storm conditions: the barometric pressure drop was rapid. The atmosphere corrected aggressively. Wait it out."
+            "Polar cyclones are rare. Dynamics differ from midlatitude.",
+            "Arctic storms driven by temperature gradients. Wind is primary.",
+            "Norwegian Sea lows arrive with energy built over hundreds of km.",
+            "Nordic storm: rapid pressure drop. The atmosphere corrected hard."
         )
     )
 
     override val heavyRainMood: ZonedPool = mapOf(
         TR to listOf(
-            "Tropical rainfall at these rates will overwhelm urban drainage within minutes. The infrastructure was not designed for this.",
-            "High-intensity tropical precipitation. The water has nowhere to go quickly enough. Flooding risk is real.",
-            "This is monsoon-scale rainfall. Enjoy the sound of it from inside.",
-            "Tropical heavy rain is qualitatively different from midlatitude rain. The droplets are larger, the rate is higher, and the sound is remarkable."
+            "Tropical rainfall overwhelms urban drainage within minutes.",
+            "High-intensity tropical precipitation. Flooding risk is real.",
+            "This is monsoon-scale rainfall. Enjoy the sound from inside.",
+            "Tropical heavy rain: large droplets, high rate, remarkable sound."
         ),
         ST to listOf(
-            "Subtropical heavy rain. Rare but intense when it arrives. Drainage systems are being fully tested right now.",
-            "Convective heavy rain in the subtropics dumps quickly and dramatically. This won't last long. But while it lasts, it's serious.",
-            "Intense subtropical rainfall. The low humidity baseline makes this event feel more dramatic than a temperate equivalent.",
-            "The atmosphere is releasing a significant moisture load. Give it time. The clearing after subtropical heavy rain is usually fast."
+            "Subtropical heavy rain: rare but intense. Drainage fully tested.",
+            "Subtropical convective rain dumps fast. Won't last, but serious.",
+            "Intense subtropical rainfall. Feels more dramatic than temperate.",
+            "Atmosphere releasing moisture. Fast clearing usually follows."
         ),
         TE to listOf(
             "The drainage infrastructure will be tested today.",
-            "This is what meteorologists classify as 'notable' rainfall. They're not wrong.",
-            "High precipitation rate. The atmosphere is very committed to this today.",
+            "Meteorologists classify this as notable rainfall. They are right.",
+            "High precipitation rate. The atmosphere is very committed.",
             "Convective activity is significant. Respect it."
         ),
         OC to listOf(
-            "Atlantic moisture load is significant. The front has been collecting water vapour across hundreds of kilometres of ocean.",
-            "Maritime heavy rain often persists for hours. The Atlantic system is slow-moving and moisture-rich.",
-            "The oceanic air mass contains an extraordinary amount of water vapour. All of it appears to be precipitating today.",
-            "Heavy oceanic rainfall. The characteristic output of deep maritime low pressure. Drainage systems are working hard."
+            "Atlantic front collected vapour over hundreds of km of ocean.",
+            "Maritime heavy rain persists for hours. Slow-moving system.",
+            "The oceanic air mass is delivering all its vapour today.",
+            "Heavy oceanic rain. Output of deep maritime low. Draining."
         ),
         NO to listOf(
-            "Cold heavy rain in the Nordic zone has a particular unpleasantness. The temperature removes any ambiguity about how this feels.",
-            "Nordic heavy precipitation. The cold air mass means this may be rain, sleet, or mixed. All options are equally unpleasant.",
-            "High precipitation rate in near-freezing air. The body loses heat rapidly in these conditions. Gear up.",
-            "Heavy rain at near-zero temperatures. The physiological cold stress is compounded by precipitation. Full coverage needed."
+            "Cold heavy rain in the Nordic zone is particularly unpleasant.",
+            "Nordic heavy precipitation: rain, sleet, or mixed. Equally grim.",
+            "High rate in near-freezing air. Body loses heat fast. Gear up.",
+            "Heavy rain near zero. Cold stress compounded by precipitation."
         )
     )
 
     override val rainMood: ZonedPool = mapOf(
         TR to listOf(
-            "Classic midlatitude cyclone activity. The drainage systems are getting a workout.",
-            "Tropical afternoon convection is normal and self-limiting. This will pass.",
-            "Good steady rain. The kind that actually replenishes the water table.",
-            "The front will clear by evening. In the meantime, it's just wet."
+            "Classic midlatitude cyclone. Drainage getting a workout.",
+            "Tropical afternoon convection is normal. Will pass.",
+            "Good steady rain. The kind that replenishes the water table.",
+            "The front will clear by evening. In the meantime, just wet."
         ),
         ST to listOf(
-            "Subtropical rain is not the everyday baseline here. The water table will appreciate it even if you don't.",
-            "This rain is doing useful work. The region's water systems need it. Cold comfort, but it's there.",
-            "Subtropical trough rainfall. It won't last forever. The high will reassert itself.",
-            "Rain event in a typically dry climate. The infrastructure wasn't really built for it. Allow extra time for everything."
+            "Subtropical rain isn't the baseline. Water table will benefit.",
+            "This rain is doing useful work. Cold comfort, but it's there.",
+            "Subtropical trough rainfall. The high will reassert itself.",
+            "Rain in a dry climate. Infrastructure wasn't built for it."
         ),
         TE to listOf(
-            "Classic midlatitude cyclone activity. The drainage systems are getting a workout.",
+            "Classic midlatitude cyclone. Drainage getting a workout.",
             "Frontal rain. Steady, persistent, not dramatic. Just wet.",
-            "Good steady rain. The kind that actually replenishes the water table.",
-            "The front will clear by evening. In the meantime, it's just wet."
+            "Good steady rain. The kind that replenishes the water table.",
+            "The front will clear by evening. In the meantime, just wet."
         ),
         OC to listOf(
-            "Atlantic frontal rain. This is the oceanic climate's default expression. The front will clear eventually.",
+            "Atlantic frontal rain. Oceanic default. The front will clear.",
             "Maritime rain. Steady, mild, relentless. The oceanic baseline.",
-            "The front has been crossing the ocean for several days. It's here now. It will pass.",
-            "Frontal system rain. The Atlantic keeps these events coming at reliable intervals. The drainage is used to it."
+            "The front crossed the ocean for days. It's here. It will pass.",
+            "Frontal rain. Atlantic delivers these at reliable intervals."
         ),
         NO to listOf(
-            "Cold frontal rain in the Nordic zone. The temperature differential is what drives the system. The physics are efficient.",
-            "Nordic rain often precedes temperature drops as cold air moves in behind the front. Watch the pressure falling.",
-            "Frontal rain with cold air advection behind it. May transition to snow as temperatures drop. Plan accordingly.",
-            "Persistent cold rain from the polar front. This system is moving slowly. Account for the duration."
+            "Cold Nordic frontal rain. Temperature differential drives it.",
+            "Nordic rain often precedes temperature drops. Watch pressure.",
+            "Frontal rain with cold advection behind. May transition to snow.",
+            "Persistent cold rain from polar front. Moving slowly. Allow time."
         )
     )
 
     override val drizzleMood: ZonedPool = mapOf(
         TR to listOf(
-            "This is the kind of precipitation that makes you question whether it's actually raining.",
-            "Post-convective moisture. The main storm event has passed; what's left is atmospheric residue.",
-            "Drizzle at tropical humidity levels feels different. The air is already saturated. You notice it more.",
-            "Light precipitation from residual cloud. Not significant. Carry on."
+            "The precipitation that makes you question if it's raining.",
+            "Post-convective moisture. Main storm passed. Atmospheric residue.",
+            "Drizzle at tropical humidity: air already saturated. You notice.",
+            "Light precipitation from residual cloud. Carry on."
         ),
         ST to listOf(
-            "Subtropical drizzle is unusual. Marine layer advection is the most likely cause. The coast effect at work.",
-            "Drizzle in a dry climate. The stratus layer is thin, the precipitation minimal. It will clear.",
-            "Orographic drizzle: moist air forced over terrain producing fine precipitation on the windward side. Specific and brief.",
-            "Fine precipitation. Low intensity. The dry-climate baseline makes this feel more notable than it would elsewhere."
+            "Subtropical drizzle: marine layer advection. Coast effect.",
+            "Drizzle in a dry climate. Stratus layer thin. Will clear.",
+            "Orographic drizzle: moist air over terrain, fine drops, windward.",
+            "Fine precipitation in a dry climate. More notable than elsewhere."
         ),
         TE to listOf(
-            "This is the kind of precipitation that makes you question whether it's actually raining.",
-            "Drizzle is just clouds that couldn't commit. Not the atmosphere's finest effort.",
+            "The precipitation that makes you question if it's raining.",
+            "Drizzle is clouds that couldn't commit. Atmosphere at its least.",
             "Technically precipitation. Practically, just damp air.",
-            "Droplets are sub-millimeter. Your hair notices before your jacket does."
+            "Sub-millimeter droplets. Hair notices before your jacket does."
         ),
         OC to listOf(
-            "Oceanic drizzle is not accidental. The maritime stratus layer persistently produces it. This is the climate expressing itself.",
-            "Atlantic drizzle: the north oceanic climate's most characteristic output. Fine, pervasive, thoroughly damp.",
-            "The drizzle will continue until conditions improve. Conditions may not improve. This is oceanic climate.",
-            "Fine marine precipitation. Not dramatic. Just persistent. Your jacket knows."
+            "Oceanic drizzle. Maritime stratus produces it reliably.",
+            "Atlantic drizzle: the north oceanic climate's signature output.",
+            "The drizzle continues until conditions improve. Oceanic climate.",
+            "Fine marine precipitation. Not dramatic. Persistent. Hood up."
         ),
         NO to listOf(
-            "Cold drizzle in the Nordic zone has a particular character. The temperature makes it feel more serious than the rate suggests.",
-            "Near-freezing fine precipitation. The droplets are small but the cold amplifies the discomfort.",
-            "Drizzle at low temperatures. The saturation point is lower in cold air. This is the atmosphere at its least dramatic.",
-            "Cold fine precipitation. Technically minimal. The temperature does the rest of the work."
+            "Cold Nordic drizzle. Temperature makes it more serious than rate.",
+            "Near-freezing fine precipitation. Cold amplifies the discomfort.",
+            "Drizzle at low temperatures. The atmosphere at its least.",
+            "Cold fine precipitation. Minimal. Temperature does the rest."
         )
     )
 
     override val snowMood: ZonedPool = mapOf(
         TR to listOf(
-            "Snowfall at tropical latitude is a genuine atmospheric event. Upper-level cold intrusion reaching the surface. Rare physics.",
-            "This is climatologically unusual. Enjoy observing it. The infrastructure is not prepared for it.",
-            "Snow at this latitude suggests upper-tropospheric cold air descended to the surface. Anomalous and interesting.",
-            "Tropical snowfall: a meteorological curiosity. The thermodynamics required to produce this here are significant."
+            "Snow at tropical latitude: upper-level cold intrusion. Rare.",
+            "Climatologically unusual. Enjoy observing it. Infra unready.",
+            "Snow here means upper cold reached the surface. Anomalous.",
+            "Tropical snowfall: significant thermodynamics to produce this."
         ),
         ST to listOf(
-            "Subtropical snow is rare enough that the infrastructure and population are not adapted. Exercise particular caution.",
-            "Snow event at this latitude: Arctic air outbreak of significant magnitude. Unusual and disruptive.",
-            "Snowfall here is an event. The systems that produce it are significant cold air outbreaks. Take it seriously.",
-            "No two snowflakes share the same crystal structure. Worth appreciating, especially as they're rare here."
+            "Subtropical snow: infrastructure and population unprepared.",
+            "Snow event: significant Arctic outbreak. Unusual and disruptive.",
+            "Snowfall here is an event. Major cold air outbreak. Seriously.",
+            "No two snowflakes share the same crystal structure. Rare here."
         ),
         TE to listOf(
-            "No two snowflakes share the same crystal structure. Worth appreciating, even underfoot.",
-            "The albedo effect will make it brighter than you expect. Your eyes will adjust.",
-            "Snow is just water in its most structurally interesting phase.",
-            "Accumulation rate is predictable. Your commute is not. Give yourself time."
+            "No two snowflakes share the same crystal structure. Worth seeing.",
+            "The albedo effect: brighter than expected. Your eyes will adjust.",
+            "Snow is water in its most structurally interesting phase.",
+            "Accumulation is predictable. Your commute is not. Allow time."
         ),
         OC to listOf(
-            "Oceanic snow is typically wet and heavy. High water content from the maritime air mass. Accumulation compacts quickly.",
-            "Maritime snow: expect the heavy, wet variety. It compacts underfoot and refreezes as ice. Traction is the primary concern.",
-            "Snow from maritime polar air is structurally different from continental powder. Wet, dense, and slippery.",
-            "The ocean's influence on temperature means this snow may be transitional. Watch for sleet or ice glaze as temperature drops."
+            "Oceanic snow: wet and heavy. Maritime air compacts it fast.",
+            "Maritime snow: heavy and wet. Compacts to ice. Watch traction.",
+            "Maritime polar snow is wet, dense, and slippery. Watch your step.",
+            "Maritime snow may shift to sleet or ice as temperature drops."
         ),
         NO to listOf(
-            "Nordic powder snow: low water content, high crystal quality. The structure is beautiful. The footing is treacherous.",
-            "Proper Arctic snow. Cold and dry means light accumulation that drifts significantly in any wind.",
-            "Snow is the Nordic climate's native expression. The infrastructure is designed for it. You should be too.",
-            "High-latitude snowfall. Low solar angle means accumulation persists. Ice under fresh snow is the real hazard."
+            "Nordic powder snow: low water content, quality crystals. Icy.",
+            "Arctic snow: cold and dry, drifts significantly in any wind.",
+            "Nordic snow: the climate's native expression. Prepared for it.",
+            "High-latitude snowfall: accumulation persists. Ice under snow."
         )
     )
 
     override val windMood: ZonedPool = mapOf(
         TR to listOf(
-            "Tropical wind events are often precursors to larger systems. The pressure gradient is informative.",
-            "Trade wind surge or tropical low approach. The wind direction and backing/veering pattern tells you where it's going.",
-            "Strong tropical winds: the atmosphere is actively redistributing air masses. The Coriolis effect is doing its job.",
-            "Elevated tropical surface winds. Kinetic energy in the lower atmosphere is significant today."
+            "Tropical wind events often precede larger systems. Watch.",
+            "Trade wind surge or tropical low. Wind direction tells the story.",
+            "Strong tropical winds: redistributing air masses. Coriolis busy.",
+            "Elevated tropical surface winds. Kinetic energy significant."
         ),
         ST to listOf(
-            "Strong subtropical gradient winds. The pressure differential between the high and low is steep today.",
-            "Wind at these speeds in dry subtropical air creates additional evaporative effects. Stay hydrated.",
-            "Significant wind event for the region. The Beaufort scale puts this in the strong breeze to near-gale range.",
-            "The aerodynamic drag becomes a practical factor in movement at these wind speeds. Kinetic energy is real."
+            "Strong subtropical gradient. Pressure differential steep today.",
+            "Wind in dry subtropical air increases evaporative loss. Hydrate.",
+            "Significant wind event. Beaufort: strong breeze to near-gale.",
+            "Aerodynamic drag becomes a practical factor at these wind speeds."
         ),
         TE to listOf(
-            "At these speeds, aerodynamic drag becomes a real factor in your commute.",
+            "At these speeds, aerodynamic drag is a factor in your commute.",
             "Wind force 6+ on the Beaufort scale. Respect the kinetic energy.",
-            "The pressure gradient is steep today. That's why it's sustained, not just gusting.",
-            "Significant wind event. The atmosphere is redistributing air masses with some enthusiasm."
+            "Steep pressure gradient today. That's why it's sustained.",
+            "Significant wind. Atmosphere redistributing air with enthusiasm."
         ),
         OC to listOf(
-            "Atlantic gradient winds are typically sustained rather than gusty. The fetch over open ocean creates organised airflow.",
-            "Maritime wind: the ocean surface boundary layer creates a different character to these winds compared to continental events.",
-            "North Atlantic wind event. The low pressure tracking across the ocean is producing a steep pressure gradient.",
-            "Oceanic winds have covered significant fetch before reaching here. The energy and organisation reflect that."
+            "Atlantic gradient: sustained not gusty. Ocean fetch organises.",
+            "Maritime wind: open ocean creates organised laminar surface flow.",
+            "North Atlantic low tracking across ocean. Steep gradient.",
+            "Oceanic winds covered significant fetch. Organisation reflects."
         ),
         NO to listOf(
-            "Arctic wind: the temperature combined with wind speed creates a wind chill far below the ambient temperature.",
-            "Polar wind event. The wind chill factor is the operationally relevant number today, not air temperature.",
-            "Nordic winds carry cold air efficiently. The wind chill formula: the real temperature is what you feel.",
-            "Arctic surface flow. Significant wind chill. The physical exposure time outdoors matters today."
+            "Arctic wind: cold plus speed creates wind chill far below.",
+            "Polar wind event. Wind chill is the operationally relevant.",
+            "Nordic winds carry cold air. Wind chill is the real temperature.",
+            "Arctic surface flow. Wind chill significant. Time outdoors."
         )
     )
 
     override val breezeMood: ZonedPool = mapOf(
         TR to listOf(
-            "Trade wind conditions: characteristic of tropical anticyclones, cooling and drying the lower atmosphere efficiently.",
-            "Classic tropical breeze. The trade winds are the most reliable wind system on Earth. Today they're pleasant.",
-            "Gentle trade wind flow. Beaufort 3-4. The tropical baseline at its most comfortable.",
-            "Trade wind breeze. The engine of tropical climate. Today it's in its most agreeable mode."
+            "Trade wind conditions: cooling and drying the lower atmosphere.",
+            "Classic tropical breeze. Trade winds most reliable on Earth.",
+            "Gentle trade winds. Beaufort 3-4. Tropical baseline at its best.",
+            "Trade wind breeze. Engine of tropical climate. Agreeable mode."
         ),
         ST to listOf(
             "Good sailing conditions, if that's relevant to your day.",
-            "The breeze from the subtropical high edge is clean and dry. The kind that makes a warm day comfortable.",
-            "Beaufort 4 conditions under subtropical high influence. Characterful without being hostile.",
-            "A proper subtropical breeze. The trade wind edge is producing organised, comfortable airflow."
+            "Subtropical high edge breeze: clean and dry. Makes heat bearable.",
+            "Beaufort 4 under subtropical high. Characterful, not hostile.",
+            "A proper subtropical breeze. Organised, comfortable airflow."
         ),
         TE to listOf(
-            "Beaufort 4. Leaves in constant motion, light branches moving. Characterful without being hostile.",
+            "Beaufort 4. Leaves in constant motion, light branches moving.",
             "Good sailing conditions, if that's relevant to your day.",
             "The trees are indicating a moderate breeze. They're rarely wrong.",
             "A proper Beaufort 4. Interesting without being hostile."
         ),
         OC to listOf(
-            "Maritime breeze. The Atlantic producing its characteristic moderate, sustained airflow. The ocean moderates everything, including this.",
-            "Oceanic Beaufort 4. The maritime influence makes this feel different to equivalent inland wind speeds. Less gusty, more organised.",
-            "Atlantic breeze. The fetch creates organised laminar flow at surface level. Steady rather than gusty.",
-            "A proper north Atlantic breeze. Characterful. Not hostile. The ocean's version of a pleasant day."
+            "Maritime breeze. Atlantic producing moderate sustained airflow.",
+            "Oceanic Beaufort 4. Less gusty than inland. More organised flow.",
+            "Atlantic breeze. Fetch creates organised laminar flow at surface.",
+            "A proper north Atlantic breeze. Characterful. Not hostile."
         ),
         NO to listOf(
-            "Nordic breeze: even a Beaufort 4 at these temperatures requires a windproof layer. The wind chill is the story.",
-            "Moderate wind at northern latitudes. The chill factor makes this feel more significant than the speed suggests.",
-            "Arctic breeze. The cold air amplifies the wind chill factor even at moderate speeds. Outer layer needed.",
-            "Northern latitude breeze. Beaufort 4 with cold air feels sharper than equivalent conditions at lower latitudes."
+            "Nordic Beaufort 4: wind chill still requires a windproof layer.",
+            "Moderate wind at northern latitudes. Chill factor significant.",
+            "Arctic breeze. Cold air amplifies chill even at moderate speeds.",
+            "Beaufort 4 at high latitudes feels sharper than further south."
         )
     )
 
     override val allClearWarmMood: ZonedPool = mapOf(
         TR to listOf(
-            "Optimal tropical conditions. The dry season clear period delivers exactly these conditions. Make use of it.",
-            "Warm, clear tropical conditions. Heat index manageable, UV significant. Stay hydrated and use sunscreen.",
-            "The inter-seasonal clear period in tropical climates is genuinely optimal. The data is good.",
-            "Tropical clear and warm: the atmosphere is cooperating at the thermal level. UV remains the one concern."
+            "Optimal tropical conditions. Dry season clear. Make use of it.",
+            "Warm, clear tropical. Heat index manageable. Use sunscreen today.",
+            "Inter-seasonal clear period: genuinely optimal. The data is good.",
+            "Tropical clear and warm. UV remains the one concern. Enjoy it."
         ),
         ST to listOf(
-            "Subtropical clear warm day: this is the climate type's optimal expression. High solar irradiance, clear air, comfortable temperature.",
-            "Perfect conditions by subtropical standards. The Hadley cell is operating as advertised.",
-            "Clear, warm, low humidity under the subtropical high. The data is genuinely very good.",
-            "Optimal subtropical conditions. The atmosphere is in its most cooperative configuration today."
+            "Subtropical clear warm day: the climate's optimal expression.",
+            "Perfect subtropical conditions. Hadley cell delivered.",
+            "Clear, warm, low humidity under subtropical high. Data very good.",
+            "Optimal subtropical conditions. Atmosphere in cooperative mode."
         ),
         TE to listOf(
             "Conditions like this are why people move to places like this.",
-            "Optimal temperature range for outdoor activity. The data is genuinely good.",
+            "Optimal temperature range for outdoor activity. Data is good.",
             "Nothing to monitor. Nothing to prepare for. Unusual, honestly.",
-            "Peak solar irradiance, comfortable temperature. The atmosphere is cooperating."
+            "Peak solar irradiance, comfortable temp. Atmosphere cooperating."
         ),
         OC to listOf(
-            "Warm maritime clear day. These are genuinely uncommon in oceanic climates. Note the date.",
-            "Clear and warm by oceanic standards. The Atlantic is not interfering today. Appreciate it.",
-            "Optimal oceanic conditions. Clear, warm, no fronts. The kind of day that justifies living near the ocean.",
-            "Maritime clear and warm. The rare combination that makes oceanic climates occasionally worth it."
+            "Warm maritime clear day. Genuinely uncommon here. Note the date.",
+            "Clear and warm oceanic. Atlantic not interfering. Appreciate.",
+            "Optimal oceanic conditions. Clear, warm, no fronts. Worth it.",
+            "Maritime clear and warm. The rare combination. Appreciate it."
         ),
         NO to listOf(
-            "Nordic warm clear day. Extended daylight with clear skies at high latitude is a genuine event. Go outside.",
-            "Summer conditions in the Nordic zone: warm and clear. The midnight sun adds hours of usable daylight. Use them.",
-            "Clear and warm at this latitude. The UV intensity is lower but the daylight duration compensates. Enjoy this.",
-            "Good Nordic summer day. The season is brief. The data is good. The atmosphere is cooperating. Go outside."
+            "Nordic warm clear day. Clear skies at high latitude is an event.",
+            "Nordic summer: warm and clear. Midnight sun adds daylight.",
+            "Clear and warm at this latitude. Daylight compensates for UV.",
+            "Good Nordic summer day. Season is brief. Data is good. Go."
         )
     )
 
     override val allClearNeutralMood: ZonedPool = mapOf(
         TR to listOf(
-            "No atmospheric drama today. The tropical weather machine has paused. Appreciate the stillness.",
-            "Clear. Calm. The ITCZ has moved away. This is the dry season at its most settled.",
-            "Nothing to monitor. The tropical atmosphere is in its quiet phase.",
-            "Clear tropical conditions. No precipitation mechanism. No atmospheric interference. Unusually calm."
+            "No atmospheric drama. Tropical machine paused. Enjoy the calm.",
+            "Clear. Calm. ITCZ moved away. Dry season at its most settled.",
+            "Nothing to monitor. Tropical atmosphere in its quiet phase.",
+            "Clear tropical conditions. Unusually calm. No atmospheric drama."
         ),
         ST to listOf(
-            "Nothing to monitor. Nothing to prepare for. The subtropical high is behaving perfectly.",
-            "Clear and stable. The descending air of the Hadley cell is doing its job. Unremarkably good conditions.",
-            "No atmospheric drama today. The subtropical anticyclone has suppressed all activity.",
-            "Clear. Calm. Dry. The subtropical climate in its baseline expression."
+            "Nothing to monitor. Subtropical high is behaving perfectly.",
+            "Hadley cell descending dry air. Clear, stable. Unremarkably good.",
+            "No atmospheric drama. Subtropical anticyclone suppressed all.",
+            "Clear. Calm. Dry. Subtropical climate in its baseline expression."
         ),
         TE to listOf(
             "Nothing to monitor. Nothing to prepare for. Unusual, honestly.",
-            "No atmospheric drama today. The meteorological equivalent of a day off.",
+            "No atmospheric drama today. The meteorological day off.",
             "The system is stable. That's the whole story.",
             "Clear. Calm. Unremarkable by the best possible definition."
         ),
         OC to listOf(
-            "Clear oceanic conditions. The Atlantic has paused between systems. Enjoy the window.",
-            "No fronts. No active weather. The oceanic atmosphere has granted a meteorological intermission.",
-            "Clear maritime conditions. This is a gap between Atlantic systems. Make the most of it.",
-            "Nothing to monitor. The oceanic weather machine is temporarily at rest."
+            "Clear oceanic conditions. Atlantic paused between systems. Enjoy.",
+            "No fronts. No active weather. Oceanic atmosphere at intermission.",
+            "Clear maritime conditions. Gap between Atlantic systems. Use it.",
+            "Nothing to monitor. Oceanic weather machine temporarily at rest."
         ),
         NO to listOf(
-            "Clear Nordic conditions. High pressure, stable polar air, no precipitation. Cold but clear. The best option here.",
-            "Nordic clear day. The Scandinavian blocking high is doing its job. Stable, settled, cold.",
-            "No atmospheric drama. The polar high has everything suppressed. Clear and cold.",
-            "Stable polar conditions. No fronts incoming. The Arctic atmosphere is, briefly, at rest."
+            "Clear Nordic. Polar high, no precipitation. Cold but clear.",
+            "Nordic clear day. Scandinavian blocking high is doing its job.",
+            "No atmospheric drama. Polar high has everything suppressed.",
+            "Stable polar conditions. No fronts incoming. Arctic at rest."
         )
     )
 
     override val greyMood: ZonedPool = mapOf(
         TR to listOf(
-            "Overcast but not actively raining. The cloud base is low but convective instability is limited. Carry on.",
-            "The cloud layer is suppressing the usual solar intensity. A welcome change from full tropical sun, actually.",
-            "Grey in the tropics usually precedes convective development in the afternoon. Keep an eye on it.",
-            "Stratus layer without precipitation. The tropical atmosphere is gathering energy. Not yet though."
+            "Overcast, not raining. Convective instability limited. Carry on.",
+            "Cloud suppressing solar intensity. A break from tropical sun.",
+            "Grey in tropics often precedes afternoon convection. Watch it.",
+            "Stratus without precipitation. Tropical atmosphere gathering."
         ),
         ST to listOf(
-            "Subtropical overcast. Marine stratus advection keeping the sky grey without producing rain. It will clear.",
-            "Low cloud layer from marine influence. The cloud base is cosmetic today. No precipitation mechanism.",
-            "Grey subtropical day. The inversion layer is trapping cloud at low level. It'll burn off.",
-            "Overcast. The descending air of the subtropical high will reassert itself. This is temporary."
+            "Subtropical overcast. Marine stratus without rain. It will clear.",
+            "Low cloud from marine influence. Cloud base is cosmetic today.",
+            "Grey subtropical day. Inversion trapping cloud low. Burns off.",
+            "Overcast. Subtropical high will reassert. This is temporary."
         ),
         TE to listOf(
-            "The diffuse lighting is actually quite even. Great day for photography, objectively speaking.",
-            "No rain mechanism present. This is atmospheric ambiance, not weather.",
+            "The diffuse lighting is even. Great day for photography.",
+            "No rain mechanism present. Atmospheric ambiance, not weather.",
             "Cloud base is high. The grey is cosmetic, not structural.",
             "It's just water vapor suspended at altitude. Carry on."
         ),
         OC to listOf(
-            "Oceanic overcast: the maritime stratus layer is the default state here. It's not threatening. It's just the baseline.",
-            "The cloud cover is from the marine boundary layer. Persistent, low-level, and not producing rain. Just grey.",
-            "Atlantic stratus. This is the oceanic climate expressing its characteristic overcast. No rain. Just grey.",
-            "Maritime overcast. The diffuse light is even and consistent. The cloud base is high enough not to worry about."
+            "Oceanic overcast: maritime stratus is the default. Just grey.",
+            "Cloud from marine boundary layer. Persistent, low-level, no rain.",
+            "Atlantic stratus. Oceanic climate's characteristic grey. No rain.",
+            "Maritime overcast. Diffuse even light. Cloud base not a worry."
         ),
         NO to listOf(
-            "Nordic grey. The persistent overcast of high latitude winters. No precipitation. Just limited light.",
-            "Overcast at northern latitude. Diffuse light, low sun angle. The cloud base is not threatening. Just present.",
-            "Grey, still, overcast. The Nordic climate's default winter expression. No precipitation today.",
-            "Low cloud cover without precipitation. The Nordic winter grey. Carry on. This is baseline here."
+            "Nordic grey. Persistent high-latitude overcast. No precipitation.",
+            "Overcast at northern latitude. Low sun angle. Not threatening.",
+            "Grey, still, overcast. Nordic winter's default. No rain today.",
+            "Low cloud, no precipitation. The Nordic winter grey. Baseline."
         )
     )
 }

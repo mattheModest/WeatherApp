@@ -25,6 +25,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -37,7 +38,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalUriHandler
+import android.content.Intent
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -422,36 +425,62 @@ private fun WeatherCard(displayState: WidgetDisplayState, style: VisualThemeStyl
                     verticalArrangement = Arrangement.spacedBy(10.dp)
                 ) {
                     if (displayState.moodLine.isNotEmpty()) {
-                        if (style.showPullQuoteBorder) {
-                            // INK: pull-quote with left accent border
-                            val borderColor = style.pullQuoteBorderColor
-                            Text(
-                                text = displayState.moodLine,
-                                fontSize = 14.sp,
-                                fontStyle = FontStyle.Italic,
-                                fontFamily = style.metaFontFamily,
-                                color = tokens.secondaryText,
-                                lineHeight = 20.sp,
-                                modifier = Modifier
-                                    .padding(start = 12.dp)
-                                    .drawBehind {
-                                        drawLine(
-                                            color = borderColor,
-                                            start = Offset(-8.dp.toPx(), 0f),
-                                            end = Offset(-8.dp.toPx(), size.height),
-                                            strokeWidth = 2.dp.toPx()
-                                        )
+                        val context = LocalContext.current
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.SpaceBetween
+                        ) {
+                            if (style.showPullQuoteBorder) {
+                                // INK: pull-quote with left accent border
+                                val borderColor = style.pullQuoteBorderColor
+                                Text(
+                                    text = displayState.moodLine,
+                                    fontSize = 14.sp,
+                                    fontStyle = FontStyle.Italic,
+                                    fontFamily = style.metaFontFamily,
+                                    color = tokens.secondaryText,
+                                    lineHeight = 20.sp,
+                                    modifier = Modifier
+                                        .weight(1f)
+                                        .padding(start = 12.dp)
+                                        .drawBehind {
+                                            drawLine(
+                                                color = borderColor,
+                                                start = Offset(-8.dp.toPx(), 0f),
+                                                end = Offset(-8.dp.toPx(), size.height),
+                                                strokeWidth = 2.dp.toPx()
+                                            )
+                                        }
+                                )
+                            } else {
+                                Text(
+                                    text = displayState.moodLine,
+                                    fontSize = 14.sp,
+                                    fontStyle = FontStyle.Italic,
+                                    fontFamily = style.metaFontFamily,
+                                    color = tokens.secondaryText,
+                                    lineHeight = 20.sp,
+                                    modifier = Modifier.weight(1f)
+                                )
+                            }
+                            IconButton(
+                                onClick = {
+                                    val intent = Intent(Intent.ACTION_SEND).apply {
+                                        type = "text/plain"
+                                        putExtra(Intent.EXTRA_TEXT, "\"${displayState.moodLine}\"\n— WeatherApp")
                                     }
-                            )
-                        } else {
-                            Text(
-                                text = displayState.moodLine,
-                                fontSize = 14.sp,
-                                fontStyle = FontStyle.Italic,
-                                fontFamily = style.metaFontFamily,
-                                color = tokens.secondaryText,
-                                lineHeight = 20.sp
-                            )
+                                    context.startActivity(Intent.createChooser(intent, null))
+                                },
+                                modifier = Modifier.size(32.dp)
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Default.Share,
+                                    contentDescription = "Share",
+                                    tint = tokens.secondaryText.copy(alpha = 0.5f),
+                                    modifier = Modifier.size(16.dp)
+                                )
+                            }
                         }
                         // Beige: blinking cursor after mood text
                         if (style.hasBlinkingCursor) {

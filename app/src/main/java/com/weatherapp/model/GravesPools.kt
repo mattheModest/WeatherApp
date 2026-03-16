@@ -11,430 +11,430 @@ internal object GravesPools : PoolSet {
 
     override val stormVerdict: ZonedPool = mapOf(
         TR to listOf(
-            "A tropical storm. The sky has made its feelings about your day abundantly clear. Stay inside.",
-            "The monsoon has cancelled your plans. You were going to have to cancel them eventually anyway.",
-            "Thunderstorm. The tropics occasionally remind you who's in charge. Today is one of those days.",
-            "Active tropical storm. You had somewhere to be. The atmosphere was unaware of this and did not care."
+            "Sky's feelings: unmistakable. Stay inside.",
+            "Monsoon cancelled your plans. Eventually anyway.",
+            "The tropics remind you who's in charge. Today.",
+            "The atmosphere didn't know your schedule. Nor did it care."
         ),
         ST to listOf(
-            "A summer thunderstorm. The heat built all day and now it's paying out, all at once, on you.",
-            "The sky has committed completely. It saved this for you specifically, it feels like.",
-            "Severe storm. You were warned by the heat and the pressure and the sky's general mood. Here it is.",
-            "Thunderstorm. Subtropical summers have a tradition of ending exactly like this."
+            "The heat built all day and paid out on you. Stay in.",
+            "The sky committed. It saved this for you specifically.",
+            "Warned by heat and pressure. Here it is. Full gear.",
+            "Subtropical summers always end like this. Stay inside."
         ),
         TE to listOf(
-            "A proper storm. You had somewhere to be. The sky had a prior engagement.",
-            "Thunderstorm. Today was always going to go like this.",
+            "You had somewhere to be. The sky had a prior engagement.",
+            "Today was always going to go like this.",
             "The sky has formally cancelled your day. Stay inside.",
-            "Active storm. You had plans. How ambitious of you."
+            "You had plans. How ambitious of you. Stay inside."
         ),
         OC to listOf(
-            "Atlantic storm. The ocean spent several days building this and it has delivered it directly to your door.",
-            "A proper Atlantic gale. The weather here has always meant business. Today especially.",
-            "Maritime storm. You live near the ocean. Occasionally it expresses itself. Today is one of those occasions.",
-            "The Atlantic low has arrived. You could have predicted this. In fact, you probably did. Stay inside."
+            "The ocean built this for days. Delivered to your door.",
+            "Atlantic gale. The weather here means business. Today.",
+            "Maritime storm. The ocean expresses itself. Stay in.",
+            "The Atlantic low arrived. You knew it would. Stay inside."
         ),
         NO to listOf(
-            "Arctic storm. The polar atmosphere has been withholding and now it isn't. Stay inside.",
-            "A proper Nordic gale. The weather was always going to be like this. You knew when you moved here.",
-            "Polar storm. Darkness, wind, cold. The holy trinity of Nordic winter. Indoor plans only.",
-            "Severe Arctic weather. The polar vortex is having a moment and you are in its way."
+            "Polar atmosphere: no longer withholding. Stay inside.",
+            "Nordic gale. You knew when you moved here. Stay in.",
+            "Darkness, wind, cold. The Nordic trinity. Indoor plans.",
+            "Polar vortex having a moment. You're in its way. Inside."
         )
     )
 
     override val heavyRainVerdict: ZonedPool = mapOf(
         TR to listOf(
-            "Tropical downpour. It is coming down in a way that respects nothing and no one. Full waterproofing.",
-            "The monsoon is expressing itself fully today. Everything is getting wet. Full gear or stay in.",
-            "Heavy tropical rain. The sky has decided. You can only decide whether you're prepared for it or not.",
-            "Pouring. Tropically pouring. The kind that ends conversations and ruins shoes. Waterproof everything."
+            "Respects nothing and no one. Full waterproofing.",
+            "Monsoon fully committed. Full gear or stay in.",
+            "The sky has decided. Are you prepared or not?",
+            "Tropically pouring. Ruins shoes. Waterproof everything."
         ),
         ST to listOf(
-            "Heavy subtropical rain. Rare, but it arrived with conviction. Waterproof jacket and low expectations.",
-            "The sky has committed to this in a way that most people never commit to anything. Full waterproofing.",
-            "Pouring. The summer heat has been building this and now it's here. Full gear.",
-            "Heavy rain. Subtropical intensity. Whatever you're planning, add 'significantly wetter' to the itinerary."
+            "Rare but arrived with conviction. Full waterproofing.",
+            "The sky committed harder than most people ever do.",
+            "Heat built this all season. It's here. Full gear.",
+            "Add 'significantly wetter' to your itinerary. Full gear."
         ),
         TE to listOf(
-            "It is absolutely pouring. Umbrella, waterproof jacket, and low expectations.",
-            "The sky has committed to this in a way most people never commit to anything. Full waterproofing.",
-            "Heavy rain. The kind that finds you no matter what. Waterproof jacket.",
-            "Pouring. Whatever you're planning, add getting wet to the itinerary unless you gear up properly."
+            "Absolutely pouring. Umbrella, jacket, low expectations.",
+            "The sky committed like most people never do. Full gear.",
+            "Finds you no matter what. Waterproof jacket.",
+            "Planning to go out? Add 'getting soaked' unless you gear up."
         ),
         OC to listOf(
-            "Heavy Atlantic rain. The ocean sent this. It's thorough, persistent, and deeply uninterested in your plans.",
-            "Pouring. The Atlantic is clearing its surplus moisture inventory over this general area today.",
-            "Heavy maritime rain. You live here. You know how this goes. Full waterproofing.",
-            "The Atlantic front has delivered. Heavy rain, no apology. Full waterproof kit."
+            "Thorough, persistent, indifferent to your plans. Full kit.",
+            "The ocean clearing surplus moisture. Over you. Today.",
+            "You live here. You know how this goes. Full waterproofing.",
+            "Atlantic front delivered. Heavy rain, no apology. Full kit."
         ),
         NO to listOf(
-            "Heavy cold rain. The kind that works on you from multiple directions simultaneously. Full waterproofing.",
-            "Nordic heavy precipitation. Cold. Wet. Persistent. The combination is impressive in its unpleasantness.",
-            "Pouring in near-freezing temperatures. Both the rain and the cold are your problem now. Full gear.",
-            "Heavy rain, Arctic air behind it. Everything is cold and wet and getting colder. Waterproof and warm."
+            "Works on you from multiple directions. Full waterproofing.",
+            "Cold. Wet. Persistent. Impressive in its unpleasantness.",
+            "Pouring in near-freezing temperatures. Full gear.",
+            "Heavy rain, Arctic air behind it. Waterproof and warm."
         )
     )
 
     override val rainVerdict: ZonedPool = mapOf(
         TR to listOf(
-            "Afternoon tropical rain. You knew this was coming. The sky here is very consistent about it.",
-            "It's raining. Properly tropical rain. Warm, heavy, entirely unbothered by your schedule. Umbrella.",
-            "Rain today. The tropics are not subtle about precipitation. Umbrella or arrive wet.",
-            "Bring an umbrella. The afternoon convection has started and it will continue until it decides to stop."
+            "You knew this was coming. The sky is very consistent.",
+            "Warm, heavy, unbothered by your schedule. Umbrella.",
+            "The tropics are not subtle about precipitation. Umbrella.",
+            "Afternoon convection started. It'll stop when it decides."
         ),
         ST to listOf(
-            "Raining. One of the few rainy days this season, and it chose today. Take an umbrella.",
-            "It's raining and it has no intention of stopping for you specifically. Umbrella.",
-            "Rain today. Moderate, persistent, and thoroughly unbothered by your plans.",
-            "Umbrella. The subtropical trough didn't ask for your input and neither did the forecast."
+            "One of the few rainy days, and it chose today. Umbrella.",
+            "No intention of stopping for you specifically. Umbrella.",
+            "Moderate, persistent, unbothered by your plans.",
+            "The subtropical trough didn't ask. Neither did I. Umbrella."
         ),
         TE to listOf(
-            "Raining. Properly. Take an umbrella or arrive wet. Both are valid choices with different consequences.",
-            "It's raining and it has no intention of stopping for you specifically. Umbrella.",
-            "Rain today. Moderate, persistent, and thoroughly unbothered by your plans.",
-            "Bring an umbrella. You'll thank yourself at around 2pm when it's still raining."
+            "Take an umbrella or arrive wet. Both have consequences.",
+            "No intention of stopping for you specifically. Umbrella.",
+            "Moderate, persistent, unbothered by your plans.",
+            "Still raining at 2pm. You'll thank yourself for the umbrella."
         ),
         OC to listOf(
             "It's raining. Of course it's raining. Umbrella.",
-            "Atlantic frontal rain. The forecast said rain. The forecast was correct. Umbrella.",
-            "Rain. Steady, oceanic, unhurried. The maritime climate is doing what it does.",
-            "Raining. Again. The Atlantic has opinions about this coast and today they are wet ones. Umbrella."
+            "The forecast said rain. The forecast was correct. Umbrella.",
+            "Steady, oceanic, unhurried. The maritime climate at work.",
+            "Again. The Atlantic has wet opinions today. Umbrella."
         ),
         NO to listOf(
-            "Cold rain. Nordic rain has a particular commitment to making you feel it. Umbrella and jacket.",
-            "It's raining and it is cold and both of these things will continue for a while. Umbrella.",
-            "Frontal rain in cold air. It was going to be like this. It is like this. Umbrella.",
-            "Rain. Cold rain. The Nordic atmosphere does not offer the warm tropical variety. Gear up."
+            "Nordic rain commits to making you feel it. Umbrella.",
+            "Cold and raining and both continue for a while. Umbrella.",
+            "Frontal rain in cold air. It is like this. Umbrella.",
+            "Cold rain. Not the warm tropical variety. Gear up."
         )
     )
 
     override val drizzleVerdict: ZonedPool = mapOf(
         TR to listOf(
-            "Tropical drizzle. Not enough to cancel plans, just enough to make the humidity worse. Hood optional.",
-            "Residual moisture from the last convective event. It drizzles between storms here. You'll survive. Hood.",
-            "Post-rain mist. The tropics don't do subtle, but this is as close as it gets. Light coverage.",
-            "Drizzling. The air is so saturated it barely has to try. Hood if you care about your hair."
+            "Humidity made worse by moisture. Hood optional.",
+            "It drizzles between storms here. You'll survive. Hood.",
+            "As subtle as the tropics get. Light coverage.",
+            "The air barely has to try. Hood if you care about your hair."
         ),
         ST to listOf(
-            "Marine drizzle. The coast has arrived at your door uninvited. Hood.",
-            "Drizzle. The sky is being passive aggressive, subtropical edition. Light coverage.",
-            "Fine precipitation from stratus layer. Not enough to justify an umbrella. Too wet to ignore entirely.",
-            "Drizzling. Not enough to ruin your day. Exactly enough to make it slightly worse. Hood."
+            "The coast arrived at your door uninvited. Hood.",
+            "Sky being passive aggressive, subtropical edition. Hood.",
+            "Not enough for an umbrella. Too wet to ignore entirely.",
+            "Not enough to ruin your day. Enough to make it worse. Hood."
         ),
         TE to listOf(
-            "Drizzling. Not enough to cancel plans. Just enough to make everything slightly worse.",
-            "Technically precipitation. Just enough to ruin your hair and not enough to justify staying in.",
-            "Drizzle. The cruelest weather. Too wet to ignore, not wet enough to complain about properly.",
+            "Not enough to cancel plans. Enough to make things worse.",
+            "Ruins your hair; not wet enough to justify staying in.",
+            "Too wet to ignore, not wet enough to complain about properly.",
             "The sky is being passive aggressive. Hood or light layer."
         ),
         OC to listOf(
-            "Atlantic drizzle. The oceanic climate's default mode. Hood up and get on with it.",
-            "Fine maritime rain. Too light to mention. Too persistent to ignore. You know what to do.",
+            "The oceanic default mode. Hood up and get on with it.",
+            "Too light to mention. Too persistent to ignore. Hood.",
             "Drizzle. You live here. You know about the drizzle. Hood.",
-            "Oceanic drizzle. The kind of precipitation that just exists here as background moisture. Hood."
+            "Just background moisture here. Hood."
         ),
         NO to listOf(
-            "Cold drizzle. Not dramatic. Not warm. Just persistent and slightly below the temperature of your tolerance.",
-            "Nordic fine precipitation. Freezing is an option the forecast hasn't ruled out. Light waterproofing.",
-            "Drizzle at near-freezing temperatures. The cruelest cold-weather variant. Hat and light coverage.",
-            "Cold mist masquerading as drizzle. You'll arrive somewhere cold and slightly damp. Hood."
+            "Not dramatic. Just persistent and below your tolerance.",
+            "Near-freezing is an option. Light waterproofing.",
+            "Near-freezing drizzle. Hat and light coverage.",
+            "Cold and slightly damp. You'll arrive cold and damp. Hood."
         )
     )
 
     override val snowVerdict: ZonedPool = mapOf(
         TR to listOf(
-            "Snow. In the tropics. The atmosphere has departed from the script entirely. Bundle up.",
-            "It is snowing here, which is a sentence that should not be possible today. Every warm layer you own.",
-            "Tropical snowfall. This is not normal. The sky knows that. It doesn't care. Bundle up.",
-            "Snow. Yes, here. No, it's not usual. Yes, you need every warm thing you have."
+            "Snow here. The atmosphere departed from the script.",
+            "Snow here. That sentence shouldn't exist today. Layers.",
+            "Tropical snowfall. The sky knows. It doesn't care. Bundle up.",
+            "Snow. Yes, here. No, it's not usual. All warm layers."
         ),
         ST to listOf(
-            "Snow. A genuine cold outbreak has reached this latitude and expressed itself fully. Bundle up.",
-            "Snowing. The subtropical cold snap has arrived, and it arrived with consequences. Layers.",
-            "Snow event. The infrastructure here was not designed for this, and neither were you. Bundle up.",
-            "White out there. Cold outbreak. Everything takes longer. Everything is more treacherous. Layers."
+            "Snow. A genuine cold outbreak at this latitude. Bundle up.",
+            "Cold snap arrived with consequences. Layers.",
+            "Infrastructure not designed for this. Neither were you.",
+            "White out there. Everything takes longer. Everything icy."
         ),
         TE to listOf(
-            "Snowing. Beautiful, treacherous, and deeply inconvenient. Bundle up.",
-            "Snow today. Everything takes longer. Everything is colder. Bundle up.",
-            "White out there. Watch your footing. The black ice is not announcing itself.",
-            "Snowing. The world looks like a greeting card. The commute does not."
+            "Beautiful, treacherous, inconvenient. Bundle up.",
+            "Snow today. Everything colder. Everything takes longer.",
+            "White out there. The black ice is not announcing itself.",
+            "Greeting card outside. Commute does not match."
         ),
         OC to listOf(
-            "Wet oceanic snow. Heavy, cold, and turning to ice on contact with surfaces. Watch your footing.",
-            "Maritime snow. It looks soft. It isn't. The water content makes it dense and slippery. Full winter kit.",
-            "Snowing. Atlantic cold air has managed to produce frozen precipitation and it's your problem now.",
-            "Snow, oceanic variety. Wet, heavy, slippery. Watch every surface. Bundle up."
+            "Heavy, cold, icing on contact. Watch your footing.",
+            "Looks soft. Isn't. Dense and slippery. Full winter kit.",
+            "Atlantic cold produced frozen precipitation. Your problem now.",
+            "Wet, heavy, slippery. Watch every surface. Bundle up."
         ),
         NO to listOf(
-            "Snow. Yes. Still. This is what you signed up for. Bundle up.",
-            "Nordic snowfall. Full winter kit. The question isn't whether it's cold. It's how cold.",
-            "Snow. The world is frozen and beautiful and your commute is ruined. Standard Nordic winter.",
-            "Snowing. Again. The Norse gods were not joking about this place. Everything you own."
+            "Snow. Yes. Still. You signed up for this. Bundle up.",
+            "Full winter kit. How cold is the only question.",
+            "Frozen and beautiful and your commute is ruined. Standard.",
+            "Snowing again. The Norse gods were not joking. All layers."
         )
     )
 
     override val veryWindyVerdict: ZonedPool = mapOf(
         TR to listOf(
-            "Gale-force tropical winds. This is either a system edge or something worse approaching. Stay in.",
-            "Very dangerous wind conditions. The tropical atmosphere has organised itself against outdoor activity. Inside.",
-            "Gale winds in the tropics. Something serious is happening. Stay inside and monitor conditions.",
-            "Near-gale tropical conditions. The sky has strong opinions today. Do not argue with it from outside."
+            "System edge or worse approaching. Stay inside.",
+            "Tropical atmosphere organised against you. Stay inside.",
+            "Something serious is happening. Stay inside and monitor.",
+            "Sky has strong opinions today. Don't argue from outside."
         ),
         ST to listOf(
-            "Gale conditions. The subtropical low has committed. You don't have to.",
-            "Very strong wind. The outside is currently hostile. It does not need to be your problem.",
-            "Near-gale winds. This is the rare dramatic day the subtropical climate occasionally produces. Stay in.",
-            "Gale-force winds. The atmosphere is making a point. You don't have to go out there to receive it."
+            "The subtropical low committed. You don't have to.",
+            "Outside is hostile. It doesn't need to be your problem.",
+            "The rare subtropical dramatic day. Stay inside.",
+            "The atmosphere made a point. You needn't go out to receive it."
         ),
         TE to listOf(
-            "It is genuinely very windy. The kind of wind with a point to make. Stay in if you can.",
-            "Gale conditions. The outside is having a terrible time. You don't have to join it.",
-            "Near-gale winds. If you have to go out, keep your head down and don't dawdle.",
-            "Very strong wind. Not dangerous if you're sensible. Are you sensible? Unclear."
+            "Wind with a point to make. Stay inside if you can.",
+            "Outside having a terrible time. You don't have to join it.",
+            "Head down, don't dawdle. If you must go out.",
+            "Strong wind. Sensible people stay in. Are you sensible?"
         ),
         OC to listOf(
-            "Atlantic gale. The ocean spent days building this. Now it's here. Stay inside.",
-            "Full maritime gale. The Atlantic does not do things by halves. This is the whole thing.",
-            "Gale conditions on the coast. This is the ocean being entirely itself. Do not go outside.",
-            "Near-gale maritime winds. The Atlantic has made a strong recommendation about indoor plans. Follow it."
+            "The ocean built this over days. Now it's here. Stay in.",
+            "Full maritime gale. The Atlantic does not do halves.",
+            "The ocean being entirely itself. Do not go outside.",
+            "Atlantic recommendation: indoor plans. Follow it."
         ),
         NO to listOf(
-            "Arctic gale. Wind chill at these speeds creates immediate problems for exposed skin. Do not go outside.",
-            "Nordic gale. The polar vortex has extended itself in your direction and it is not being gentle.",
-            "Gale conditions, Arctic air. The combination is dangerous. This is a stay-inside day, non-negotiably.",
-            "Near-gale Nordic winds. The cold plus the speed creates something genuinely hostile. Indoor plans only."
+            "Exposed skin: immediate problem at these speeds. Inside.",
+            "Polar vortex extended your way. Not gently. Stay in.",
+            "Dangerous combination. This is a stay-inside day.",
+            "Cold plus speed equals hostile. Indoor plans only."
         )
     )
 
     override val windyVerdict: ZonedPool = mapOf(
         TR to listOf(
-            "Properly windy for the tropics. The umbrella is a structural liability today. Leave it.",
-            "Strong trade wind or trough winds. Your plans just got harder. The forecast offers no apology.",
-            "It's very windy and the wind does not care that you have somewhere to be. Skip the umbrella.",
-            "Windy enough that the tropics have stopped cooperating. Windproof layer. Abandon the umbrella."
+            "Umbrella is a liability today. Leave it.",
+            "Your plans just got harder. No apology from the forecast.",
+            "Windy. The tropics stopped cooperating. Skip the umbrella.",
+            "Tropics not cooperating. Windproof layer. Lose the umbrella."
         ),
         ST to listOf(
-            "Windy. The umbrella will embarrass you today. Leave it at home.",
-            "Strong winds and the forecast has nothing to say for itself. Windproof layer.",
-            "It's very windy and your umbrella has already lost today. Don't take it out.",
-            "Properly windy subtropical day. The pressure gradient has strong opinions. Windproof layer."
+            "Umbrella will embarrass you today. Leave it at home.",
+            "Strong winds and no apology. Windproof layer.",
+            "Umbrella already lost today. Don't take it out.",
+            "Pressure gradient has opinions. Windproof layer."
         ),
         TE to listOf(
-            "Properly windy. The umbrella is a trap today. Leave it.",
-            "Strong wind. Your plans just got harder. The forecast has no apologies.",
-            "Windy enough that the outside is working against you today. Skip the umbrella.",
-            "It's very windy and the wind does not care that you have somewhere to be."
+            "Umbrella is a trap today. Leave it.",
+            "Your plans just got harder. No apology from the forecast.",
+            "Outside working against you today. Skip the umbrella.",
+            "The wind doesn't care that you have somewhere to be."
         ),
         OC to listOf(
-            "Atlantic wind. Strong, sustained, and deeply unbothered by your umbrella. Leave it.",
-            "Properly maritime windy. This is the coast doing what coasts do. Windproof layer.",
-            "Wind from the Atlantic, which has plenty of it and is sharing generously today. Skip the umbrella.",
-            "Windy. Very. The oceanic climate is expressing itself through kinetic energy today."
+            "Strong, sustained, indifferent to your umbrella. Leave it.",
+            "Coast doing what coasts do. Windproof layer.",
+            "Atlantic sharing its wind generously today. Skip the umbrella.",
+            "The oceanic climate expressing itself through kinetic energy."
         ),
         NO to listOf(
-            "Nordic wind. Cold, strong, wind chill-amplified, and entirely indifferent to your discomfort. Windproof shell.",
-            "It's windy and cold and the wind chill is worse than the thermometer suggests. Windproof shell.",
-            "Strong polar winds. The umbrella was never going to work here. Windproof outer layer.",
-            "Properly windy and cold. The Arctic doesn't ask how you're feeling about it. Windproof shell."
+            "Cold, strong, wind chill-amplified. Windproof shell.",
+            "Wind chill worse than the thermometer. Windproof shell.",
+            "Umbrella never worked here. Windproof outer layer.",
+            "Arctic doesn't ask how you feel about it. Windproof shell."
         )
     )
 
     override val hotVerdict: ZonedPool = mapOf(
         TR to listOf(
-            "Tropical heat with extreme humidity. The kind of hot that makes you question all your decisions. Water, shade, SPF.",
-            "Very hot and very humid. Your body is working hard just to exist today. Hydrate constantly.",
-            "Heat and humidity combined into something aggressively unpleasant. Water. Shade. Sunscreen. Keep moving.",
-            "The heat index is extreme. The sun does not like you specifically today. Sunscreen, water, tempered expectations."
+            "Humidity makes existing an effort today. Water, shade, SPF.",
+            "Very hot and humid. Your body is working hard. Hydrate.",
+            "Aggressively unpleasant. Water. Shade. Sunscreen. Move fast.",
+            "Heat index extreme. Sunscreen, water, tempered expectations."
         ),
         ST to listOf(
-            "Extreme subtropical heat. The sun has strong opinions and you're in the middle of them. Sunscreen.",
-            "Very hot. The Hadley cell has delivered maximum insolation to your location. This is on you now.",
-            "Hot. Properly hot. The kind where the pavement contributes. Sunscreen, water, and recalibrated ambitions.",
-            "Subtropical peak heat. The sun is here and it means it. Sunscreen. Water. Tempered expectations."
+            "Sun has strong opinions and you're in them. Sunscreen.",
+            "Maximum insolation delivered to your location. Sunscreen.",
+            "Pavement contributing to the heat. Water, sunscreen.",
+            "Sun means it. Sunscreen. Water. Recalibrate expectations."
         ),
         TE to listOf(
-            "Very hot. The sun has strong opinions today and you're in the middle of them. Sunscreen.",
-            "Hot. Actually hot. Stay hydrated and try not to be dramatic about it.",
-            "It's going to be warm and you are going to be reminded of it constantly. Sunscreen, water.",
-            "The heat is here and it means it. Sunscreen. Water. Tempered expectations."
+            "Sun has strong opinions and you're in them. Sunscreen.",
+            "Actually hot. Hydrate and don't be dramatic about it.",
+            "Warm. You'll be reminded of it constantly. Sunscreen, water.",
+            "The heat means it. Sunscreen. Water. Tempered expectations."
         ),
         OC to listOf(
-            "Anomalous oceanic heat. The Atlantic is not cooling things today. Enjoy it or suffer it. Both are options.",
-            "Hot by maritime standards. The blocking high has removed the usual sea breeze. Sunscreen is still necessary.",
-            "Warm enough to be uncomfortable, which is not something this climate usually has to apologise for. Sunscreen.",
-            "Maritime heatwave. Rare and disorienting. Hydrate. Use sunscreen. Try not to be surprised by it."
+            "Atlantic not cooling things today. Enjoy it or suffer it.",
+            "Blocking high removed the sea breeze. Sunscreen still needed.",
+            "Uncomfortable, which this climate rarely has to apologise for.",
+            "Maritime heatwave. Rare. Disorienting. Hydrate. Sunscreen."
         ),
         NO to listOf(
-            "Hot by Nordic standards. Which is still not that hot. But UV at this latitude is deceptive. Use sunscreen.",
-            "Anomalously warm. The Nordic summer occasionally delivers this. It will pass, but for now, sunscreen and water.",
-            "Warm enough to notice, which here means something. Sunscreen. Daylight hours are long; UV exposure accumulates.",
-            "Nordic warm day. The midnight sun means more UV hours than you think. Sunscreen is non-optional."
+            "Not that hot. But UV here is deceptive. Sunscreen.",
+            "It will pass. But now: sunscreen and water.",
+            "Warm enough to notice. UV accumulates here. Sunscreen.",
+            "Midnight sun means more UV than you think. Sunscreen."
         )
     )
 
     override val warmVerdict: ZonedPool = mapOf(
         TR to listOf(
-            "Warm and clear. The pleasant tropical window before the heat builds. Go outside before the afternoon decides things.",
-            "Decent conditions. The tropics are temporarily not being difficult about it. Enjoy this.",
-            "Warm, clear, manageable. The sky is cooperating and you should take advantage before it stops.",
-            "Nothing bad is happening right now. The tropical atmosphere is in its most agreeable mode. Go outside."
+            "Go outside before the afternoon decides things.",
+            "Tropics temporarily not being difficult. Enjoy this.",
+            "Sky cooperating. Take advantage before it stops.",
+            "Tropical atmosphere in its most agreeable mode. Go outside."
         ),
         ST to listOf(
-            "Warm and clear. Zero complaints available. This is suspicious.",
-            "Genuinely nice out. The subtropical high has delivered. Go before the forecast changes its mind.",
-            "Warm, sunny, uneventful. The weather is, for once, not your problem.",
-            "Nothing bad is happening today. The bar was low and it cleared it."
+            "Warm and clear. Zero complaints available. Suspicious.",
+            "Subtropical high delivered. Go before the forecast changes.",
+            "Warm, sunny, uneventful. Weather is not your problem.",
+            "The bar was low. It cleared it."
         ),
         TE to listOf(
-            "Warm and clear. Zero complaints available. This is suspicious.",
-            "Nice out. Genuinely nice. Go before the forecast remembers what it's supposed to be doing.",
-            "Warm, sunny, uneventful. The weather is, for once, not your problem.",
-            "Nothing bad is happening today. The bar was low and it cleared it."
+            "Warm and clear. Zero complaints available. Suspicious.",
+            "Go before the forecast remembers what it's supposed to do.",
+            "Warm, sunny, uneventful. Weather is not your problem.",
+            "The bar was low. It cleared it."
         ),
         OC to listOf(
-            "Warm maritime day. These don't come often. You know that. Go outside.",
-            "Genuinely warm and clear on the coast. A rare configuration. Note it. Use it.",
-            "The Atlantic is being cooperative. Warm and dry. This is the exception, not the rule. Go outside.",
-            "Warm and clear by oceanic standards. This is not nothing. Go outside while it's like this."
+            "Warm maritime day. These don't come often. Go outside.",
+            "Rare warm and clear coast day. Note it. Use it.",
+            "Atlantic cooperating. Warm and dry. The exception. Go out.",
+            "Clear by oceanic standards. This is not nothing. Go outside."
         ),
         NO to listOf(
-            "Warm Nordic day. The short summer is briefly delivering. Go outside.",
-            "Summer arrived today. Possibly temporarily. Go outside before it reassesses its position.",
-            "Warm, clear, and the sun is staying up late. The Nordic summer is making a case for itself. Use it.",
-            "Actually warm today. By any standard. The Nordic summer occasionally justifies itself. Today is one of those days."
+            "The short summer is briefly delivering. Go outside.",
+            "Summer arrived. Possibly temporarily. Go before it leaves.",
+            "Nordic summer making its case. Sun staying late. Use it.",
+            "Actually warm today. Nordic summer justifying itself. Use it."
         )
     )
 
     override val lightJacketVerdict: ZonedPool = mapOf(
         TR to listOf(
-            "Cool by tropical standards. Something unusual is happening atmospherically. Light layer and mild curiosity.",
-            "A light layer is warranted today, which is not usually a sentence about the tropics. Take the jacket.",
-            "Cooler than expected. The tropical atmosphere is briefly cooperating with lower latitudes. Light jacket.",
-            "Pleasantly cool or anomalously cold, depending on your perspective. Light jacket handles it."
+            "Cool here. Something unusual is happening. Light layer.",
+            "A light layer today — not a usual tropical sentence. Jacket.",
+            "Cooler than expected. Brief atmospheric cooperation. Jacket.",
+            "Cool or anomalously cold depending on your outlook. Jacket."
         ),
         ST to listOf(
             "A bit cool. Grab a light jacket and get on with it.",
-            "Cool subtropical day. Not dramatic. Light layer and you're set.",
-            "Mild but you'll feel it. A light layer addresses this and nothing else needs addressing.",
-            "Light jacket weather. Not much to report, which is a sentence this forecast rarely gets to say."
+            "Cool subtropical day. Not dramatic. Light layer, done.",
+            "Mild but you'll feel it. A light layer. Nothing else needed.",
+            "Light jacket weather. Nothing else to report. Rare."
         ),
         TE to listOf(
             "A bit cool. Grab a light jacket and get on with it.",
-            "Cool enough that you'll notice. Light layer and you'll be fine.",
-            "Mild but you'll feel it by mid-morning. A light layer addresses this.",
-            "Light jacket weather. Not much else to report, which is something."
+            "Cool enough to notice. Light layer and you'll be fine.",
+            "Mild but you'll feel it by mid-morning. Light layer.",
+            "Light jacket weather. Not much else to report. Something."
         ),
         OC to listOf(
-            "Cool maritime day. Light jacket and you're set. The ocean is keeping things from being worse.",
-            "Mild and slightly cool. The Atlantic is moderating. Light layer and it's fine.",
-            "Cool coastal conditions. Light jacket covers it. The dampness makes it feel slightly more than it is.",
-            "Light jacket weather. Oceanic cool. The forecast has nothing else to add, for once."
+            "Light jacket and you're set. Ocean keeping things civil.",
+            "Mild and slightly cool. Atlantic moderating. Light layer.",
+            "Dampness makes it feel like more than it is. Light jacket.",
+            "Light jacket weather. Forecast has nothing else to add."
         ),
         NO to listOf(
-            "Mild by Nordic standards. Which is to say: you'll want a light jacket. The wind is the deciding factor.",
-            "Not that cold. Still a jacket. The Nordic wind chill has a way of changing the thermometer's story.",
-            "Cool Nordic day. Light jacket. The temperature says manageable; the wind will offer a second opinion.",
-            "Light jacket weather in the Nordic sense: this is actually a reasonable day. Appreciate it."
+            "Mild here. You'll want a light jacket. Wind is the factor.",
+            "Still a jacket. Nordic wind chill rewrites the thermometer.",
+            "Temperature says manageable. Wind will offer a second opinion.",
+            "A reasonable day. Light jacket. Appreciate it."
         )
     )
 
     override val jacketVerdict: ZonedPool = mapOf(
         TR to listOf(
-            "Cold for the tropics. Jacket. The body here is not used to this and it will let you know.",
-            "Unusually cold. The atmosphere has imported some conditions from further away. Jacket.",
-            "Cold. Tropical cold, but cold. Jacket and mild bewilderment.",
-            "Sub-12°C in the tropics. Something unusual is happening. Jacket. Possibly two."
+            "Cold for the tropics. Body not used to this. Jacket.",
+            "Conditions imported from further away. Jacket.",
+            "Tropical cold. Jacket and mild bewilderment.",
+            "Sub-12°C in the tropics. Something unusual. Jacket."
         ),
         ST to listOf(
             "Cold. Jacket. Don't try to tough it out. Nobody's watching.",
-            "Cold snap. The subtropical sky has remembered it has a winter mode. Jacket.",
-            "Cold enough to matter. Jacket. The warmth will be back. It is not back yet.",
-            "Single digits. Jacket. The forecast has made its position on today clear."
+            "Subtropical winter mode activated. Jacket.",
+            "Cold enough to matter. Warmth not back yet. Jacket.",
+            "Single digits. Forecast has made its position clear. Jacket."
         ),
         TE to listOf(
             "Cold. Jacket. Don't try to tough it out. Nobody's watching.",
-            "Jacket weather. The sunshine is decorative. It is not helping.",
-            "Cold enough to matter. Jacket. Maybe gloves if you're honest with yourself.",
-            "Single digits. Jacket. The weather has made its position clear."
+            "Sunshine is decorative today. Not helping. Jacket.",
+            "Cold enough. Jacket. Gloves if you're honest with yourself.",
+            "Single digits. Weather made its position clear. Jacket."
         ),
         OC to listOf(
-            "Cold maritime day. The dampness makes it worse than the number suggests. Jacket.",
-            "Cold and damp. The ocean is not warming things today. Jacket. Maybe gloves.",
-            "Maritime cold. Jacket. The Atlantic is not providing any warmth right now.",
-            "Cold coastal conditions. Jacket. The wind coming off the water will see to the rest."
+            "Dampness makes it worse than the number. Jacket.",
+            "Cold and damp. Ocean not warming today. Jacket. Gloves.",
+            "Maritime cold. Atlantic not providing warmth. Jacket.",
+            "Wind off the water handles the rest. Jacket."
         ),
         NO to listOf(
-            "Cold. By most standards. Still a moderate Nordic day, but cold. Jacket.",
-            "Cold today. Nordic cold. Which is cold. Jacket and possibly gloves.",
-            "Jacket weather. The wind chill makes the actual temperature somewhat optimistic. Jacket.",
-            "Cold. The Nordic climate reminding you of its primary characteristic. Jacket."
+            "Cold. Moderate for Nordic. Still cold. Jacket.",
+            "Nordic cold. Which is cold. Jacket and possibly gloves.",
+            "Wind chill makes the thermometer optimistic. Jacket.",
+            "Nordic climate reminding you of its main characteristic."
         )
     )
 
     override val bundleUpVerdict: ZonedPool = mapOf(
         TR to listOf(
-            "It's properly cold. In the tropics. All the layers. Every single one you can find.",
-            "Bitter cold for this climate zone. The body has no adaptation for this. Everything warm.",
-            "Sub-5°C in the tropics. This is a genuine meteorological anomaly and a genuine personal problem. Bundle up.",
-            "Cold. Actually cold. Tropically cold, which is worse because nothing here is designed for it. All the layers."
+            "Properly cold. In the tropics. Every layer you can find.",
+            "No adaptation for this here. Everything warm.",
+            "Tropical cold anomaly and a personal problem. Bundle up.",
+            "Nothing here is designed for this. All the layers."
         ),
         ST to listOf(
-            "It's properly cold. All the layers. Every single one.",
-            "Bitter cold snap. The subtropical cold outbreak has nothing against you. It just doesn't care. Bundle up.",
-            "Sub-zero feels. Whatever gap exists in your cold weather clothing. The cold has already found it.",
+            "Properly cold. All the layers. Every single one.",
+            "Cold outbreak has nothing against you. It doesn't care.",
+            "Every gap in your cold weather kit. Cold found it already.",
             "Cold. Genuinely cold. Bundle up and come to terms with it."
         ),
         TE to listOf(
-            "It's properly cold. All the layers. Every single one.",
-            "Bitter out there. The cold has nothing personal against you. It just doesn't care.",
-            "Sub-zero feels. Whatever gap exists between your scarf and collar. The cold has already found it.",
+            "Properly cold. All the layers. Every single one.",
+            "The cold has nothing personal against you. It just doesn't care.",
+            "Whatever gap exists between scarf and collar. Cold found it.",
             "Cold. Genuinely cold. Bundle up and come to terms with it."
         ),
         OC to listOf(
-            "Maritime cold. Wet and freezing. The dampness makes every gap in your clothing matter more. Bundle up.",
-            "Cold Atlantic air. The ocean is not helping today. It is contributing. All the layers.",
-            "Bitter maritime cold. Cold and damp is harder than cold and dry. Bundle up completely.",
-            "Near-freezing with Atlantic wind. The cold finds every gap. Base layer, mid layer, waterproof outer. All of it."
+            "Wet and freezing. Every gap matters more. Bundle up.",
+            "Ocean contributing today. Not helping. All the layers.",
+            "Cold and damp is harder than cold and dry. Bundle up.",
+            "Cold finds every gap. Base, mid, waterproof outer. All of it."
         ),
         NO to listOf(
-            "Deep Nordic cold. This is what everything was always going to be like. Full thermal system. Every layer.",
-            "Properly cold by any standard. The polar air has arrived with no ambiguity. Bundle up completely.",
-            "Arctic cold. The wind chill is the real number and it is not a kind one. Every layer you own.",
-            "Nordic winter conditions. The cold is not dramatic. It is simply absolute. Full layering system."
+            "Full thermal system. Every layer. This is just winter.",
+            "Polar air arrived unambiguously. Bundle up completely.",
+            "Wind chill is the real number. Not a kind one. Every layer.",
+            "Cold is not dramatic here. It's simply absolute. Full layers."
         )
     )
 
     override val allClearVerdict: ZonedPool = mapOf(
         TR to listOf(
-            "Clear. The tropical sky has taken the day off from making things difficult. Go outside.",
-            "Clear skies. The ITCZ has moved away. The atmosphere is briefly uncomplicated. Enjoy it.",
-            "Nothing bad is happening. The tropics have granted a window. It won't last forever. Use it.",
-            "Clear tropical day. No storms forming. No humidity events. A genuinely good day. I'm sorry."
+            "Tropical sky took the day off from difficulty. Go outside.",
+            "ITCZ moved away. Briefly uncomplicated. Enjoy it.",
+            "Nothing bad happening. Tropics granted a window. Use it.",
+            "No storms forming. A genuinely good day. I'm sorry."
         ),
         ST to listOf(
-            "Clear. No atmospheric excuse to stay home. The day is yours. I'm sorry.",
+            "Clear. No excuse to stay home. The day is yours. Sorry.",
             "Clear skies. Don't get used to it.",
-            "Nothing bad is happening today. Go outside while the subtropical high is cooperating.",
-            "Clear. Sunny. The forecast has nothing to complain about, which is unusual for it."
+            "Nothing bad today. Go while the high is cooperating.",
+            "The forecast has nothing to complain about. Unusual."
         ),
         TE to listOf(
-            "Clear. No atmospheric excuse to stay home. The day is yours. I'm sorry.",
+            "Clear. No excuse to stay home. The day is yours. Sorry.",
             "Clear skies. Don't get used to it.",
-            "Nothing bad is happening today, weather-wise. Go outside. While it lasts.",
-            "Perfectly clear. Statistically, this is your best day this week. Spend it wisely."
+            "Nothing bad today. Go outside while it lasts.",
+            "Statistically your best day this week. Spend it wisely."
         ),
         OC to listOf(
-            "Clear. The Atlantic has paused. This doesn't happen often here. Go outside.",
-            "Clear skies on the coast. Note the date. They are not always like this.",
-            "No rain. No wind. No clouds. The oceanic climate is briefly, inexplicably, cooperating.",
-            "Clear. The maritime weather has taken an uncharacteristic break. Go outside before it remembers itself."
+            "The Atlantic paused. Doesn't happen often. Go outside.",
+            "Clear skies on the coast. Note the date.",
+            "No rain. No wind. No clouds. Inexplicably cooperating.",
+            "Maritime weather on break. Go before it remembers itself."
         ),
         NO to listOf(
-            "Clear. Dark or light depending on the season, but clear. Go outside.",
-            "Nordic clear day. Cold but clear. The best available option here. Use it.",
-            "Clear skies. The polar high has delivered its one favour. Go outside before the next front arrives.",
-            "Clear. No excuses. The Nordic outdoors is available today. I'm sorry for the temperature."
+            "Clear. Dark or light by season, but clear. Go outside.",
+            "Cold but clear. Best available option here. Use it.",
+            "Polar high delivered its one favour. Go before the front.",
+            "Clear. No excuses. Sorry about the temperature."
         )
     )
 
@@ -443,330 +443,330 @@ internal object GravesPools : PoolSet {
     override val stormMood: ZonedPool = mapOf(
         TR to listOf(
             "The monsoon doesn't care about your plans. It never did.",
-            "Tropical storms are a feature, not a bug. You live here. The sky lives here too.",
-            "You had somewhere to be. The storm had already claimed the afternoon.",
-            "Nature reminding you it doesn't need your schedule. Tropically."
+            "Tropical storms are a feature. The sky lives here too.",
+            "You had somewhere to be. The storm claimed the afternoon.",
+            "Nature reminding you it doesn't need your schedule."
         ),
         ST to listOf(
-            "The heat built all day for this. In a way, it was always going to end here.",
-            "The sky saved everything up and delivered it at once. That's just how the subtropics work.",
-            "You had plans. The atmosphere had other ideas. The atmosphere wins, as usual.",
-            "A summer storm. Inevitable, dramatic, and entirely indifferent to your afternoon."
+            "The heat built all day for this. It was always going here.",
+            "Sky saved everything and delivered it at once. Subtropics.",
+            "You had plans. Atmosphere had other ideas. Atmosphere wins.",
+            "Inevitable, dramatic, indifferent to your afternoon."
         ),
         TE to listOf(
-            "The weather isn't angry at you specifically. You're just in the way.",
-            "You had plans. The sky had other ideas. The sky won.",
-            "Nature reminding you it doesn't need your schedule.",
-            "A proper storm. The good news is you have an excellent excuse to stay in."
+            "Not angry at you specifically. You're just in the way.",
+            "You had plans. The sky had other ideas. Sky won.",
+            "Nature doesn't need your schedule.",
+            "Excellent excuse to stay in. The silver lining."
         ),
         OC to listOf(
-            "The Atlantic has been building this for days. You were eventually going to be in the way.",
-            "Maritime storms have a patience to them. This one waited. Now it's here.",
-            "You live on the Atlantic coast. This is a condition of that arrangement.",
-            "The ocean sent its regards. They are wet and loud and require you to stay inside."
+            "The Atlantic built this for days. You were in the way.",
+            "Maritime storms have patience. This one waited. It's here.",
+            "You live on the Atlantic coast. This is part of the deal.",
+            "The ocean sent its regards. Wet, loud, stay inside."
         ),
         NO to listOf(
-            "The polar atmosphere is not being subtle about its feelings.",
-            "Arctic storm. You knew what this place was when you arrived.",
-            "The darkness and the wind have found each other. This happens here.",
-            "The Nordic winter is expressing itself comprehensively today. Let it."
+            "Polar atmosphere not being subtle about its feelings.",
+            "Arctic storm. You knew what this place was.",
+            "The darkness and wind found each other. It happens here.",
+            "Nordic winter expressing itself comprehensively. Let it."
         )
     )
 
     override val heavyRainMood: ZonedPool = mapOf(
         TR to listOf(
-            "The tropical sky commits to things. Today it committed to this.",
+            "The tropical sky commits. Today it committed to this.",
             "You will get wet. The only question is how much of you.",
-            "It's coming down hard. Even by tropical standards, which are not low.",
-            "Heavy and warm and entirely relentless. Welcome to the rainy season."
+            "Heavy even by tropical standards. Which are not low.",
+            "Heavy and warm and relentless. Welcome to the rainy season."
         ),
         ST to listOf(
-            "You will get wet. The only question is which part of you surrenders first.",
-            "Heavy subtropical rain arrives with a certainty that feels personal.",
-            "Coming down hard. Everything you planned outdoors has been rescheduled by the sky.",
-            "The gutters are working overtime. You won't be dry. Accept this early."
+            "You will get wet. Which part surrenders first is the question.",
+            "Heavy subtropical rain arrives with something personal.",
+            "Everything outdoors rescheduled by the sky.",
+            "Gutters working overtime. You won't be dry. Accept it early."
         ),
         TE to listOf(
-            "You will get wet. The only question is which part of you surrenders first.",
+            "You will get wet. Which part surrenders first is the question.",
             "Coming down hard. Bring everything. Expect nothing.",
             "Heavy. Relentless. Very much your problem now.",
-            "The gutters are working overtime. You won't be dry. Accept this early."
+            "Gutters working overtime. You won't be dry. Accept it early."
         ),
         OC to listOf(
-            "The Atlantic front has made its point. Comprehensively.",
-            "Heavy Atlantic rain has a thoroughness to it. It finds everywhere.",
-            "Pouring. The oceanic moisture content is significant and it's all coming down today.",
-            "Heavy maritime rain. You live here. This is part of the arrangement."
+            "The Atlantic front made its point. Comprehensively.",
+            "Atlantic heavy rain has a thoroughness. It finds everywhere.",
+            "Pouring. Oceanic moisture content: significant. All down now.",
+            "Heavy maritime rain. Part of the arrangement here."
         ),
         NO to listOf(
             "Cold heavy rain. Both unpleasant. Together, formidable.",
-            "Nordic heavy precipitation. The cold makes the rain feel personal.",
-            "It is heavy and cold and it will continue. The Arctic is efficient.",
-            "Heavy rain in near-freezing air. Comfort is not on offer today."
+            "The cold makes the rain feel personal.",
+            "Heavy and cold and it will continue. Arctic efficiency.",
+            "Heavy rain in near-freezing air. Comfort not on offer."
         )
     )
 
     override val rainMood: ZonedPool = mapOf(
         TR to listOf(
             "Afternoon rain again. You knew. We all knew.",
-            "The tropics have a very consistent relationship with rain. Today is not an exception.",
+            "Tropics have a consistent relationship with rain. As usual.",
             "Wet out there. Warm and wet. The tropical baseline.",
-            "It's not a storm. Just the daily rain event. Arriving on schedule."
+            "Daily rain event. Arriving on schedule."
         ),
         ST to listOf(
             "The puddles are forming. You will find the deep one.",
-            "Rain in the subtropics. Not as common as it should be. Not welcome today regardless.",
-            "Wet out there. Been wetter. Will be wetter again. This is fine.",
-            "Steady subtropical rain. The sky is making a rare but thorough effort."
+            "Not as common as it should be. Not welcome today either.",
+            "Wet out there. Been wetter. Will be wetter again. Fine.",
+            "Steady subtropical rain. Sky making a rare thorough effort."
         ),
         TE to listOf(
             "The puddles are forming. You will find the deep one.",
             "The rain doesn't know your name. It doesn't need to.",
             "Wet out there. Been wetter. Will be wetter again.",
-            "It's not a storm. Just persistent and unpleasant. You'll survive. Probably."
+            "Persistent and unpleasant. You'll survive. Probably."
         ),
         OC to listOf(
             "Rain. You live here. Umbrella.",
-            "The Atlantic front is doing what Atlantic fronts do. Umbrella.",
+            "Atlantic fronts do what Atlantic fronts do. Umbrella.",
             "It's raining. This is the coast. These things coexist.",
-            "Wet. Persistently. The oceanic baseline expressing itself."
+            "Persistently wet. The oceanic baseline."
         ),
         NO to listOf(
-            "Cold frontal rain. The cold air behind it is on its way. The rain is just the opening act.",
-            "Nordic rain is not warm. That's the main thing to know.",
-            "Frontal rain with everything cold about it. You'll survive. Dress for it.",
+            "Cold air is behind it. The rain is just the opening act.",
+            "Nordic rain is not warm. That's the main thing.",
+            "Cold frontal rain. You'll survive. Dress for it.",
             "Rain. Cold rain. At least it's not snow. Yet."
         )
     )
 
     override val drizzleMood: ZonedPool = mapOf(
         TR to listOf(
-            "Post-convective mist. The drama is over; what remains is just damp air.",
-            "Residual moisture. The tropics couldn't quite commit to a full rain today. This is what you get.",
-            "Tropical drizzle is the sky being polite. Appreciate the restraint.",
-            "It drizzles between storms here sometimes. This is that."
+            "Drama is over. What remains is just damp air.",
+            "Tropics couldn't commit to full rain. This is what you get.",
+            "Tropical drizzle is the sky being polite. Note the restraint.",
+            "It drizzles between storms here. This is that."
         ),
         ST to listOf(
-            "You'll arrive somewhere slightly damp and nobody will understand why.",
-            "Marine layer drizzle. The coast reaches inland today. Just damp enough to be annoying.",
-            "It drizzles in the way that life sometimes drizzles. You know the feeling.",
+            "Arrive somewhere damp and nobody will understand why.",
+            "Coast reaching inland today. Just damp enough to annoy.",
+            "It drizzles in the way life sometimes drizzles. You know.",
             "Passive aggressive precipitation. Subtropical edition."
         ),
         TE to listOf(
-            "You'll arrive somewhere slightly damp and nobody will understand why.",
-            "Not a real rain. Just atmospheric disappointment with moisture.",
-            "It drizzles in the way that life sometimes drizzles. You know the feeling.",
-            "It'll cling to your jacket and make everything slightly worse. Welcome to today."
+            "Arrive somewhere slightly damp. Nobody will understand why.",
+            "Not a real rain. Just atmospheric disappointment. With moisture.",
+            "It drizzles in the way life sometimes drizzles. You know.",
+            "Clings to your jacket. Makes everything slightly worse."
         ),
         OC to listOf(
-            "Atlantic drizzle. The defining precipitation of the north oceanic coast. You know this one.",
-            "The sky is technically not raining. It is, however, making everything wet. Hood.",
-            "Maritime drizzle. Not dramatic. Just permanent. Welcome to the coast.",
-            "Fine oceanic precipitation. The kind that just exists. You know what to do."
+            "Defining precipitation of this coast. You know this one.",
+            "Technically not raining. Making everything wet regardless.",
+            "Maritime drizzle. Not dramatic. Just permanent.",
+            "Fine oceanic precipitation. Just exists. You know what to do."
         ),
         NO to listOf(
-            "Cold fine precipitation. The drizzle here doesn't have the luxury of being merely annoying. It's cold too.",
-            "Near-freezing drizzle. The worst kind. Not enough to name, too cold to ignore.",
-            "Nordic drizzle. The cold makes the subtlety feel sarcastic.",
-            "Fine cold mist. Damp and cold and persistent. The Nordic climate's version of drizzle."
+            "Drizzle here doesn't have the luxury of being merely annoying.",
+            "Near-freezing drizzle. Not enough to name. Too cold to ignore.",
+            "The cold makes the subtlety feel sarcastic.",
+            "Damp and cold and persistent. Nordic drizzle."
         )
     )
 
     override val snowMood: ZonedPool = mapOf(
         TR to listOf(
-            "Snow in the tropics. The atmosphere has departed from the expected narrative.",
-            "Picturesque and deeply inconvenient and genuinely not supposed to be happening here.",
-            "The sky has done something unusual. Infrastructure and people are both underprepared.",
-            "Snow. Here. Yes. The world is full of surprises, most of them cold."
+            "Atmosphere departed from the expected narrative.",
+            "Inconvenient and not supposed to be happening here.",
+            "Something unusual. Infrastructure and people: underprepared.",
+            "Snow. Here. Yes. The world is full of cold surprises."
         ),
         ST to listOf(
             "Picturesque. Treacherous. Somehow both at once.",
-            "The world looks like a greeting card. The commute does not.",
-            "Subtropical snow is an event. The black ice will not announce itself.",
-            "Snow is frozen disappointment. Subtropical edition. Rarer and therefore worse."
+            "Greeting card outside. Commute does not match.",
+            "Subtropical snow is an event. Black ice unannounced.",
+            "Rarer and therefore worse. Subtropical edition."
         ),
         TE to listOf(
             "Picturesque. Treacherous. Somehow both at once.",
-            "The world is beautiful and your commute is ruined. Happy winter.",
-            "Snow is just frozen disappointment. Wear boots.",
-            "Peaceful, if you don't have to go anywhere. Do you have to go anywhere?"
+            "Beautiful outside. Commute ruined. Happy winter.",
+            "Snow is frozen disappointment. Wear boots.",
+            "Peaceful, if you don't have to go anywhere. Do you?"
         ),
         OC to listOf(
-            "Maritime snow: wet, heavy, and converting to ice on contact with anything. Watch every surface.",
-            "Oceanic snow is not the light powder variety. It compacts. It refreezes. Watch your footing.",
-            "The snow looks soft. It is not soft. The water content made sure of that.",
-            "Heavy wet snow. The world is white and slippery and the gritters are trying their best."
+            "Wet, heavy, converts to ice on contact. Watch every surface.",
+            "Not the light powder variety. Compacts. Refreezes. Watch out.",
+            "Looks soft. It is not soft. Water content ensured that.",
+            "White and slippery and the gritters are doing their best."
         ),
         NO to listOf(
-            "Snow. Yes. Still. This is the Nordic winter. Bundle up.",
-            "The world is white and frozen and this is normal here. Boots. Traction. Patience.",
-            "Nordic snow. Light, dry, drifting. Beautiful. Cold. The commute is your problem.",
-            "Snowfall. Again. The sky here has a very consistent aesthetic."
+            "Snow. Yes. Still. This is Nordic winter. Bundle up.",
+            "White and frozen and normal here. Boots. Traction. Patience.",
+            "Beautiful. Cold. Your commute is still your problem.",
+            "Again. The sky here has a very consistent aesthetic."
         )
     )
 
     override val windMood: ZonedPool = mapOf(
         TR to listOf(
-            "The trade winds have strengthened past their usual position. Something is informative about this.",
-            "Tropical wind event. Something that wasn't tied down is now someone else's problem.",
-            "Strong tropical winds. Impressive, in a grim sort of way.",
-            "The atmosphere is moving with purpose today. You are not the purpose."
+            "Trade winds past their usual position. Informative.",
+            "Something untied is now someone else's problem.",
+            "Strong tropical winds. Impressive, in a grim way.",
+            "Atmosphere moving with purpose. You are not the purpose."
         ),
         ST to listOf(
-            "Something that wasn't tied down is now someone else's problem.",
-            "Feels personal. It isn't. The pressure gradient just doesn't care.",
-            "The umbrella would have embarrassed you anyway. You made the right call leaving it.",
-            "Significant wind. Impressive, in the kind of way that makes you stay inside."
+            "Something untied is now someone else's problem.",
+            "Feels personal. It isn't. The pressure gradient doesn't care.",
+            "Umbrella would have embarrassed you anyway. Right call.",
+            "Impressive in the way that keeps you inside."
         ),
         TE to listOf(
-            "Something that wasn't tied down is now someone else's problem.",
+            "Something untied is now someone else's problem.",
             "Feels personal. It isn't. The wind just doesn't care.",
-            "The umbrella would have embarrassed you anyway. Leave it.",
+            "Umbrella would have embarrassed you anyway. Leave it.",
             "Impressive, in a grim sort of way."
         ),
         OC to listOf(
-            "The Atlantic has opinions and today it is expressing them at volume.",
-            "Maritime wind. The ocean built this over hundreds of kilometres. It arrived with the full investment.",
-            "Strong coastal wind. The kind that makes you understand why people build houses with thick walls here.",
-            "The ocean is expressing itself through wind today. You are receiving the message."
+            "Atlantic expressing opinions at volume today.",
+            "Ocean built this over hundreds of kilometres. Full delivery.",
+            "Makes you understand why walls here are thick.",
+            "Ocean expressing itself through wind. You are receiving it."
         ),
         NO to listOf(
-            "Arctic wind. The cold and the speed combined is doing something the thermometer is understating.",
-            "Nordic wind. It was already cold. The wind saw room for improvement.",
-            "The polar atmosphere is redistributing air masses. You are in the redistribution path.",
-            "Cold and fast and efficient. The Arctic doesn't waste effort on warmth today."
+            "Cold and speed: doing something the thermometer understates.",
+            "Already cold. Wind saw room for improvement.",
+            "You're in the redistribution path. Polar air masses moving.",
+            "Cold, fast, efficient. Arctic not wasting effort on warmth."
         )
     )
 
     override val breezeMood: ZonedPool = mapOf(
         TR to listOf(
-            "Trade winds at their most agreeable. The tropical baseline at its best.",
-            "A pleasant tropical breeze. The kind that makes you understand why people live here.",
-            "Warm breeze. The atmosphere is being cooperative. Appreciate it.",
-            "The trade winds are in their pleasant mode today. This is the best the tropics routinely offer."
+            "Trade winds at their most agreeable. The best it gets.",
+            "A pleasant breeze. The reason people live here.",
+            "Warm breeze. Atmosphere cooperating. Appreciate it.",
+            "Trade winds in pleasant mode. Best the tropics routinely offer."
         ),
         ST to listOf(
-            "The atmosphere's version of a shrug. A comfortable shrug today.",
-            "Not enough wind to cause problems. Not enough cloud to complain about. A day.",
-            "The breeze is manageable. The forecast has nothing to add. That's fine.",
-            "Breezy and mild. The subtropical high is in its most agreeable configuration."
+            "The atmosphere's version of a shrug. Comfortable today.",
+            "Not enough wind to cause problems. Not enough cloud either.",
+            "The breeze is manageable. Nothing to add. Fine.",
+            "Breezy and mild. High in its most agreeable configuration."
         ),
         TE to listOf(
-            "The atmosphere's version of a shrug. Still a shrug though.",
-            "Not enough wind to cause problems. Not enough sun to celebrate. A day.",
+            "The atmosphere's version of a shrug. Still a shrug.",
+            "Not enough wind for problems. Not enough sun to celebrate.",
             "Your umbrella will behave. Mostly.",
-            "Breezy. The most inoffensive weather. Something to be grateful for, I suppose."
+            "The most inoffensive weather. Something to be grateful for."
         ),
         OC to listOf(
-            "Atlantic breeze. Moderate, sustained, and utterly characteristic of this coast.",
-            "The ocean is breathing today. Enough wind to notice, not enough to matter.",
+            "Atlantic breeze. Moderate, sustained, utterly characteristic.",
+            "Enough wind to notice. Not enough to matter.",
             "Maritime breeze. Your umbrella will hold. Probably.",
-            "Breezy coastal conditions. The Atlantic in its least dramatic mode."
+            "Breezy coastal conditions. Atlantic at its least dramatic."
         ),
         NO to listOf(
-            "Nordic breeze. Cool and sharp. The wind chill adds a note that the thermometer doesn't fully explain.",
-            "Moderate wind in cold air. A light windproof layer and you're set. Today is inoffensive.",
-            "The Arctic breeze has decided to be moderate today. A small favour.",
-            "Breezy and cold. The Nordic version of a shrug. Still requires a windproof layer."
+            "Cool and sharp. Wind chill adds a note the thermometer misses.",
+            "Moderate wind in cold air. Windproof layer. Inoffensive day.",
+            "Arctic breeze decided to be moderate today. A small favour.",
+            "Breezy and cold. Nordic shrug. Still needs a windproof layer."
         )
     )
 
     override val allClearWarmMood: ZonedPool = mapOf(
         TR to listOf(
-            "Go outside. The afternoon storms aren't here yet. That window exists. Use it.",
-            "Warm and clear and the tropics are briefly not being difficult. Appreciate this.",
-            "A good tropical day. Note the date. File it away for the rainy season.",
-            "Nice out. Genuinely nice. The tropical atmosphere is cooperating. Eat lunch outside."
+            "Afternoon storms aren't here yet. Window exists. Use it.",
+            "Tropics briefly not being difficult. Appreciate this.",
+            "A good tropical day. File it away for the rainy season.",
+            "Nice out. Genuinely. Eat lunch outside."
         ),
         ST to listOf(
-            "Go outside. Appreciate it. File this day away for January.",
+            "Go outside. Appreciate it. File this away for January.",
             "A good day. Note the date. They're not all like this.",
-            "Make the most of it. The forecast has opinions about the weekend.",
-            "Warm and pleasant. The bar was low and it cleared it impressively."
+            "Make the most of it. Forecast has weekend opinions.",
+            "Warm and pleasant. Bar was low. Cleared it impressively."
         ),
         TE to listOf(
-            "Go outside. Appreciate it. File this day away for January.",
+            "Go outside. Appreciate it. File this away for January.",
             "A good day. Note the date. They're not all like this.",
-            "Make the most of it. The forecast has opinions about the weekend.",
-            "Warm and pleasant. The bar was low and it cleared it impressively."
+            "Make the most of it. Forecast has weekend opinions.",
+            "Warm and pleasant. Bar was low. Cleared it impressively."
         ),
         OC to listOf(
-            "Go outside. The Atlantic is having a good day. So are you.",
-            "Warm and clear on the coast. This is why people stay despite everything else.",
-            "Note the date. An actually good day here. They are not endless.",
-            "The oceanic climate occasionally justifies itself. Today is that occasion."
+            "Go outside. Atlantic having a good day. So are you.",
+            "Warm and clear on the coast. This is why people stay.",
+            "Note the date. Actually good here. Not endless.",
+            "Oceanic climate justifying itself. Today is that occasion."
         ),
         NO to listOf(
-            "Summer is briefly here. Go outside. The window is real.",
+            "Summer is briefly here. Go outside. Window is real.",
             "Warm Nordic day. File this away for February.",
-            "The Nordic summer is making its case. Go outside and receive it.",
-            "Clear and warm and the sun is staying up. This is the season justifying itself. Use it."
+            "Nordic summer making its case. Go outside and receive it.",
+            "Warm and clear. Sun staying up. Season justifying itself."
         )
     )
 
     override val allClearNeutralMood: ZonedPool = mapOf(
         TR to listOf(
-            "Clear tropical skies. Storms are possible this afternoon. They're always possible this afternoon.",
-            "No rain right now. The tropics have noted this and are planning accordingly.",
-            "Clear. Calm. The ITCZ hasn't decided anything yet today.",
-            "It's not actively bad. The tropics are withholding judgment."
+            "Storms possible this afternoon. They always are.",
+            "No rain right now. Tropics noted this. Planning accordingly.",
+            "Clear. Calm. ITCZ hasn't decided anything yet.",
+            "Not actively bad. Tropics withholding judgment."
         ),
         ST to listOf(
             "Clear skies. Don't get used to it.",
-            "It's not actively bad. That's today's headline.",
+            "Not actively bad. That's today's headline.",
             "Weather's fine. Everything else is still your problem.",
-            "Go outside. The sun will be back to ignoring you soon enough."
+            "Go outside. Sun will be back to ignoring you soon enough."
         ),
         TE to listOf(
             "Clear skies. Don't get used to it.",
-            "It's not actively bad. That's today's headline.",
+            "Not actively bad. That's today's headline.",
             "Weather's fine. Everything else is still your problem.",
-            "Go outside. The sun will be back to ignoring you soon enough."
+            "Go outside. Sun will be back to ignoring you soon enough."
         ),
         OC to listOf(
-            "Not raining. The oceanic climate has briefly suspended its habits.",
-            "Clear maritime conditions. Enjoy the weather not being your problem today.",
-            "No rain, no wind, no drama. The Atlantic is resting. So should you.",
-            "It's fine today. Note that. Fine is not the baseline here."
+            "Not raining. Oceanic climate briefly suspended its habits.",
+            "Clear maritime conditions. Weather not your problem today.",
+            "No rain, no wind, no drama. Atlantic resting. So should you.",
+            "Fine today. Note that. Fine is not the baseline here."
         ),
         NO to listOf(
-            "Clear Nordic skies. Cold but clear. A reasonable day, objectively.",
-            "Not storming. Not snowing. Clear. The Nordic winter occasionally allows this.",
-            "Clear and cold. The polar high is doing you a favour. Note it.",
-            "No atmospheric drama. The Arctic has decided to take the day off from being difficult."
+            "Clear Nordic skies. Cold but clear. Objectively reasonable.",
+            "Not storming. Not snowing. Clear. Nordic winter allows this.",
+            "Clear and cold. Polar high doing you a favour. Note it.",
+            "Arctic took the day off from being difficult. Note the date."
         )
     )
 
     override val greyMood: ZonedPool = mapOf(
         TR to listOf(
-            "Overcast but not active yet. The tropical atmosphere is deciding something. It usually decides rain.",
-            "Grey tropical sky. Afternoon will likely have opinions. For now, you're clear.",
-            "Clouds without rain. The tropics are pacing themselves.",
-            "Cloud cover without conviction. Could be worse. Could be about to be worse."
+            "Tropical sky deciding something. Usually decides rain.",
+            "Grey tropical sky. Afternoon will have opinions. For now: clear.",
+            "Clouds without rain. Tropics pacing themselves.",
+            "Could be worse. Could be about to be worse."
         ),
         ST to listOf(
             "Could be worse. Could always be worse.",
-            "Not raining, technically. The subtropical sky is weighing its options.",
-            "Grey is just the default setting some days. Try to remember that.",
-            "Overcast. Not threatening. Just grey. The forecast has nothing to commit to."
+            "Not raining, technically. Sky weighing its options.",
+            "Grey is just the default some days. Remember that.",
+            "Not threatening. Just grey. Forecast uncommitted."
         ),
         TE to listOf(
             "Could be worse. Could always be worse.",
-            "Not raining, technically. The sky is keeping its options open.",
-            "Grey is just the default setting. Try to remember that.",
+            "Not raining, technically. Sky keeping options open.",
+            "Grey is just the default. Try to remember that.",
             "The sun exists. You just can't see it. Comforting, maybe."
         ),
         OC to listOf(
-            "Overcast. Just overcast. The oceanic climate at its most understated.",
-            "Grey maritime day. The Atlantic stratus has settled in. It's not raining. It's just grey.",
-            "The cloud base is low and the sky is indifferent. No rain. Just grey. Just this.",
-            "Atlantic overcast. The default state. No precipitation. Just the character of the coast."
+            "Overcast. Just overcast. Oceanic climate understated.",
+            "Atlantic stratus settled in. Not raining. Just grey.",
+            "Low cloud base. Sky indifferent. No rain. Just grey.",
+            "Atlantic overcast. Default state. No precipitation. Just this."
         ),
         NO to listOf(
-            "Nordic grey. Low sun angle, persistent cloud cover, limited light. Not raining. Just grey.",
-            "Overcast at high latitude. The diffuse light is even, if dim. Carry on.",
-            "Grey. The Nordic winter default. No precipitation. Just the colour of winter.",
-            "The sun is technically there. It is not, however, visible. Carry on."
+            "Low sun, persistent cloud, limited light. Not raining. Grey.",
+            "Diffuse light is even, if dim. Carry on.",
+            "Grey. The Nordic winter default. Just the colour of winter.",
+            "Sun is technically there. Not visible. Carry on."
         )
     )
 }
