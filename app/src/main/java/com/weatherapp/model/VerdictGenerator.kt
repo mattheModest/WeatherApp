@@ -102,6 +102,24 @@ class VerdictGenerator {
         return pick(pool, zone)
     }
 
+    /**
+     * Maps WMO-code-based weather condition to the 4-value WeatherState used for theming.
+     * This is the authoritative source — store its result in DataStore, don't infer from copy text.
+     */
+    fun determineWeatherState(hourlyData: List<ForecastHour>): WeatherState =
+        when (detectCondition(hourlyData)) {
+            WeatherCondition.STORM                                  -> WeatherState.STORM
+            WeatherCondition.HEAVY_RAIN,
+            WeatherCondition.RAIN,
+            WeatherCondition.DRIZZLE                               -> WeatherState.RAIN
+            WeatherCondition.SNOW,
+            WeatherCondition.VERY_WINDY,
+            WeatherCondition.WINDY,
+            WeatherCondition.BREEZY,
+            WeatherCondition.OVERCAST                              -> WeatherState.OVERCAST
+            WeatherCondition.CLEAR                                 -> WeatherState.CLEAR
+        }
+
     fun evaluateBringList(hourlyData: List<ForecastHour>): List<String> {
         val items = mutableListOf<String>()
         val hasRain = hourlyData.any { it.precipitationProbability >= UMBRELLA_THRESHOLD }

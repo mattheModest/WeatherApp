@@ -85,6 +85,7 @@ class ForecastRefreshWorker @AssistedInject constructor(
                     VerdictGenerator.climateZoneFromAbsLat(kotlin.math.abs(location.first))
                 } else com.weatherapp.model.ClimateZone.TEMPERATE
 
+                val detectedWeatherState = verdictGenerator.determineWeatherState(todayHours)
                 val verdictResult = verdictGenerator.generateVerdict(todayHours, comfortOffset, climateZone)
                 // Generate candidate pools for all 3 personalities — stored so switching is instant
                 val verdictCandidates = verdictGenerator.generateVerdictCandidates(todayHours, comfortOffset, climateZone)
@@ -110,6 +111,7 @@ class ForecastRefreshWorker @AssistedInject constructor(
                     prefs[PreferenceKeys.KEY_MOOD_CANDIDATES_KELVIN]      = moodCandidatesKelvin.joinToString("|")
                     prefs[PreferenceKeys.KEY_VERDICT_CANDIDATES_GRAVES]   = verdictCandidatesGraves.joinToString("|")
                     prefs[PreferenceKeys.KEY_MOOD_CANDIDATES_GRAVES]      = moodCandidatesGraves.joinToString("|")
+                    prefs[PreferenceKeys.KEY_WEATHER_STATE]               = detectedWeatherState.name
                     prefs[PreferenceKeys.KEY_STALENESS_FLAG]              = false
                     if (currentTempC != null) prefs[PreferenceKeys.KEY_CURRENT_TEMP_C] = currentTempC
                     // LAST — widget reads this to detect fresh data

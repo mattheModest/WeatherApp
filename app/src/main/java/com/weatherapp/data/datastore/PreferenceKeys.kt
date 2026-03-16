@@ -32,4 +32,5 @@ object PreferenceKeys {
     val KEY_VERDICT_CANDIDATES_GRAVES = stringPreferencesKey("verdict_candidates_graves")
     val KEY_MOOD_CANDIDATES_GRAVES = stringPreferencesKey("mood_candidates_graves")
     val KEY_VISUAL_THEME = stringPreferencesKey("visual_theme")
+    val KEY_WEATHER_STATE = stringPreferencesKey("weather_state")
 }

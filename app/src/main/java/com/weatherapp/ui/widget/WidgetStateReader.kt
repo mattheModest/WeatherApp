@@ -33,7 +33,10 @@ fun buildWidgetDisplayState(prefs: Preferences): WidgetDisplayState {
     val isStale = stalenessFlag || (lastUpdateEpoch > 0 &&
         System.currentTimeMillis() / 1000L - lastUpdateEpoch > 1800)
 
-    val weatherState = inferWeatherStateFromVerdict(verdictText, isAllClear)
+    val weatherStateStr = prefs[PreferenceKeys.KEY_WEATHER_STATE]
+    val weatherState = if (weatherStateStr != null)
+        runCatching { WeatherState.valueOf(weatherStateStr) }.getOrElse { inferWeatherStateFromVerdict(verdictText, isAllClear) }
+    else inferWeatherStateFromVerdict(verdictText, isAllClear)
 
     return WidgetDisplayState(
         verdict         = verdictText,

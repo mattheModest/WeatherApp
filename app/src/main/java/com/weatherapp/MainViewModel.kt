@@ -12,6 +12,7 @@ import com.weatherapp.model.personalityCoreFromString
 import com.weatherapp.model.visualThemeFromString
 import com.weatherapp.data.update.UpdateChecker
 import com.weatherapp.data.update.UpdateInfo
+import com.weatherapp.model.WeatherState
 import com.weatherapp.model.WidgetDisplayState
 import com.weatherapp.ui.widget.inferWeatherStateFromVerdictPublic
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -56,7 +57,10 @@ class MainViewModel @Inject constructor(
         val isAllClear = prefs[PreferenceKeys.KEY_ALL_CLEAR] ?: false
         val isStale = stalenessFlag || (lastUpdateEpoch > 0 &&
             System.currentTimeMillis() / 1000L - lastUpdateEpoch > 1800)
-        val weatherState = inferWeatherStateFromVerdictPublic(verdictText, isAllClear)
+        val weatherStateStr = prefs[PreferenceKeys.KEY_WEATHER_STATE]
+        val weatherState = if (weatherStateStr != null)
+            runCatching { WeatherState.valueOf(weatherStateStr) }.getOrElse { inferWeatherStateFromVerdictPublic(verdictText, isAllClear) }
+        else inferWeatherStateFromVerdictPublic(verdictText, isAllClear)
         WidgetDisplayState(
             verdict         = verdictText,
             bringItems      = bringListStr.split("|").filter { it.isNotEmpty() },
