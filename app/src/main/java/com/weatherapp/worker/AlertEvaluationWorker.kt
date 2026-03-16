@@ -166,15 +166,17 @@ class AlertEvaluationWorker @AssistedInject constructor(
 
             AlertState.CONFIRMED_CLEAR -> {
                 // At-most-once: confirmation already sent today (AC-3)
+                // existing is non-null here by definition (state is CONFIRMED_CLEAR), but guard defensively
+                val record = existing ?: return
                 val snapshot = runCatching {
-                    gson.fromJson(existing!!.confirmedForecastSnapshot, ForecastSnapshot::class.java)
+                    gson.fromJson(record.confirmedForecastSnapshot, ForecastSnapshot::class.java)
                 }.getOrNull()
                 if (snapshot != null && isMaterialChange(snapshot, hours)) {
                     alertStateDao.insertRecord(
                         AlertStateRecord(
                             eventId = todayKey,
                             state   = AlertState.ALERT_SENT,
-                            confirmedForecastSnapshot = existing!!.confirmedForecastSnapshot,
+                            confirmedForecastSnapshot = record.confirmedForecastSnapshot,
                             lastTransitionAt = nowEpoch
                         )
                     )
@@ -216,15 +218,16 @@ class AlertEvaluationWorker @AssistedInject constructor(
             }
 
             AlertState.CONFIRMED_CLEAR -> {
+                val record = existing ?: return
                 val snapshot = runCatching {
-                    gson.fromJson(existing!!.confirmedForecastSnapshot, ForecastSnapshot::class.java)
+                    gson.fromJson(record.confirmedForecastSnapshot, ForecastSnapshot::class.java)
                 }.getOrNull()
                 if (snapshot != null && isMaterialChange(snapshot, hours) && shouldSendAlert(event, nowEpoch)) {
                     alertStateDao.insertRecord(
                         AlertStateRecord(
                             eventId = event.eventId,
                             state   = AlertState.ALERT_SENT,
-                            confirmedForecastSnapshot = existing!!.confirmedForecastSnapshot,
+                            confirmedForecastSnapshot = record.confirmedForecastSnapshot,
                             lastTransitionAt = nowEpoch
                         )
                     )

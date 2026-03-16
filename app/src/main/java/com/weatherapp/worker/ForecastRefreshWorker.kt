@@ -125,6 +125,7 @@ class ForecastRefreshWorker @AssistedInject constructor(
                 if (alreadyRequested != true) {
                     dataStore.edit { prefs ->
                         prefs[PreferenceKeys.KEY_SHOULD_REQUEST_NOTIFICATIONS] = true
+                        prefs[PreferenceKeys.KEY_NOTIFICATIONS_PERMISSION_REQUESTED] = true
                     }
                     Timber.d("ForecastRefreshWorker: notification permission prompt queued")
                 }
