@@ -20,8 +20,8 @@ android {
         applicationId = "com.weatherapp"
         minSdk = 34
         targetSdk = 35
-        versionCode = 7
-        versionName = "1.0.6"
+        versionCode = 8
+        versionName = "1.0.7"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
@@ -30,10 +30,10 @@ android {
 
     signingConfigs {
         create("release") {
-            storeFile = file("weatherapp-release.jks")
-            storePassword = "Shejutirahman11x"
-            keyAlias = "weatherapp"
-            keyPassword = "Shejutirahman11x"
+            storeFile = file(localProps.getProperty("KEYSTORE_FILE", "weatherapp-release.jks"))
+            storePassword = localProps.getProperty("KEYSTORE_PASSWORD", "")
+            keyAlias = localProps.getProperty("KEY_ALIAS", "weatherapp")
+            keyPassword = localProps.getProperty("KEY_PASSWORD", "")
         }
     }
 
