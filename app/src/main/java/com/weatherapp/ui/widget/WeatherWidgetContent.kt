@@ -54,19 +54,23 @@ fun WeatherWidgetContent(state: WidgetDisplayState, visualTheme: VisualTheme = V
     // For those themes, a single solid cardBackground matches the in-app card preview.
     val useZonedLayout = tokens.topZoneBackground.alpha >= 0.5f
 
-    // Per-theme font family for Glance
+    // Per-theme font family for Glance (limited to system fonts; no custom loading in RemoteViews)
+    // CHALK_SLATE uses Serif — the in-app handwriting font has no Glance equivalent; Cursive maps
+    // to whatever system script font is installed, which is often completely illegible.
     val verdictFont: FontFamily? = when (visualTheme) {
-        VisualTheme.CHALK_SLATE -> FontFamily.Cursive
+        VisualTheme.CHALK_SLATE -> FontFamily.Serif
         VisualTheme.SUN_STAINED_BEIGE, VisualTheme.UTILITY_CHIC,
         VisualTheme.EIGHT_BIT -> FontFamily.Monospace
         else -> null
     }
     val metaFont: FontFamily? = when (visualTheme) {
-        VisualTheme.CHALK_SLATE -> FontFamily.Cursive
+        VisualTheme.CHALK_SLATE -> FontFamily.Serif
         VisualTheme.SUN_STAINED_BEIGE, VisualTheme.UTILITY_CHIC,
         VisualTheme.EIGHT_BIT -> FontFamily.Monospace
         else -> null
     }
+    // INK_EDITORIAL has a 3px amber stripe at the very top of its card — replicate in Glance
+    val showTopEdgeStripe = visualTheme == VisualTheme.INK_EDITORIAL
     val showLiveBadge = visualTheme == VisualTheme.UTILITY_CHIC
     val useAsciiWeather = visualTheme == VisualTheme.EIGHT_BIT
 
@@ -118,6 +122,9 @@ fun WeatherWidgetContent(state: WidgetDisplayState, visualTheme: VisualTheme = V
                 .semantics { contentDescription = buildContentDescription(state) }
         ) {
             Box(modifier = GlanceModifier.fillMaxSize().background(tokens.cardBackground)) {}
+            if (showTopEdgeStripe) {
+                Box(modifier = GlanceModifier.fillMaxWidth().height(3.dp).background(tokens.accentColor)) {}
+            }
             if (useZonedLayout) {
                 Box(modifier = GlanceModifier.fillMaxWidth().height(topHeight + 2.dp).background(tokens.accentColor)) {}
                 Box(modifier = GlanceModifier.fillMaxWidth().height(topHeight).background(tokens.topZoneBackground)) {}
@@ -237,6 +244,10 @@ fun WeatherWidgetContent(state: WidgetDisplayState, visualTheme: VisualTheme = V
                 .fillMaxSize()
                 .background(tokens.cardBackground)
         ) {}
+
+        if (showTopEdgeStripe) {
+            Box(modifier = GlanceModifier.fillMaxWidth().height(3.dp).background(tokens.accentColor)) {}
+        }
 
         if (useZonedLayout) {
             Box(
