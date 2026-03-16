@@ -71,6 +71,8 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.PathEffect
+import androidx.compose.ui.semantics.heading
+import androidx.compose.ui.semantics.semantics
 
 @Composable
 fun MainScreen(
@@ -336,7 +338,8 @@ private fun WeatherCard(displayState: WidgetDisplayState, style: VisualThemeStyl
                                     fontWeight = style.verdictWeight,
                                     fontFamily = style.titleFontFamily,
                                     color = tokens.verdictText,
-                                    lineHeight = 32.sp
+                                    lineHeight = 32.sp,
+                                    modifier = Modifier.semantics { heading() }
                                 )
                             }
                         } else {
@@ -346,7 +349,8 @@ private fun WeatherCard(displayState: WidgetDisplayState, style: VisualThemeStyl
                                 fontWeight = style.verdictWeight,
                                 fontFamily = style.titleFontFamily,
                                 color = tokens.verdictText,
-                                lineHeight = 32.sp
+                                lineHeight = 32.sp,
+                                modifier = Modifier.semantics { heading() }
                             )
                         }
                         if (displayState.bestWindow != null) {
@@ -476,7 +480,7 @@ private fun WeatherCard(displayState: WidgetDisplayState, style: VisualThemeStyl
                             ) {
                                 Icon(
                                     imageVector = Icons.Default.Share,
-                                    contentDescription = "Share",
+                                    contentDescription = "Share today's mood",
                                     tint = tokens.secondaryText.copy(alpha = 0.5f),
                                     modifier = Modifier.size(16.dp)
                                 )

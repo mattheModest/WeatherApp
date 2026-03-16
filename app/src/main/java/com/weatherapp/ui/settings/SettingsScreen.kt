@@ -1,7 +1,10 @@
 package com.weatherapp.ui.settings
 
 import android.app.Activity
+import android.appwidget.AppWidgetManager
+import android.content.ComponentName
 import android.content.Intent
+import android.os.Build
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -38,6 +41,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.weatherapp.model.PersonalityCore
 import com.weatherapp.model.VisualTheme
+import com.weatherapp.ui.widget.WeatherWidgetReceiver
 import com.weatherapp.util.UiState
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -122,6 +126,7 @@ private fun SettingsContent(
     onUpgradeTapped: () -> Unit,
     onShareMoodCard: () -> Unit
 ) {
+    val context = LocalContext.current
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -262,6 +267,27 @@ private fun SettingsContent(
                 text = "Share Today's Mood",
                 fontSize = 16.sp
             )
+        }
+
+        // Add Widget to Home Screen
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val widgetManager = AppWidgetManager.getInstance(context)
+            if (widgetManager.isRequestPinAppWidgetSupported) {
+                TextButton(
+                    onClick = {
+                        val provider = ComponentName(context, WeatherWidgetReceiver::class.java)
+                        widgetManager.requestPinAppWidget(provider, null, null)
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .heightIn(min = 48.dp)
+                ) {
+                    Text(
+                        text = "Add Widget to Home Screen",
+                        fontSize = 16.sp
+                    )
+                }
+            }
         }
     }
 }

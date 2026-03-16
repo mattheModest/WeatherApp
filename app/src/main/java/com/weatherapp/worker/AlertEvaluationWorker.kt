@@ -122,7 +122,13 @@ class AlertEvaluationWorker @AssistedInject constructor(
                 val outdoorEvents = allEvents.filter { isOutdoorPotential(it) }
                 Timber.d("AlertEvaluationWorker (premium): evaluating ${outdoorEvents.size} outdoor events")
                 for (event in outdoorEvents) {
-                    evaluatePremiumEventAlert(event, nowEpoch, todayHours)
+                    // Query the forecast hours for the event's specific day, not today's hours.
+                    // Future events (e.g. a BBQ on Thursday) must be evaluated against their
+                    // own day's weather data, which Open-Meteo stores up to 7 days ahead.
+                    val eventDayStart = event.startEpoch - (event.startEpoch % 86400L)
+                    val eventDayEnd = eventDayStart + 86400L
+                    val eventHours = forecastDao.queryByTimeWindow(eventDayStart, eventDayEnd).first()
+                    evaluatePremiumEventAlert(event, nowEpoch, eventHours)
                 }
             }
 
