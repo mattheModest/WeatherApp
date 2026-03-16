@@ -2,7 +2,7 @@
 
 **Weather handled. Go live your day.**
 
-WeatherApp inverts the standard weather model: instead of showing you data to interpret, it reads your calendar, checks the forecast, and delivers a verdict. One glance at the widget — you know exactly what to do. No mental mapping required.
+WeatherApp inverts the standard weather model: instead of showing you data to interpret, it tells you what to do. One glance at the widget — you know exactly what to wear, what to bring, when to go outside. No mental mapping required.
 
 [**→ Download APK**](https://github.com/matthemodest/WeatherApp/releases/latest) · [**Landing page**](https://matthemodest.github.io/WeatherApp)
 
@@ -12,14 +12,16 @@ WeatherApp inverts the standard weather model: instead of showing you data to in
 
 The widget is the product. The app is configuration.
 
-| Free tier | Premium ($7.99/year) |
-|---|---|
-| Clothing-language verdict ("light jacket weather") | Calendar-aware widget shifts ("Your BBQ starts in 2h. You're clear.") |
-| Contextual bring list (umbrella, sunscreen) only when warranted | Change-triggered alerts — only fires if forecast changes after an earlier all-clear |
-| Best outdoor window for the day | Event-importance-scaled monitoring windows |
-| All-clear state ("You're good. Go live your day.") | Conflict detection for overlapping outdoor events |
-| Confirmation-first alerts | — |
-| Hourly detail on one tap | — |
+- Clothing-language verdict ("light jacket weather") — never raw temperature
+- Contextual bring list (umbrella, sunscreen) only when warranted
+- Best outdoor window for the day
+- All-clear state ("You're good. Go live your day.")
+- Confirmation-first alerts — proactively confirms good news, escalates only on genuine change
+- Hourly detail one tap behind the widget
+- 3 personality cores (Frank, Kelvin, Graves) — rotate in settings
+- 7 visual themes
+- Calendar-aware widget shifts for upcoming outdoor events
+- Change-triggered alerts when forecast changes after an earlier all-clear
 
 ## Install (sideload)
 
@@ -38,27 +40,25 @@ The widget is the product. The app is configuration.
 - **Data** — Room (forecast cache + alert records), DataStore (preferences)
 - **Network** — Retrofit → Cloudflare Worker → Open-Meteo API
 - **DI** — Hilt
-- **Billing** — Google Play Billing Library 7.x ($7.99/year subscription)
 
 ## Architecture
 
 ```
 com.weatherapp/
 ├── data/
-│   ├── billing/        # Play Billing wrapper + repository
 │   ├── calendar/       # CalendarContract reader
 │   ├── datastore/      # Preference keys + flows
 │   ├── db/             # Room: ForecastHour, AlertRecord DAOs
 │   ├── location/       # FusedLocationProvider wrapper
 │   └── weather/        # Retrofit API + WeatherRepository
-├── di/                 # Hilt modules (App, Network, DB, Billing)
-├── model/              # VerdictGenerator, AlertStateMachine
+├── di/                 # Hilt modules
+├── model/              # VerdictGenerator, personality pools, AlertStateMachine
 ├── ui/
 │   ├── hourly/         # HourlyDetailBottomSheet + ViewModel
-│   ├── main/           # MainScreen (host)
+│   ├── main/           # MainScreen
 │   ├── onboarding/     # Permission flow + ViewModel
 │   ├── settings/       # Settings + ViewModel
-│   ├── theme/          # Material3 theme
+│   ├── theme/          # Material3 theme + design tokens
 │   └── widget/         # Glance widget composable
 ├── util/               # UiState, extensions
 └── worker/             # ForecastRefreshWorker, CalendarScanWorker, AlertEvaluationWorker
@@ -66,20 +66,18 @@ com.weatherapp/
 
 ## CI
 
-GitHub Actions runs on every PR to `master`:
+GitHub Actions runs on every push to `master` and every PR:
 
 - `./gradlew lint`
 - `./gradlew test`
 - `./gradlew assembleDebug`
 
-Release builds are triggered by pushing a version tag (`v1.0.0`) or via manual workflow dispatch.
-
 ## Privacy
 
-- **Location** — used only to fetch the local forecast. Never stored server-side.
+- **Location** — used only to fetch the local forecast. Never stored server-side. Coordinates are snapped to a 0.1° grid before any network request.
 - **Calendar** — read locally via `CalendarContract`. Event titles are processed on-device; never sent to any server.
 - **No analytics, no ads, no accounts.**
 
 ---
 
-*Built by [Lafayette](https://github.com/matthemodest) · Weather data: [Open-Meteo](https://open-meteo.com) (free, no API key required) · Proxy: Cloudflare Workers*
+*Built by [Lafayette](https://github.com/matthemodest) · Weather data: [Open-Meteo](https://open-meteo.com) · Proxy: Cloudflare Workers*

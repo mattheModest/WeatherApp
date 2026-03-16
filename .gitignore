@@ -20,3 +20,7 @@ cloudflare-worker/node_modules/
 cloudflare-worker/.wrangler/
 cloudflare-worker/dist/
 cloudflare-worker/.env
+IMPLEMENTATION_PLAN.md
+VISUAL_OVERHAUL_STATUS.md
+docs/artstyles.html
+WeatherApp-v*.apk

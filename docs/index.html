@@ -339,7 +339,6 @@
     }
 
     .tag-free { background: rgba(74,222,128,0.12); color: var(--green); }
-    .tag-premium { background: rgba(167,139,250,0.12); color: var(--accent2); }
 
     /* ── How it works ── */
     .steps {
@@ -446,7 +445,7 @@
 
 <!-- ── Hero ── -->
 <section class="hero" style="max-width:none; padding-top:80px;">
-  <div class="badge">Android · Free + Premium · $7.99/year</div>
+  <div class="badge">Android · Free · Open Source</div>
 
   <h1>Weather handled.<br /><span>Go live your day.</span></h1>
 
@@ -519,19 +518,21 @@
       </div>
     </div>
 
-    <!-- Premium: calendar-aware widget -->
+    <!-- Storm day widget -->
     <div class="phone">
       <div class="phone-notch"></div>
       <div class="widget">
-        <div class="widget-label">WeatherApp · Premium</div>
-        <div class="widget-verdict">Your BBQ starts in 2h.<br/>You're clear. ☀️</div>
-        <div class="widget-chip">✓ All clear for your event</div>
+        <div class="widget-label">WeatherApp · widget</div>
+        <div class="widget-verdict">⛈ Stay inside. This one's real.</div>
+        <div style="display:flex;gap:6px;margin:8px 0;">
+          <div class="widget-chip amber">⚡ Storm</div>
+        </div>
         <div class="widget-divider"></div>
-        <div class="widget-detail">No changes since last check</div>
+        <div class="widget-detail">Good window: none today</div>
       </div>
       <div class="calendar-card">
-        <div class="cal-label">Saturday BBQ · 3pm</div>
-        <div class="cal-verdict">Sunny · No wind · Perfect</div>
+        <div class="cal-label">Today's forecast</div>
+        <div class="cal-verdict">Active storm · Stay in · Opens with full hourly breakdown</div>
       </div>
     </div>
 
@@ -592,23 +593,6 @@
       <span class="feature-tag tag-free">Free</span>
     </div>
 
-    <div class="feature-card">
-      <span class="feature-icon">📅</span>
-      <div class="feature-title">Calendar-aware widget</div>
-      <div class="feature-desc">
-        "Your BBQ starts in 2h. You're clear." — the widget shifts state before you think to check. No input required.
-      </div>
-      <span class="feature-tag tag-premium">Premium</span>
-    </div>
-
-    <div class="feature-card">
-      <span class="feature-icon">⚡</span>
-      <div class="feature-title">Change-triggered alerts</div>
-      <div class="feature-desc">
-        Confirmed your Saturday run was clear on Thursday? Get notified only if the forecast materially changes. Not before.
-      </div>
-      <span class="feature-tag tag-premium">Premium</span>
-    </div>
 
   </div>
 </section>
@@ -651,7 +635,7 @@
   <div class="install-section">
     <h2>Install WeatherApp</h2>
     <p class="section-sub" style="margin:12px auto 0;">
-      This is a direct APK download — not on the Play Store yet. Sideloading takes about 30 seconds.
+      Free and open source. Direct APK download from GitHub — not on the Play Store. Sideloading takes about 30 seconds.
     </p>
 
     <div class="install-steps">
@@ -678,10 +662,6 @@
       <span>This APK is signed with a debug key. Android will warn you it's from an unknown source — that's expected. The app contains no analytics, no ads, and no data collection beyond what's needed to show you the weather.</span>
     </div>
 
-    <br />
-    <p style="font-size:13px; color:var(--muted); margin-top:8px;">
-      Have an activation code? Enter it in Settings → Premium to unlock instantly — no Play Store required.
-    </p>
 
     <br /><br />
     <a href="https://github.com/matthemodest/WeatherApp/releases/latest" class="btn-primary" style="font-size:16px; padding:16px 36px;">
@@ -699,7 +679,7 @@
     Weather data via <a href="https://open-meteo.com">Open-Meteo</a>
   </p>
   <p style="margin-top:8px; font-size:12px;">
-    WeatherApp reads your location and optionally your calendar to show event-aware forecasts.
+    WeatherApp reads your location to fetch a local forecast. Nothing else is collected.
     Data never leaves your device except for the anonymous forecast API call. No account required.
   </p>
 </footer>
