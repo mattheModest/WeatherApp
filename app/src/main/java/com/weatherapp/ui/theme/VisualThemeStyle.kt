@@ -9,8 +9,9 @@ import com.weatherapp.model.VisualTheme
 import com.weatherapp.model.WeatherState
 
 /**
- * Full per-theme styling — colors, typography, shape, layout flags.
- * Passed into WeatherCard and ForecastCard to drive all visual variation.
+ * Per-theme styling — only properties that can be replicated in both
+ * Jetpack Compose (app) and Glance (widget). No animations, no gradients,
+ * no Canvas effects, no borders. Widget and app show an identical view.
  */
 data class VisualThemeStyle(
     val tokens: WeatherColorTokens,
@@ -21,52 +22,18 @@ data class VisualThemeStyle(
     // Shape
     val cardCornerRadius: Dp = 24.dp,
     val chipCornerRadius: Dp = 20.dp,
-    // Chip border
-    val chipBorderColor: Color = Color.Transparent,
-    val chipBorderWidth: Dp = 0.dp,
-    // Card border
-    val cardBorderColor: Color = Color.Transparent,
-    val cardBorderWidth: Dp = 0.dp,
-    // Layout variants
+    // SUN_STAINED_BEIGE: retro titlebar row at top of card
     val showTitlebar: Boolean = false,
     val titlebarBg: Color = Color.Transparent,
     val titlebarTextColor: Color = Color.White,
-    val showPullQuoteBorder: Boolean = false,
-    val pullQuoteBorderColor: Color = Color.Transparent,
-    val showLiveBadge: Boolean = false,
-    // Neo-Brutalism: hard CSS-style offset shadow
-    val hasBrutalistShadow: Boolean = false,
-    val brutalistShadowColor: Color = Color.Black,
-    val brutalistShadowOffset: Dp = 4.dp,
-    // 8-Bit: ASCII weather symbols + pixel indicator
-    val useAsciiWeather: Boolean = false,
-    val showPixelIndicator: Boolean = false,
-    // ── Animation flags ────────────────────────────────────────────────────────
-    // Default: accent dot pulses blue → purple
-    val dotAnimatesColor: Boolean = false,
-    val dotAnimationTargetColor: Color = Color.Transparent,
-    // Utility: accent dot blinks step-end
-    val hasDotBlink: Boolean = false,
-    // ── Background glow (Default theme, screen-level) ──────────────────────────
-    val hasScreenGlow: Boolean = false,
-    val screenGlowColor1: Color = Color.Transparent,  // top-left blue blob
-    val screenGlowColor2: Color = Color.Transparent,  // bottom-right purple blob
-    // ── Overlay effects ────────────────────────────────────────────────────────
-    // Utility: CRT scanline repeating-linear-gradient over card
-    val hasScanlineOverlay: Boolean = false,
-    // Ink: 3px amber gradient stripe at very top of card
+    // INK_EDITORIAL: solid accent stripe at very top of card
     val hasTopEdgeStripe: Boolean = false,
     val topEdgeStripeColor: Color = Color.Transparent,
-    // ── Chalk effects ──────────────────────────────────────────────────────────
-    // Multi-layer glow bloom on verdict text (simulated via blurred copy)
-    val verdictGlowColor: Color = Color.Transparent,
-    // Replace solid zone divider with dashed line
-    val hasDashedDivider: Boolean = false,
-    // ── Zone backgrounds ───────────────────────────────────────────────────────
-    // When non-transparent, overrides cardBackground for the bottom zone only
-    val bottomZoneBackground: Color = Color.Transparent,
-    // ── Beige: blinking terminal cursor ───────────────────────────────────────
-    val hasBlinkingCursor: Boolean = false,
+    // UTILITY_CHIC: static live badge (dot + LIVE label)
+    val showLiveBadge: Boolean = false,
+    // EIGHT_BIT: ASCII weather symbols + pixel indicator
+    val useAsciiWeather: Boolean = false,
+    val showPixelIndicator: Boolean = false,
 )
 
 // ── Fixed palettes ────────────────────────────────────────────────────────────
@@ -142,46 +109,27 @@ internal val eightBitTokens = WeatherColorTokens(
 // ── Theme → Style factory ─────────────────────────────────────────────────────
 
 fun VisualTheme.toStyle(weatherState: WeatherState, isDark: Boolean): VisualThemeStyle = when (this) {
-    VisualTheme.DEFAULT -> {
-        val tokens = WeatherDesignTokens.getTokens(weatherState, isDark)
-        VisualThemeStyle(
-            tokens               = tokens,
-            cardBorderColor      = tokens.accentColor.copy(alpha = 0.25f),
-            cardBorderWidth      = 1.dp,
-            dotAnimatesColor     = true,
-            dotAnimationTargetColor = Color(0xFFA78BFA),  // purple
-            hasScreenGlow        = true,
-            screenGlowColor1     = Color(0x216C8FFF),     // blue, ~13% opacity
-            screenGlowColor2     = Color(0x17A78BFA),     // purple, ~9% opacity
-        )
-    }
+    VisualTheme.DEFAULT -> VisualThemeStyle(
+        tokens = WeatherDesignTokens.getTokens(weatherState, isDark)
+    )
     VisualTheme.SUN_STAINED_BEIGE -> VisualThemeStyle(
-        tokens              = beigeTokens,
-        titleFontFamily     = AppFonts.monospace,
-        metaFontFamily      = AppFonts.monospace,
-        verdictWeight       = FontWeight.Bold,
-        cardCornerRadius    = 4.dp,
-        chipCornerRadius    = 0.dp,
-        chipBorderColor     = Color(0xFFE8DCC0),   // light bevel top/left
-        chipBorderWidth     = 1.dp,
-        showTitlebar        = true,
-        titlebarBg          = Color(0xFF5A4A28),
-        titlebarTextColor   = Color(0xFFE0C888),
-        bottomZoneBackground = Color(0xFFC0AA78),  // distinct warm tan bottom
-        hasBlinkingCursor   = true,
+        tokens           = beigeTokens,
+        titleFontFamily  = AppFonts.monospace,
+        metaFontFamily   = AppFonts.monospace,
+        verdictWeight    = FontWeight.Bold,
+        cardCornerRadius = 4.dp,
+        chipCornerRadius = 0.dp,
+        showTitlebar     = true,
+        titlebarBg       = Color(0xFF5A4A28),
+        titlebarTextColor = Color(0xFFE0C888),
     )
     VisualTheme.INK_EDITORIAL -> VisualThemeStyle(
-        tokens               = inkTokens,
-        verdictWeight        = FontWeight.Black,
-        cardCornerRadius     = 14.dp,
-        chipCornerRadius     = 3.dp,
-        showPullQuoteBorder  = true,
-        pullQuoteBorderColor = Color(0x80FBBF24),   // rgba(251,191,36,0.50)
-        cardBorderColor      = Color(0x1FFBBF24),
-        cardBorderWidth      = 1.dp,
-        hasTopEdgeStripe     = true,
-        topEdgeStripeColor   = Color(0xFFFBBF24),
-        bottomZoneBackground = Color(0x47000000),   // rgba(0,0,0,0.28)
+        tokens             = inkTokens,
+        verdictWeight      = FontWeight.Bold,
+        cardCornerRadius   = 14.dp,
+        chipCornerRadius   = 3.dp,
+        hasTopEdgeStripe   = true,
+        topEdgeStripeColor = Color(0xFFFBBF24),
     )
     VisualTheme.UTILITY_CHIC -> VisualThemeStyle(
         tokens           = utilityTokens,
@@ -189,38 +137,20 @@ fun VisualTheme.toStyle(weatherState: WeatherState, isDark: Boolean): VisualThem
         cardCornerRadius = 14.dp,
         chipCornerRadius = 3.dp,
         showLiveBadge    = true,
-        cardBorderColor  = Color(0x2E4ADE80),
-        cardBorderWidth  = 1.dp,
-        hasDotBlink      = true,
-        hasScanlineOverlay = true,
     )
     VisualTheme.CHALK_SLATE -> VisualThemeStyle(
-        tokens            = chalkTokens,
-        titleFontFamily   = AppFonts.handwriting,
-        metaFontFamily    = AppFonts.handwriting,
-        verdictWeight     = FontWeight.Bold,
-        cardCornerRadius  = 4.dp,
-        chipCornerRadius  = 0.dp,
-        chipBorderColor   = Color(0x8CE6E1D2),
-        chipBorderWidth   = 2.dp,
-        cardBorderColor   = Color(0x52F0EBDC),
-        cardBorderWidth   = 2.dp,
-        verdictGlowColor  = Color(0xFFF5F2EE),
-        hasDashedDivider  = true,
-        bottomZoneBackground = Color(0x38000000),  // rgba(0,0,0,0.22)
+        tokens           = chalkTokens,
+        titleFontFamily  = AppFonts.handwriting,
+        metaFontFamily   = AppFonts.handwriting,
+        verdictWeight    = FontWeight.Bold,
+        cardCornerRadius = 4.dp,
+        chipCornerRadius = 0.dp,
     )
     VisualTheme.NEO_BRUTALISM -> VisualThemeStyle(
-        tokens                = neoBrutalismTokens,
-        verdictWeight         = FontWeight.Black,
-        cardCornerRadius      = 0.dp,
-        chipCornerRadius      = 0.dp,
-        chipBorderColor       = Color(0xFFF5E642),  // yellow border on black chips
-        chipBorderWidth       = 2.dp,
-        cardBorderColor       = Color(0xFF0A0A0A),
-        cardBorderWidth       = 3.dp,
-        hasBrutalistShadow    = true,
-        brutalistShadowColor  = Color(0xFF0A0A0A),
-        brutalistShadowOffset = 4.dp,
+        tokens           = neoBrutalismTokens,
+        verdictWeight    = FontWeight.Bold,
+        cardCornerRadius = 0.dp,
+        chipCornerRadius = 0.dp,
     )
     VisualTheme.EIGHT_BIT -> VisualThemeStyle(
         tokens             = eightBitTokens,
@@ -229,10 +159,6 @@ fun VisualTheme.toStyle(weatherState: WeatherState, isDark: Boolean): VisualThem
         verdictWeight      = FontWeight.Bold,
         cardCornerRadius   = 0.dp,
         chipCornerRadius   = 0.dp,
-        chipBorderColor    = Color(0xFF9BBC0F),
-        chipBorderWidth    = 2.dp,
-        cardBorderColor    = Color(0xFF9BBC0F),
-        cardBorderWidth    = 2.dp,
         useAsciiWeather    = true,
         showPixelIndicator = true,
     )
@@ -241,11 +167,11 @@ fun VisualTheme.toStyle(weatherState: WeatherState, isDark: Boolean): VisualThem
 /** Widget-specific: colors only (Glance has no custom font support). */
 fun VisualTheme.toWidgetTokens(weatherState: WeatherState, isDark: Boolean): WeatherColorTokens =
     when (this) {
-        VisualTheme.DEFAULT          -> WeatherDesignTokens.getTokens(weatherState, isDark)
+        VisualTheme.DEFAULT           -> WeatherDesignTokens.getTokens(weatherState, isDark)
         VisualTheme.SUN_STAINED_BEIGE -> beigeTokens
-        VisualTheme.INK_EDITORIAL    -> inkTokens
-        VisualTheme.UTILITY_CHIC     -> utilityTokens
-        VisualTheme.CHALK_SLATE      -> chalkTokens
-        VisualTheme.NEO_BRUTALISM    -> neoBrutalismTokens
-        VisualTheme.EIGHT_BIT        -> eightBitTokens
+        VisualTheme.INK_EDITORIAL     -> inkTokens
+        VisualTheme.UTILITY_CHIC      -> utilityTokens
+        VisualTheme.CHALK_SLATE       -> chalkTokens
+        VisualTheme.NEO_BRUTALISM     -> neoBrutalismTokens
+        VisualTheme.EIGHT_BIT         -> eightBitTokens
     }

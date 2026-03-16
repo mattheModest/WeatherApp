@@ -73,6 +73,9 @@ fun WeatherWidgetContent(state: WidgetDisplayState, visualTheme: VisualTheme = V
     val showTopEdgeStripe = visualTheme == VisualTheme.INK_EDITORIAL
     val showLiveBadge = visualTheme == VisualTheme.UTILITY_CHIC
     val useAsciiWeather = visualTheme == VisualTheme.EIGHT_BIT
+    val showTitlebar = visualTheme == VisualTheme.SUN_STAINED_BEIGE
+    // Titlebar adds ~22dp above the verdict row; grow the top zone to match
+    val topZoneHeight = if (showTitlebar) 94.dp else 72.dp
 
     val clickAction = actionStartActivity<MainActivity>(
         actionParametersOf(ActionParameters.Key<Boolean>("open_hourly") to true)
@@ -128,6 +131,27 @@ fun WeatherWidgetContent(state: WidgetDisplayState, visualTheme: VisualTheme = V
             if (useZonedLayout) {
                 Box(modifier = GlanceModifier.fillMaxWidth().height(topHeight + 2.dp).background(tokens.accentColor)) {}
                 Box(modifier = GlanceModifier.fillMaxWidth().height(topHeight).background(tokens.topZoneBackground)) {}
+            }
+            // BEIGE: titlebar overlay at very top of medium layout
+            if (showTitlebar) {
+                Row(
+                    modifier = GlanceModifier
+                        .fillMaxWidth()
+                        .height(18.dp)
+                        .background(tokens.topZoneBackground)
+                        .padding(horizontal = 10.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = "WEATHER.EXE",
+                        style = TextStyle(
+                            color = ColorProvider(Color(0xFFE0C888)),
+                            fontSize = 7.sp,
+                            fontWeight = FontWeight.Bold,
+                            fontFamily = metaFont
+                        )
+                    )
+                }
             }
             Column(modifier = GlanceModifier.fillMaxSize()) {
                 Row(
@@ -253,24 +277,46 @@ fun WeatherWidgetContent(state: WidgetDisplayState, visualTheme: VisualTheme = V
             Box(
                 modifier = GlanceModifier
                     .fillMaxWidth()
-                    .height(74.dp)
+                    .height(topZoneHeight + 2.dp)
                     .background(tokens.accentColor)
             ) {}
 
             Box(
                 modifier = GlanceModifier
                     .fillMaxWidth()
-                    .height(72.dp)
+                    .height(topZoneHeight)
                     .background(tokens.topZoneBackground)
             ) {}
         }
 
         Column(modifier = GlanceModifier.fillMaxSize()) {
 
+            // BEIGE: retro titlebar
+            if (showTitlebar) {
+                Row(
+                    modifier = GlanceModifier
+                        .fillMaxWidth()
+                        .height(22.dp)
+                        .background(tokens.topZoneBackground)
+                        .padding(horizontal = 10.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = "WEATHER.EXE",
+                        style = TextStyle(
+                            color = ColorProvider(Color(0xFFE0C888)),
+                            fontSize = 8.sp,
+                            fontWeight = FontWeight.Bold,
+                            fontFamily = metaFont
+                        )
+                    )
+                }
+            }
+
             Row(
                 modifier = GlanceModifier
                     .fillMaxWidth()
-                    .height(72.dp)
+                    .height(topZoneHeight - if (showTitlebar) 22.dp else 0.dp)
                     .padding(horizontal = 14.dp, vertical = 10.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
