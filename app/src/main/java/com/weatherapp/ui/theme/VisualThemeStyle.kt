@@ -44,17 +44,17 @@ internal val beigeTokens = WeatherColorTokens(
     background        = Color(0xFFB8A880),
     cardBackground    = Color(0xFFC8B888),
     topZoneBackground = Color(0xFF5A4A28),   // dark amber titlebar
-    verdictText       = Color(0xFF1E1408),
-    secondaryText     = Color(0xFF3A2C10),
+    verdictText       = Color(0xFFE0C888),   // light amber — readable on dark top zone
+    secondaryText     = Color(0xFF5A4A28),   // matches top-zone amber for visual continuity
     accentColor       = Color(0xFF8A7848),
     chipBackground    = Color(0xFFC8B888),   // matches card for bevel chips
-    chipText          = Color(0xFF1E1408)
+    chipText          = Color(0xFF2A1E08)
 )
 
 internal val inkTokens = WeatherColorTokens(
     background        = Color(0xFF0E0D0B),
-    cardBackground    = Color(0x0AFBBF24),   // rgba(251,191,36,0.04)
-    topZoneBackground = Color(0x0FFBBF24),   // rgba(251,191,36,0.06)
+    cardBackground    = Color(0xFF111008),   // solid very dark amber-black (bottom zone)
+    topZoneBackground = Color(0xFF1A1400),   // solid dark amber — opaque so painter's algo fires
     verdictText       = Color(0xF7FCDC8C),   // rgba(252,220,140,0.97)
     secondaryText     = Color(0xB2DCC896),   // rgba(220,200,150,0.70)
     accentColor       = Color(0xFFFBBF24),
@@ -65,7 +65,7 @@ internal val inkTokens = WeatherColorTokens(
 internal val utilityTokens = WeatherColorTokens(
     background        = Color(0xFF070809),
     cardBackground    = Color(0xFF0D0F10),
-    topZoneBackground = Color(0x084ADE80),   // rgba(74,222,128,0.03)
+    topZoneBackground = Color(0xFF0A1A0F),   // solid dark green — opaque so painter's algo fires
     verdictText       = Color(0xFFE8EAF6),
     secondaryText     = Color(0x804ADE80),   // rgba(74,222,128,0.50)
     accentColor       = Color(0xFF4ADE80),
@@ -121,9 +121,6 @@ fun VisualTheme.toStyle(weatherState: WeatherState, isDark: Boolean): VisualThem
         verdictWeight    = FontWeight.Bold,
         cardCornerRadius = 4.dp,
         chipCornerRadius = 0.dp,
-        showTitlebar     = true,
-        titlebarBg       = Color(0xFF5A4A28),
-        titlebarTextColor = Color(0xFFE0C888),
     )
     VisualTheme.INK_EDITORIAL -> VisualThemeStyle(
         tokens               = inkTokens,
@@ -132,7 +129,7 @@ fun VisualTheme.toStyle(weatherState: WeatherState, isDark: Boolean): VisualThem
         chipCornerRadius     = 3.dp,
         hasTopEdgeStripe     = true,
         topEdgeStripeColor   = Color(0xFFFBBF24),
-        bottomZoneBackground = Color(0x47000000),   // 28% black — bottom visibly darker
+        // no bottomZoneBackground — two-zone split handles it via solid topZoneBackground
     )
     VisualTheme.UTILITY_CHIC -> VisualThemeStyle(
         tokens               = utilityTokens,
@@ -140,7 +137,7 @@ fun VisualTheme.toStyle(weatherState: WeatherState, isDark: Boolean): VisualThem
         cardCornerRadius     = 14.dp,
         chipCornerRadius     = 3.dp,
         showLiveBadge        = true,
-        bottomZoneBackground = Color(0x29000000),   // 16% black — subtle bottom darkening
+        // no bottomZoneBackground — two-zone split handles it via solid topZoneBackground
     )
     VisualTheme.CHALK_SLATE -> VisualThemeStyle(
         tokens               = chalkTokens,
@@ -149,7 +146,7 @@ fun VisualTheme.toStyle(weatherState: WeatherState, isDark: Boolean): VisualThem
         verdictWeight        = FontWeight.Bold,
         cardCornerRadius     = 4.dp,
         chipCornerRadius     = 0.dp,
-        bottomZoneBackground = Color(0x38000000),   // 22% black — bottom visibly darker
+        bottomZoneBackground = Color(0x1E000000),   // 12% black — subtle bottom darkening
     )
     VisualTheme.NEO_BRUTALISM -> VisualThemeStyle(
         tokens           = neoBrutalismTokens,

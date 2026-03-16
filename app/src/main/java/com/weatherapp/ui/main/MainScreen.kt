@@ -495,7 +495,7 @@ private fun weatherSymbol(state: WeatherState, useAscii: Boolean = false): Strin
     }
     return when (state) {
         WeatherState.CLEAR    -> "☀️"
-        WeatherState.OVERCAST -> "☁️"
+        WeatherState.OVERCAST -> "🌥️"
         WeatherState.RAIN     -> "🌧"
         WeatherState.STORM    -> "⛈"
     }

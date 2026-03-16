@@ -73,15 +73,11 @@ fun WeatherWidgetContent(state: WidgetDisplayState, visualTheme: VisualTheme = V
     val showTopEdgeStripe = visualTheme == VisualTheme.INK_EDITORIAL
     val showLiveBadge = visualTheme == VisualTheme.UTILITY_CHIC
     val useAsciiWeather = visualTheme == VisualTheme.EIGHT_BIT
-    val showTitlebar = visualTheme == VisualTheme.SUN_STAINED_BEIGE
-    // Titlebar adds ~22dp above the verdict row; grow the top zone to match
-    val topZoneHeight = if (showTitlebar) 94.dp else 72.dp
-    // Bottom zone darkening — for non-zoned themes that need a visible top/bottom split
+    val topZoneHeight = 72.dp
+    // Bottom zone darkening — only for non-zoned themes that can't use painter's two-zone
     val bottomZoneOverlay: Color = when (visualTheme) {
-        VisualTheme.INK_EDITORIAL -> Color(0x47000000)
-        VisualTheme.UTILITY_CHIC  -> Color(0x29000000)
-        VisualTheme.CHALK_SLATE   -> Color(0x38000000)
-        else                      -> Color.Transparent
+        VisualTheme.CHALK_SLATE -> Color(0x1E000000)   // 12% black — subtle bottom darkening
+        else                    -> Color.Transparent
     }
 
     val clickAction = actionStartActivity<MainActivity>(
@@ -143,27 +139,6 @@ fun WeatherWidgetContent(state: WidgetDisplayState, visualTheme: VisualTheme = V
             if (useZonedLayout) {
                 Box(modifier = GlanceModifier.fillMaxWidth().height(topHeight + 2.dp).background(tokens.accentColor)) {}
                 Box(modifier = GlanceModifier.fillMaxWidth().height(topHeight).background(tokens.topZoneBackground)) {}
-            }
-            // BEIGE: titlebar overlay at very top of medium layout
-            if (showTitlebar) {
-                Row(
-                    modifier = GlanceModifier
-                        .fillMaxWidth()
-                        .height(18.dp)
-                        .background(tokens.topZoneBackground)
-                        .padding(horizontal = 10.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Text(
-                        text = "WEATHER.EXE",
-                        style = TextStyle(
-                            color = ColorProvider(Color(0xFFE0C888)),
-                            fontSize = 7.sp,
-                            fontWeight = FontWeight.Bold,
-                            fontFamily = metaFont
-                        )
-                    )
-                }
             }
             Column(modifier = GlanceModifier.fillMaxSize()) {
                 Row(
@@ -308,32 +283,10 @@ fun WeatherWidgetContent(state: WidgetDisplayState, visualTheme: VisualTheme = V
 
         Column(modifier = GlanceModifier.fillMaxSize()) {
 
-            // BEIGE: retro titlebar
-            if (showTitlebar) {
-                Row(
-                    modifier = GlanceModifier
-                        .fillMaxWidth()
-                        .height(22.dp)
-                        .background(tokens.topZoneBackground)
-                        .padding(horizontal = 10.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Text(
-                        text = "WEATHER.EXE",
-                        style = TextStyle(
-                            color = ColorProvider(Color(0xFFE0C888)),
-                            fontSize = 8.sp,
-                            fontWeight = FontWeight.Bold,
-                            fontFamily = metaFont
-                        )
-                    )
-                }
-            }
-
             Row(
                 modifier = GlanceModifier
                     .fillMaxWidth()
-                    .height(topZoneHeight - if (showTitlebar) 22.dp else 0.dp)
+                    .height(topZoneHeight)
                     .padding(horizontal = 14.dp, vertical = 10.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -463,7 +416,7 @@ private fun weatherEmoji(state: WeatherState, useAscii: Boolean = false): String
     }
     return when (state) {
         WeatherState.CLEAR    -> "☀️"
-        WeatherState.OVERCAST -> "☁️"
+        WeatherState.OVERCAST -> "🌥️"
         WeatherState.RAIN     -> "🌧"
         WeatherState.STORM    -> "⛈"
     }
