@@ -21,7 +21,7 @@ data class VisualThemeStyle(
     // Shape
     val cardCornerRadius: Dp = 24.dp,
     val chipCornerRadius: Dp = 20.dp,
-    // Chip border (Chalk: visible chalk border; Beige: light bevel approximation)
+    // Chip border
     val chipBorderColor: Color = Color.Transparent,
     val chipBorderWidth: Dp = 0.dp,
     // Card border
@@ -41,6 +41,32 @@ data class VisualThemeStyle(
     // 8-Bit: ASCII weather symbols + pixel indicator
     val useAsciiWeather: Boolean = false,
     val showPixelIndicator: Boolean = false,
+    // ── Animation flags ────────────────────────────────────────────────────────
+    // Default: accent dot pulses blue → purple
+    val dotAnimatesColor: Boolean = false,
+    val dotAnimationTargetColor: Color = Color.Transparent,
+    // Utility: accent dot blinks step-end
+    val hasDotBlink: Boolean = false,
+    // ── Background glow (Default theme, screen-level) ──────────────────────────
+    val hasScreenGlow: Boolean = false,
+    val screenGlowColor1: Color = Color.Transparent,  // top-left blue blob
+    val screenGlowColor2: Color = Color.Transparent,  // bottom-right purple blob
+    // ── Overlay effects ────────────────────────────────────────────────────────
+    // Utility: CRT scanline repeating-linear-gradient over card
+    val hasScanlineOverlay: Boolean = false,
+    // Ink: 3px amber gradient stripe at very top of card
+    val hasTopEdgeStripe: Boolean = false,
+    val topEdgeStripeColor: Color = Color.Transparent,
+    // ── Chalk effects ──────────────────────────────────────────────────────────
+    // Multi-layer glow bloom on verdict text (simulated via blurred copy)
+    val verdictGlowColor: Color = Color.Transparent,
+    // Replace solid zone divider with dashed line
+    val hasDashedDivider: Boolean = false,
+    // ── Zone backgrounds ───────────────────────────────────────────────────────
+    // When non-transparent, overrides cardBackground for the bottom zone only
+    val bottomZoneBackground: Color = Color.Transparent,
+    // ── Beige: blinking terminal cursor ───────────────────────────────────────
+    val hasBlinkingCursor: Boolean = false,
 )
 
 // ── Fixed palettes ────────────────────────────────────────────────────────────
@@ -52,7 +78,7 @@ internal val beigeTokens = WeatherColorTokens(
     verdictText       = Color(0xFF1E1408),
     secondaryText     = Color(0xFF3A2C10),
     accentColor       = Color(0xFF8A7848),
-    chipBackground    = Color(0xFFBBA870),
+    chipBackground    = Color(0xFFC8B888),   // matches card for bevel chips
     chipText          = Color(0xFF1E1408)
 )
 
@@ -116,21 +142,33 @@ internal val eightBitTokens = WeatherColorTokens(
 // ── Theme → Style factory ─────────────────────────────────────────────────────
 
 fun VisualTheme.toStyle(weatherState: WeatherState, isDark: Boolean): VisualThemeStyle = when (this) {
-    VisualTheme.DEFAULT -> VisualThemeStyle(
-        tokens = WeatherDesignTokens.getTokens(weatherState, isDark)
-    )
+    VisualTheme.DEFAULT -> {
+        val tokens = WeatherDesignTokens.getTokens(weatherState, isDark)
+        VisualThemeStyle(
+            tokens               = tokens,
+            cardBorderColor      = tokens.accentColor.copy(alpha = 0.25f),
+            cardBorderWidth      = 1.dp,
+            dotAnimatesColor     = true,
+            dotAnimationTargetColor = Color(0xFFA78BFA),  // purple
+            hasScreenGlow        = true,
+            screenGlowColor1     = Color(0x216C8FFF),     // blue, ~13% opacity
+            screenGlowColor2     = Color(0x17A78BFA),     // purple, ~9% opacity
+        )
+    }
     VisualTheme.SUN_STAINED_BEIGE -> VisualThemeStyle(
-        tokens          = beigeTokens,
-        titleFontFamily = AppFonts.monospace,
-        metaFontFamily  = AppFonts.monospace,
-        verdictWeight   = FontWeight.Bold,
-        cardCornerRadius = 4.dp,
-        chipCornerRadius = 2.dp,
-        chipBorderColor  = Color(0xFFE8DCC0),
-        chipBorderWidth  = 1.dp,
-        showTitlebar     = true,
-        titlebarBg       = Color(0xFF5A4A28),
-        titlebarTextColor = Color(0xFFE0C888),
+        tokens              = beigeTokens,
+        titleFontFamily     = AppFonts.monospace,
+        metaFontFamily      = AppFonts.monospace,
+        verdictWeight       = FontWeight.Bold,
+        cardCornerRadius    = 4.dp,
+        chipCornerRadius    = 0.dp,
+        chipBorderColor     = Color(0xFFE8DCC0),   // light bevel top/left
+        chipBorderWidth     = 1.dp,
+        showTitlebar        = true,
+        titlebarBg          = Color(0xFF5A4A28),
+        titlebarTextColor   = Color(0xFFE0C888),
+        bottomZoneBackground = Color(0xFFC0AA78),  // distinct warm tan bottom
+        hasBlinkingCursor   = true,
     )
     VisualTheme.INK_EDITORIAL -> VisualThemeStyle(
         tokens               = inkTokens,
@@ -141,27 +179,35 @@ fun VisualTheme.toStyle(weatherState: WeatherState, isDark: Boolean): VisualThem
         pullQuoteBorderColor = Color(0x80FBBF24),   // rgba(251,191,36,0.50)
         cardBorderColor      = Color(0x1FFBBF24),
         cardBorderWidth      = 1.dp,
+        hasTopEdgeStripe     = true,
+        topEdgeStripeColor   = Color(0xFFFBBF24),
+        bottomZoneBackground = Color(0x47000000),   // rgba(0,0,0,0.28)
     )
     VisualTheme.UTILITY_CHIC -> VisualThemeStyle(
-        tokens          = utilityTokens,
-        metaFontFamily  = AppFonts.monospace,
+        tokens           = utilityTokens,
+        metaFontFamily   = AppFonts.monospace,
         cardCornerRadius = 14.dp,
         chipCornerRadius = 3.dp,
-        showLiveBadge   = true,
+        showLiveBadge    = true,
         cardBorderColor  = Color(0x2E4ADE80),
         cardBorderWidth  = 1.dp,
+        hasDotBlink      = true,
+        hasScanlineOverlay = true,
     )
     VisualTheme.CHALK_SLATE -> VisualThemeStyle(
-        tokens           = chalkTokens,
-        titleFontFamily  = AppFonts.handwriting,
-        metaFontFamily   = AppFonts.handwriting,
-        verdictWeight    = FontWeight.Bold,
-        cardCornerRadius = 4.dp,
-        chipCornerRadius = 0.dp,
-        chipBorderColor  = Color(0x8CE6E1D2),
-        chipBorderWidth  = 2.dp,
-        cardBorderColor  = Color(0x52F0EBDC),
-        cardBorderWidth  = 2.dp,
+        tokens            = chalkTokens,
+        titleFontFamily   = AppFonts.handwriting,
+        metaFontFamily    = AppFonts.handwriting,
+        verdictWeight     = FontWeight.Bold,
+        cardCornerRadius  = 4.dp,
+        chipCornerRadius  = 0.dp,
+        chipBorderColor   = Color(0x8CE6E1D2),
+        chipBorderWidth   = 2.dp,
+        cardBorderColor   = Color(0x52F0EBDC),
+        cardBorderWidth   = 2.dp,
+        verdictGlowColor  = Color(0xFFF5F2EE),
+        hasDashedDivider  = true,
+        bottomZoneBackground = Color(0x38000000),  // rgba(0,0,0,0.22)
     )
     VisualTheme.NEO_BRUTALISM -> VisualThemeStyle(
         tokens                = neoBrutalismTokens,
