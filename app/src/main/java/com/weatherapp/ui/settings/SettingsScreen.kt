@@ -6,6 +6,8 @@ import android.content.ComponentName
 import android.content.Intent
 import android.os.Build
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -136,6 +138,7 @@ private fun SettingsContent(
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .verticalScroll(rememberScrollState())
             .padding(horizontal = 16.dp, vertical = 8.dp),
         verticalArrangement = Arrangement.spacedBy(4.dp)
     ) {
@@ -175,33 +178,6 @@ private fun SettingsContent(
                 checked = state.notificationsEnabled,
                 onCheckedChange = { onNotificationsToggled() }
             )
-        }
-
-        // City / manual location
-        Spacer(modifier = Modifier.height(12.dp))
-        Text(
-            text = "City",
-            style = MaterialTheme.typography.titleSmall,
-            color = MaterialTheme.colorScheme.onSurfaceVariant,
-            modifier = Modifier.padding(bottom = 6.dp)
-        )
-        var cityText by remember(state.manualLocation) { mutableStateOf(state.manualLocation) }
-        OutlinedTextField(
-            value = cityText,
-            onValueChange = { cityText = it },
-            label = { Text("City name (e.g. Stockholm)") },
-            modifier = Modifier.fillMaxWidth(),
-            singleLine = true
-        )
-        Spacer(modifier = Modifier.height(6.dp))
-        TextButton(
-            onClick = { if (cityText.isNotBlank()) onManualLocationSaved(cityText) },
-            enabled = cityText.isNotBlank() && cityText.trim() != state.manualLocation.trim(),
-            modifier = Modifier
-                .fillMaxWidth()
-                .heightIn(min = 48.dp)
-        ) {
-            Text("Save City & Refresh Forecast", fontSize = 14.sp)
         }
 
         // Personality selector
@@ -322,6 +298,39 @@ private fun SettingsContent(
                 }
             }
         }
+
+        // Manual city fallback
+        Spacer(modifier = Modifier.height(12.dp))
+        Text(
+            text = "GPS not working?",
+            style = MaterialTheme.typography.titleSmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+            modifier = Modifier.padding(bottom = 4.dp)
+        )
+        Text(
+            text = "Set a city name to use as a fallback when location is unavailable.",
+            fontSize = 13.sp,
+            color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f),
+            modifier = Modifier.padding(bottom = 8.dp)
+        )
+        var cityText by remember(state.manualLocation) { mutableStateOf(state.manualLocation) }
+        OutlinedTextField(
+            value = cityText,
+            onValueChange = { cityText = it },
+            label = { Text("City name") },
+            singleLine = true,
+            modifier = Modifier.fillMaxWidth()
+        )
+        Spacer(modifier = Modifier.height(4.dp))
+        TextButton(
+            onClick = { onManualLocationSaved(cityText) },
+            modifier = Modifier
+                .fillMaxWidth()
+                .heightIn(min = 48.dp)
+        ) {
+            Text("Save & Refresh Forecast", fontSize = 14.sp)
+        }
+        Spacer(modifier = Modifier.height(16.dp))
     }
 }
 
