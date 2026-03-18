@@ -1,11 +1,11 @@
 package com.weatherapp
 
 import android.Manifest
-import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts.RequestPermission
 import androidx.activity.viewModels
@@ -14,6 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -21,12 +22,10 @@ import com.weatherapp.ui.main.MainScreen
 import com.weatherapp.ui.onboarding.OnboardingScreen
 import com.weatherapp.ui.settings.SettingsScreen
 import com.weatherapp.ui.theme.AdaptiveSkyTheme
-import androidx.lifecycle.lifecycleScope
 import com.weatherapp.ui.widget.rotateWidgetCopy
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import androidx.activity.compose.rememberLauncherForActivityResult
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -37,19 +36,9 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
-        if (intent.getBooleanExtra(EXTRA_OPEN_HOURLY, false)) {
-            mainViewModel.openHourlyDetail()
-        }
-
         setContent {
             WeatherAppContent(mainViewModel)
         }
-    }
-
-    override fun onNewIntent(intent: Intent) {
-        super.onNewIntent(intent)
-        setIntent(intent)
-        mainViewModel.onNewIntent(intent)
     }
 
     override fun onResume() {
@@ -58,17 +47,12 @@ class MainActivity : ComponentActivity() {
         lifecycleScope.launch { rotateWidgetCopy(this@MainActivity) }
     }
 
-    companion object {
-        const val EXTRA_OPEN_HOURLY = "open_hourly"
-    }
 }
 
 @Composable
 fun WeatherAppContent(mainViewModel: MainViewModel) {
     val startDestination by mainViewModel.startDestination.collectAsStateWithLifecycle()
-    val showHourly by mainViewModel.showHourlySheet.collectAsStateWithLifecycle()
     val displayState by mainViewModel.displayState.collectAsStateWithLifecycle()
-    val tempUnit by mainViewModel.tempUnit.collectAsStateWithLifecycle()
     val updateInfo by mainViewModel.updateInfo.collectAsStateWithLifecycle()
     val visualTheme by mainViewModel.visualTheme.collectAsStateWithLifecycle()
     val navController = rememberNavController()
@@ -108,12 +92,8 @@ fun WeatherAppContent(mainViewModel: MainViewModel) {
             composable("main") {
                 MainScreen(
                     displayState = displayState,
-                    tempUnit = tempUnit,
-                    showHourlySheet = showHourly,
                     updateInfo = updateInfo,
                     visualTheme = visualTheme,
-                    onOpenHourly = { mainViewModel.openHourlyDetail() },
-                    onCloseHourly = { mainViewModel.closeHourlyDetail() },
                     onOpenSettings = { navController.navigate("settings") },
                     onDismissUpdate = { mainViewModel.dismissUpdate() }
                 )

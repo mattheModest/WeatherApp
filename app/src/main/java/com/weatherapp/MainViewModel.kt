@@ -1,6 +1,5 @@
 package com.weatherapp
 
-import android.content.Intent
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
@@ -46,9 +45,6 @@ class MainViewModel @Inject constructor(
 
     private val _startDestination = MutableStateFlow<String?>(null)
     val startDestination: StateFlow<String?> = _startDestination.asStateFlow()
-
-    private val _showHourlySheet = MutableStateFlow(false)
-    val showHourlySheet: StateFlow<Boolean> = _showHourlySheet.asStateFlow()
 
     private val _requestNotificationPermission = MutableSharedFlow<Unit>(extraBufferCapacity = 1)
     val requestNotificationPermission: SharedFlow<Unit> = _requestNotificationPermission.asSharedFlow()
@@ -127,22 +123,6 @@ class MainViewModel @Inject constructor(
 
     fun dismissUpdate() {
         _updateInfo.value = null
-    }
-
-    fun openHourlyDetail() {
-        _showHourlySheet.value = true
-        Timber.d("MainViewModel: hourly detail opened")
-    }
-
-    fun closeHourlyDetail() {
-        _showHourlySheet.value = false
-        Timber.d("MainViewModel: hourly detail closed")
-    }
-
-    fun onNewIntent(intent: Intent) {
-        if (intent.getBooleanExtra(MainActivity.EXTRA_OPEN_HOURLY, false)) {
-            openHourlyDetail()
-        }
     }
 
     fun onResume() {

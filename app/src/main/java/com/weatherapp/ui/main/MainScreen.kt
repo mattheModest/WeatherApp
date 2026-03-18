@@ -49,7 +49,6 @@ import com.weatherapp.data.update.UpdateInfo
 import com.weatherapp.model.VisualTheme
 import com.weatherapp.model.WeatherState
 import com.weatherapp.model.WidgetDisplayState
-import com.weatherapp.ui.hourly.HourlyDetailBottomSheet
 import com.weatherapp.ui.hourly.HourlyDetailRow
 import com.weatherapp.ui.hourly.HourlyDetailViewModel
 import com.weatherapp.ui.theme.VisualThemeStyle
@@ -60,12 +59,8 @@ import com.weatherapp.util.UiState
 @Composable
 fun MainScreen(
     displayState: WidgetDisplayState,
-    tempUnit: String,
-    showHourlySheet: Boolean,
     updateInfo: UpdateInfo?,
     visualTheme: VisualTheme = VisualTheme.DEFAULT,
-    onOpenHourly: () -> Unit,
-    onCloseHourly: () -> Unit,
     onOpenSettings: () -> Unit,
     onDismissUpdate: () -> Unit,
     hourlyViewModel: HourlyDetailViewModel = hiltViewModel()
@@ -126,9 +121,6 @@ fun MainScreen(
         }
     }
 
-    if (showHourlySheet) {
-        HourlyDetailBottomSheet(onDismiss = onCloseHourly)
-    }
 }
 
 @Composable
