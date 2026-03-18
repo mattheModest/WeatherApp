@@ -97,7 +97,7 @@ fun MainScreen(
                     WeatherCard(displayState, style)
                 }
                 item {
-                    ForecastCard(hourlyState, style)
+                    ForecastCard(hourlyState, style, displayState.lastUpdateEpoch)
                 }
                 if (updateInfo != null) {
                     item {
@@ -373,7 +373,8 @@ private fun WeatherCard(displayState: WidgetDisplayState, style: VisualThemeStyl
 @Composable
 private fun ForecastCard(
     hourlyState: UiState<List<HourlyDetailRow>>,
-    style: VisualThemeStyle
+    style: VisualThemeStyle,
+    lastUpdateEpoch: Long = 0L
 ) {
     val tokens = style.tokens
     val shape = RoundedCornerShape(style.cardCornerRadius)
@@ -432,10 +433,14 @@ private fun ForecastCard(
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(24.dp),
+                            .padding(32.dp),
                         contentAlignment = Alignment.Center
                     ) {
-                        Text("No forecast available", fontSize = 14.sp, color = tokens.secondaryText)
+                        if (lastUpdateEpoch == 0L) {
+                            CircularProgressIndicator(color = tokens.accentColor)
+                        } else {
+                            Text("No forecast available", fontSize = 14.sp, color = tokens.secondaryText)
+                        }
                     }
                 } else {
                     state.data.forEachIndexed { index, row ->

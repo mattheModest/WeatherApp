@@ -149,6 +149,13 @@ class MainViewModel @Inject constructor(
         viewModelScope.launch {
             val prefs = dataStore.data.first()
 
+            // Don't trigger a refresh until onboarding is done — worker would fail (no location yet).
+            val hasCompletedOnboarding = prefs[PreferenceKeys.KEY_HAS_COMPLETED_ONBOARDING] ?: false
+            if (!hasCompletedOnboarding) {
+                Timber.d("MainViewModel.onResume: onboarding not complete — skipping refresh")
+                return@launch
+            }
+
             // Trigger an immediate refresh if data is stale (>30 min) or never fetched.
             // Ensures forecast rows populate even if WorkManager's initial job was delayed.
             val lastUpdate = prefs[PreferenceKeys.KEY_LAST_UPDATE_EPOCH] ?: 0L

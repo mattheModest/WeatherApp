@@ -7,6 +7,8 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
 import com.weatherapp.data.billing.BillingRepository
 import com.weatherapp.data.datastore.PreferenceKeys
 import com.weatherapp.model.PersonalityCore
@@ -15,6 +17,7 @@ import com.weatherapp.model.personalityCoreFromString
 import com.weatherapp.model.visualThemeFromString
 import com.weatherapp.ui.widget.WeatherWidget
 import com.weatherapp.util.UiState
+import com.weatherapp.worker.ForecastRefreshWorker
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.SharingStarted
@@ -30,6 +33,7 @@ import javax.inject.Inject
 class SettingsViewModel @Inject constructor(
     private val dataStore: DataStore<Preferences>,
     private val billingRepository: BillingRepository,
+    private val workManager: WorkManager,
     @ApplicationContext private val appContext: Context
 ) : ViewModel() {
 
@@ -43,6 +47,7 @@ class SettingsViewModel @Inject constructor(
             val shareText = "\"$moodLine\"\n\nWeatherApp — daily weather in plain language"
             val personality = personalityCoreFromString(prefs[PreferenceKeys.KEY_PERSONALITY_CORE])
             val visualTheme = visualThemeFromString(prefs[PreferenceKeys.KEY_VISUAL_THEME])
+            val manualLocation = prefs[PreferenceKeys.KEY_MANUAL_LOCATION] ?: ""
 
             UiState.Success(
                 SettingsState(
@@ -52,7 +57,8 @@ class SettingsViewModel @Inject constructor(
                     moodLine = moodLine,
                     shareText = shareText,
                     personality = personality,
-                    visualTheme = visualTheme
+                    visualTheme = visualTheme,
+                    manualLocation = manualLocation
                 )
             ) as UiState<SettingsState>
         }
@@ -105,6 +111,16 @@ class SettingsViewModel @Inject constructor(
             }
             WeatherWidget.update(appContext)
             Timber.d("SettingsViewModel: visual theme changed to ${theme.name}")
+        }
+    }
+
+    fun onManualLocationSaved(city: String) {
+        viewModelScope.launch {
+            dataStore.edit { prefs ->
+                prefs[PreferenceKeys.KEY_MANUAL_LOCATION] = city.trim()
+            }
+            workManager.enqueue(OneTimeWorkRequestBuilder<ForecastRefreshWorker>().build())
+            Timber.d("SettingsViewModel: manual location saved: '$city' — refresh enqueued")
         }
     }
 

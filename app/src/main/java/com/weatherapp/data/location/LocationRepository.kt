@@ -78,16 +78,23 @@ class LocationRepository @Inject constructor(
 
         return try {
             val locationManager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
-            val provider = LocationManager.NETWORK_PROVIDER
-            val location = locationManager.getLastKnownLocation(provider)
-            if (location == null) {
-                Timber.d("No last known location available — checking manual location fallback")
+            // Try multiple providers — PASSIVE_PROVIDER returns last known from any source
+            val providers = listOf(LocationManager.NETWORK_PROVIDER, LocationManager.PASSIVE_PROVIDER)
+            var found: android.location.Location? = null
+            for (provider in providers) {
+                try {
+                    found = locationManager.getLastKnownLocation(provider)
+                    if (found != null) break
+                } catch (e: SecurityException) {
+                    Timber.w(e, "SecurityException for provider $provider")
+                }
+            }
+            if (found == null) {
+                Timber.d("No last known location from any provider — checking manual location fallback")
                 return getManualLocationFallback()
             }
             // Raw GPS never leaves this function — snap before returning
-            val snappedLat = location.latitude.snapToGrid()
-            val snappedLon = location.longitude.snapToGrid()
-            Pair(snappedLat, snappedLon)
+            Pair(found.latitude.snapToGrid(), found.longitude.snapToGrid())
         } catch (e: SecurityException) {
             Timber.w(e, "SecurityException when accessing location")
             getManualLocationFallback()

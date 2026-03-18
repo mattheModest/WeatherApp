@@ -15,5 +15,6 @@ data class SettingsState(
     val moodLine: String,
     val shareText: String,
     val personality: PersonalityCore = PersonalityCore.FRANK,
-    val visualTheme: VisualTheme = VisualTheme.DEFAULT
+    val visualTheme: VisualTheme = VisualTheme.DEFAULT,
+    val manualLocation: String = ""
 )
