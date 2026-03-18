@@ -17,9 +17,14 @@ fun AdaptiveSkyTheme(
 ) {
     val tokens = visualTheme.toWidgetTokens(weatherState, darkTheme)
 
-    // Derive selection/container colors from theme tokens so the Settings screen
-    // doesn't fall back to Material3's purple defaults.
-    val primaryContainer = lerp(tokens.cardBackground, tokens.accentColor, 0.25f)
+    // Use topZoneBackground as the selected-card container when it's opaque
+    // (it's already designed to contrast with verdictText). For themes where
+    // topZoneBackground is nearly transparent (e.g. Chalk), fall back to a
+    // stronger lerp toward accentColor.
+    val primaryContainer = if (tokens.topZoneBackground.alpha >= 0.5f)
+        tokens.topZoneBackground
+    else
+        lerp(tokens.cardBackground, tokens.accentColor, 0.5f)
 
     val colorScheme = if (darkTheme) {
         darkColorScheme(
