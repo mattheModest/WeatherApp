@@ -266,9 +266,9 @@ internal object KelvinPools : PoolSet {
             "Oceanic heat. Maritime moderation absent today. Water and SPF."
         ),
         NO to listOf(
-            "Nordic heat event. Above 25°C is significant here. UV elevated.",
-            "Warm Nordic day. Extended daylight means UV accumulates. SPF.",
-            "Anomalously warm. Extended daylight producing 25°C+. SPF.",
+            "Nordic heat event. Anomalously warm. UV elevated. SPF.",
+            "Hot for the latitude. Extended daylight means UV accumulates. SPF.",
+            "Anomalously warm here. Extended daylight amplifies UV load. SPF.",
             "Hot by Nordic standards. Cold adaptation affects heat tolerance."
         )
     )
@@ -299,10 +299,10 @@ internal object KelvinPools : PoolSet {
             "Optimal oceanic conditions. Atlantic moderation. No rain."
         ),
         NO to listOf(
-            "Warm Nordic day. Above 20°C: genuine climatological warmth.",
-            "Good summer conditions. Nordic thermal peak is brief. This is it.",
-            "Warm for the latitude. Daylight duration compensates. Clear.",
-            "20-27°C in the Nordic zone: peak summer. Data looks good."
+            "Warm Nordic day. A degree above the weekly average is an event.",
+            "Good conditions for the latitude. Brief warm window. Use it.",
+            "Warm for here. Daylight and relative warmth aligning. Go.",
+            "Above the Nordic average. Thermodynamically notable. Use it."
         )
     )
 
@@ -698,9 +698,9 @@ internal object KelvinPools : PoolSet {
         ),
         NO to listOf(
             "Nordic warm clear day. Clear skies at high latitude is an event.",
-            "Nordic summer: warm and clear. Midnight sun adds daylight.",
+            "Warm and clear at this latitude. Extended daylight adds time.",
             "Clear and warm at this latitude. Daylight compensates for UV.",
-            "Good Nordic summer day. Season is brief. Data is good. Go."
+            "Good Nordic day. Weather window is brief. Data is good. Go."
         )
     )
 

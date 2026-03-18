@@ -130,7 +130,8 @@ class VerdictGenerator {
                 .atZone(ZoneId.systemDefault()).hour
             localHour in 11..17 &&
                 hour.precipitationProbability < 0.10 &&
-                hour.weatherCode in 0..2
+                hour.weatherCode in 0..2 &&
+                hour.temperatureC >= 18.0   // only recommend sunscreen when it's actually warm
         }
         if (hasSunnyAfternoon) items.add("☀ Sunscreen")
         return items
@@ -436,7 +437,7 @@ class VerdictGenerator {
                 isLocalSummer -> summerOffset
                 isLocalWinter -> winterOffset
                 isLocalAutumn -> summerOffset + 1.0
-                else          -> (summerOffset + winterOffset) / 2.0
+                else          -> winterOffset * 0.5   // spring: cold-acclimated but less extreme than full winter
             }
         }
 

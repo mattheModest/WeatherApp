@@ -299,10 +299,10 @@ internal object GravesPools : PoolSet {
             "Clear by oceanic standards. This is not nothing. Go outside."
         ),
         NO to listOf(
-            "The short summer is briefly delivering. Go outside.",
-            "Summer arrived. Possibly temporarily. Go before it leaves.",
-            "Nordic summer making its case. Sun staying late. Use it.",
-            "Actually warm today. Nordic summer justifying itself. Use it."
+            "Warm here. That's not a sentence this forecast says often.",
+            "The thermometer cooperating. Possibly temporarily. Go.",
+            "Nordic warmth making its case. Sun staying late. Use it.",
+            "Actually warm today. Rare enough to comment on. Use it."
         )
     )
 
@@ -697,10 +697,10 @@ internal object GravesPools : PoolSet {
             "Oceanic climate justifying itself. Today is that occasion."
         ),
         NO to listOf(
-            "Summer is briefly here. Go outside. Window is real.",
+            "Warm and clear. Brief window. Go outside. The window is real.",
             "Warm Nordic day. File this away for February.",
-            "Nordic summer making its case. Go outside and receive it.",
-            "Warm and clear. Sun staying up. Season justifying itself."
+            "Nordic warmth, making its case. Go outside and receive it.",
+            "Warm and clear. Sun staying out longer. Worth noting."
         )
     )
 

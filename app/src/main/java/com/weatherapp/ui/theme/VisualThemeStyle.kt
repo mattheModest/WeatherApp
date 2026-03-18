@@ -124,6 +124,7 @@ fun VisualTheme.toStyle(weatherState: WeatherState, isDark: Boolean): VisualThem
     )
     VisualTheme.INK_EDITORIAL -> VisualThemeStyle(
         tokens               = inkTokens,
+        titleFontFamily      = AppFonts.handwriting,     // Serif — editorial/newspaper feel
         verdictWeight        = FontWeight.Bold,
         cardCornerRadius     = 14.dp,
         chipCornerRadius     = 3.dp,
@@ -150,6 +151,7 @@ fun VisualTheme.toStyle(weatherState: WeatherState, isDark: Boolean): VisualThem
     )
     VisualTheme.NEO_BRUTALISM -> VisualThemeStyle(
         tokens           = neoBrutalismTokens,
+        titleFontFamily  = AppFonts.monospace,           // Monospace — brutalist/mechanical
         verdictWeight    = FontWeight.Bold,
         cardCornerRadius = 0.dp,
         chipCornerRadius = 0.dp,
