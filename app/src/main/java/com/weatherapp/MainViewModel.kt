@@ -6,6 +6,8 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
 import com.weatherapp.data.datastore.PreferenceKeys
 import com.weatherapp.model.VisualTheme
 import com.weatherapp.model.personalityCoreFromString
@@ -15,6 +17,7 @@ import com.weatherapp.data.update.UpdateInfo
 import com.weatherapp.model.WeatherState
 import com.weatherapp.model.WidgetDisplayState
 import com.weatherapp.ui.widget.inferWeatherStateFromVerdictPublic
+import com.weatherapp.worker.ForecastRefreshWorker
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -34,7 +37,8 @@ import javax.inject.Inject
 @HiltViewModel
 class MainViewModel @Inject constructor(
     private val dataStore: DataStore<Preferences>,
-    private val updateChecker: UpdateChecker
+    private val updateChecker: UpdateChecker,
+    private val workManager: WorkManager
 ) : ViewModel() {
 
     private val _updateInfo = MutableStateFlow<UpdateInfo?>(null)
@@ -144,6 +148,16 @@ class MainViewModel @Inject constructor(
     fun onResume() {
         viewModelScope.launch {
             val prefs = dataStore.data.first()
+
+            // Trigger an immediate refresh if data is stale (>30 min) or never fetched.
+            // Ensures forecast rows populate even if WorkManager's initial job was delayed.
+            val lastUpdate = prefs[PreferenceKeys.KEY_LAST_UPDATE_EPOCH] ?: 0L
+            val ageSeconds = System.currentTimeMillis() / 1000L - lastUpdate
+            if (ageSeconds > 1800L) {
+                Timber.d("MainViewModel.onResume: data age=${ageSeconds}s — triggering refresh")
+                workManager.enqueue(OneTimeWorkRequestBuilder<ForecastRefreshWorker>().build())
+            }
+
             val personality = personalityCoreFromString(prefs[PreferenceKeys.KEY_PERSONALITY_CORE])
 
             val verdictKey = when (personality) {
