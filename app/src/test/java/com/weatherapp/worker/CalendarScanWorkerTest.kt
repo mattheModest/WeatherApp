@@ -10,7 +10,6 @@ import io.mockk.mockkStatic
 import io.mockk.unmockkAll
 import androidx.work.WorkManager
 import androidx.work.WorkerParameters
-import com.google.gson.Gson
 import com.weatherapp.data.calendar.CalendarEvent
 import com.weatherapp.data.calendar.CalendarRepository
 import com.weatherapp.data.datastore.PreferenceKeys
