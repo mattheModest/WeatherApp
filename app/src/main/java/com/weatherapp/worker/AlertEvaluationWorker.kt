@@ -89,8 +89,10 @@ class AlertEvaluationWorker @AssistedInject constructor(
                 return Result.success()
             }
 
-            // Read isPremium at start of doWork()
-            val isPremium = dataStore.data.first()[PreferenceKeys.KEY_IS_PREMIUM] ?: false
+            val calendarGranted = ContextCompat.checkSelfPermission(
+                applicationContext,
+                Manifest.permission.READ_CALENDAR
+            ) == PackageManager.PERMISSION_GRANTED
 
             NotificationChannels.ensureWeatherAlertsChannel(applicationContext)
 
@@ -116,11 +118,11 @@ class AlertEvaluationWorker @AssistedInject constructor(
             // Free-tier evaluation
             evaluateAndTransition(todayKey, existing, todayHours, nowEpoch)
 
-            // Premium per-event evaluation
-            if (isPremium) {
+            // Per-event evaluation (requires calendar permission)
+            if (calendarGranted) {
                 val allEvents = calendarRepository.getUpcomingEvents(daysAhead = 7)
                 val outdoorEvents = allEvents.filter { isOutdoorPotential(it) }
-                Timber.d("AlertEvaluationWorker (premium): evaluating ${outdoorEvents.size} outdoor events")
+                Timber.d("AlertEvaluationWorker: evaluating ${outdoorEvents.size} outdoor events")
                 for (event in outdoorEvents) {
                     // Query the forecast hours for the event's specific day, not today's hours.
                     // Future events (e.g. a BBQ on Thursday) must be evaluated against their
@@ -213,7 +215,7 @@ class AlertEvaluationWorker @AssistedInject constructor(
                             lastTransitionAt = nowEpoch
                         )
                     )
-                    Timber.d("AlertEvaluationWorker (premium): UNCHECKED → CONFIRMED_CLEAR for ${event.eventId} — no notification")
+                    Timber.d("AlertEvaluationWorker: UNCHECKED → CONFIRMED_CLEAR for ${event.eventId} — no notification")
                 }
             }
 
@@ -231,7 +233,7 @@ class AlertEvaluationWorker @AssistedInject constructor(
                             lastTransitionAt = nowEpoch
                         )
                     )
-                    Timber.d("AlertEvaluationWorker (premium): CONFIRMED_CLEAR → ALERT_SENT for ${event.eventId}")
+                    Timber.d("AlertEvaluationWorker: CONFIRMED_CLEAR → ALERT_SENT for ${event.eventId}")
                     val notificationId = event.eventId.hashCode().let { if (it < 0) (-it) + 2000 else it + 2000 }
                     sendNotification(
                         buildPremiumChangeNotification(event, snapshot, hours),
@@ -251,12 +253,12 @@ class AlertEvaluationWorker @AssistedInject constructor(
                             lastTransitionAt = nowEpoch
                         )
                     )
-                    Timber.d("AlertEvaluationWorker (premium): ALERT_SENT → CONFIRMED_CLEAR for ${event.eventId} (conditions improved)")
+                    Timber.d("AlertEvaluationWorker: ALERT_SENT → CONFIRMED_CLEAR for ${event.eventId} (conditions improved)")
                 }
             }
 
             AlertState.RESOLVED -> {
-                Timber.d("AlertEvaluationWorker (premium): RESOLVED — skipping ${event.eventId}")
+                Timber.d("AlertEvaluationWorker: RESOLVED — skipping ${event.eventId}")
             }
         }
     }

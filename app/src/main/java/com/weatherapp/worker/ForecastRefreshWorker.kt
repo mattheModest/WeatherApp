@@ -41,9 +41,6 @@ class ForecastRefreshWorker @AssistedInject constructor(
     private val verdictGenerator = VerdictGenerator()
 
     override suspend fun doWork(): Result {
-        // Read isPremium at the very start of doWork()
-        val isPremium = dataStore.data.first()[PreferenceKeys.KEY_IS_PREMIUM] ?: false
-
         // 24h billing check gate
         val lastBillingCheck = dataStore.data.first()[PreferenceKeys.KEY_LAST_BILLING_CHECK] ?: 0L
         val nowEpoch = System.currentTimeMillis() / 1000L
@@ -137,11 +134,11 @@ class ForecastRefreshWorker @AssistedInject constructor(
                 workManager.enqueue(alertWork)
                 Timber.d("ForecastRefreshWorker: AlertEvaluationWorker enqueued")
 
-                // If premium, also enqueue CalendarScanWorker
-                if (isPremium) {
+                // If calendar permission granted, also enqueue CalendarScanWorker
+                if (calendarPermission == PermissionChecker.PERMISSION_GRANTED) {
                     val calendarWork = OneTimeWorkRequestBuilder<CalendarScanWorker>().build()
                     workManager.enqueue(calendarWork)
-                    Timber.d("ForecastRefreshWorker: CalendarScanWorker enqueued (premium)")
+                    Timber.d("ForecastRefreshWorker: CalendarScanWorker enqueued (calendar permission granted)")
                 }
 
                 Result.success()
