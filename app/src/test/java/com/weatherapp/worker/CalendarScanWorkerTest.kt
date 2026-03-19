@@ -53,10 +53,7 @@ class CalendarScanWorkerTest {
         dataStore                = mockk(relaxed = true)
         workManager              = mockk(relaxed = true)
 
-        // Default: premium
-        val prefs = mockk<Preferences> {
-            every { this@mockk[PreferenceKeys.KEY_IS_PREMIUM] } returns true
-        }
+        val prefs = mockk<Preferences>(relaxed = true)
         every { dataStore.data } returns flowOf(prefs)
         coEvery { forecastDao.queryByTimeWindow(any(), any()) } returns flowOf(allClearHours())
     }
@@ -118,21 +115,6 @@ class CalendarScanWorkerTest {
             location   = null
         )
         assertTrue(worker.isOutdoorPotential(event))
-    }
-
-    // --- isPremium guard ---
-
-    @Test
-    fun isPremiumFalse_exitsImmediately_noCalendarQuery() = runTest {
-        val prefs = mockk<Preferences> {
-            every { this@mockk[PreferenceKeys.KEY_IS_PREMIUM] } returns false
-        }
-        every { dataStore.data } returns flowOf(prefs)
-
-        val result = buildWorker().doWork()
-
-        assertEquals(Result.success(), result)
-        coVerify(exactly = 0) { calendarRepository.getUpcomingEvents(any()) }
     }
 
     // --- single outdoor event verdict ---

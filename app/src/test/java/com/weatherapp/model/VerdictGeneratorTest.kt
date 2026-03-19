@@ -66,7 +66,7 @@ class VerdictGeneratorTest {
     fun `mild temperature produces light jacket verdict`() {
         val hours = listOf(hour(10, tempC = 15.0, precipProb = 0.5))
         val result = generator.generateVerdict(hours)
-        assertEquals("Light jacket weather.", result.verdictText)
+        assertEquals("Cold enough to need a jacket. Don't argue with the forecast.", result.verdictText)
     }
 
     @Test
@@ -148,7 +148,7 @@ class VerdictGeneratorTest {
 
     @Test
     fun `all criteria met produces all-clear true and all-clear message`() {
-        val hours = clearDayHours(peakTempC = 18.0)
+        val hours = clearDayHours(peakTempC = 22.0)
         val result = generator.generateVerdict(hours)
         assertTrue(result.isAllClear)
         assertEquals(VerdictGenerator.ALL_CLEAR_MESSAGE, result.verdictText)

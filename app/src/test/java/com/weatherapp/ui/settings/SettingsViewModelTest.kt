@@ -6,7 +6,6 @@ import androidx.datastore.preferences.core.MutablePreferences
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.work.WorkManager
-import com.weatherapp.data.billing.BillingRepository
 import com.weatherapp.data.datastore.PreferenceKeys
 import com.weatherapp.util.UiState
 import io.mockk.coEvery
@@ -41,7 +40,6 @@ class SettingsViewModelTest {
     private val mockContext: Context = mockk(relaxed = true)
     private val mockWorkManager: WorkManager = mockk(relaxed = true)
     private lateinit var mockDataStore: DataStore<Preferences>
-    private lateinit var mockBillingRepository: BillingRepository
     private lateinit var mockPrefs: Preferences
     private lateinit var mockMutablePrefs: MutablePreferences
 
@@ -53,7 +51,6 @@ class SettingsViewModelTest {
         mockMutablePrefs = mockk(relaxed = true)
 
         mockDataStore = mockk<DataStore<Preferences>>(relaxed = true)
-        mockBillingRepository = mockk(relaxed = true)
         every { mockDataStore.data } returns flowOf(mockPrefs)
         coEvery { mockDataStore.edit(capture(editSlot)) } coAnswers {
             editSlot.captured.invoke(mockMutablePrefs)
@@ -70,12 +67,10 @@ class SettingsViewModelTest {
     private fun setupPrefs(
         tempUnit: String = "celsius",
         notificationsEnabled: Boolean = false,
-        isPremium: Boolean = false,
         moodLine: String = "A really good day."
     ) {
         every { mockPrefs[PreferenceKeys.KEY_TEMP_UNIT] } returns tempUnit
         every { mockPrefs[PreferenceKeys.KEY_NOTIFICATIONS_ENABLED] } returns notificationsEnabled
-        every { mockPrefs[PreferenceKeys.KEY_IS_PREMIUM] } returns isPremium
         every { mockPrefs[PreferenceKeys.KEY_MOOD_LINE] } returns moodLine
         every { mockPrefs[PreferenceKeys.KEY_PERSONALITY_CORE] } returns null
         every { mockPrefs[PreferenceKeys.KEY_VISUAL_THEME] } returns null
@@ -87,11 +82,10 @@ class SettingsViewModelTest {
         setupPrefs(
             tempUnit = "celsius",
             notificationsEnabled = true,
-            isPremium = false,
             moodLine = "Grey but manageable."
         )
 
-        val viewModel = SettingsViewModel(mockDataStore, mockBillingRepository, mockWorkManager, mockContext)
+        val viewModel = SettingsViewModel(mockDataStore, mockWorkManager, mockContext)
         backgroundScope.launch { viewModel.uiState.collect {} }
         advanceUntilIdle()
 
@@ -100,7 +94,6 @@ class SettingsViewModelTest {
         val data = (state as UiState.Success).data
         assertEquals(TempUnit.CELSIUS, data.tempUnit)
         assertTrue(data.notificationsEnabled)
-        assertFalse(data.isPremium)
         assertEquals("Grey but manageable.", data.moodLine)
     }
 
@@ -109,7 +102,7 @@ class SettingsViewModelTest {
         runTest(testDispatcher) {
             setupPrefs(tempUnit = "celsius")
 
-            val viewModel = SettingsViewModel(mockDataStore, mockBillingRepository, mockWorkManager, mockContext)
+            val viewModel = SettingsViewModel(mockDataStore, mockWorkManager, mockContext)
             viewModel.onTempUnitToggled()
             advanceUntilIdle()
 
@@ -125,14 +118,13 @@ class SettingsViewModelTest {
             val secondPrefs = mockk<Preferences>(relaxed = true)
             every { secondPrefs[PreferenceKeys.KEY_TEMP_UNIT] } returns "fahrenheit"
             every { secondPrefs[PreferenceKeys.KEY_NOTIFICATIONS_ENABLED] } returns false
-            every { secondPrefs[PreferenceKeys.KEY_IS_PREMIUM] } returns false
             every { secondPrefs[PreferenceKeys.KEY_MOOD_LINE] } returns ""
             every { secondPrefs[PreferenceKeys.KEY_PERSONALITY_CORE] } returns null
             every { secondPrefs[PreferenceKeys.KEY_VISUAL_THEME] } returns null
             every { secondPrefs[PreferenceKeys.KEY_MANUAL_LOCATION] } returns null
             every { mockDataStore.data } returns flowOf(secondPrefs)
 
-            val viewModel = SettingsViewModel(mockDataStore, mockBillingRepository, mockWorkManager, mockContext)
+            val viewModel = SettingsViewModel(mockDataStore, mockWorkManager, mockContext)
             viewModel.onTempUnitToggled()
             advanceUntilIdle()
 
@@ -146,7 +138,7 @@ class SettingsViewModelTest {
         val mood = "Honestly lovely today. Eat lunch outside."
         setupPrefs(moodLine = mood)
 
-        val viewModel = SettingsViewModel(mockDataStore, mockBillingRepository, mockWorkManager, mockContext)
+        val viewModel = SettingsViewModel(mockDataStore, mockWorkManager, mockContext)
         backgroundScope.launch { viewModel.uiState.collect {} }
         advanceUntilIdle()
 
@@ -162,7 +154,7 @@ class SettingsViewModelTest {
         runTest(testDispatcher) {
             setupPrefs(notificationsEnabled = false)
 
-            val viewModel = SettingsViewModel(mockDataStore, mockBillingRepository, mockWorkManager, mockContext)
+            val viewModel = SettingsViewModel(mockDataStore, mockWorkManager, mockContext)
             viewModel.onNotificationsToggled()
             advanceUntilIdle()
 
