@@ -87,18 +87,44 @@ class VerdictGenerator {
         else -> if (isAllClear) pick(Pools.allClearVerdict, zone) else generateClothingVerdict(hourlyData, comfortOffset, zone)
     }
 
+    /**
+     * Clothing band index (0 = bundleUp … 4 = hot). Used to detect cross-band morning-to-peak spreads.
+     */
+    private fun bandOf(tempC: Double, offset: Double) = when {
+        tempC >= 28 + offset -> 4
+        tempC >= 20 + offset -> 3
+        tempC >= 12 + offset -> 2
+        tempC >= 5  + offset -> 1
+        else                 -> 0
+    }
+
+    /**
+     * Returns the temperature to base clothing advice on.
+     * Uses the waking-hours low (6am–9pm) if it's in a meaningfully colder band than the day's peak
+     * AND the spread is ≥ 6°C — because the useful question is "what do I need to bring?",
+     * not "what's the warmest it gets?". A jacket morning / no-jacket afternoon = bring a jacket.
+     */
+    private fun planningTempC(hourlyData: List<ForecastHour>, comfortOffset: Double): Double {
+        val peakTempC = hourlyData.maxOf { it.temperatureC }
+        val wakingLow = hourlyData
+            .filter { h -> Instant.ofEpochSecond(h.hourEpoch).atZone(ZoneId.systemDefault()).hour in 6..21 }
+            .minOfOrNull { it.temperatureC } ?: return peakTempC
+        return if (bandOf(wakingLow, comfortOffset) < bandOf(peakTempC, comfortOffset) &&
+                   peakTempC - wakingLow >= 6.0) wakingLow else peakTempC
+    }
+
     private fun generateClothingVerdict(
         hourlyData: List<ForecastHour>,
         comfortOffset: Double,
         zone: ClimateZone
     ): String {
-        val peakTempC = hourlyData.maxOf { it.temperatureC }
+        val tempC = planningTempC(hourlyData, comfortOffset)
         val pool = when {
-            peakTempC >= 28 + comfortOffset -> Pools.hotVerdict
-            peakTempC >= 20 + comfortOffset -> Pools.warmVerdict
-            peakTempC >= 12 + comfortOffset -> Pools.lightJacketVerdict
-            peakTempC >= 5  + comfortOffset -> Pools.jacketVerdict
-            else                            -> Pools.bundleUpVerdict
+            tempC >= 28 + comfortOffset -> Pools.hotVerdict
+            tempC >= 20 + comfortOffset -> Pools.warmVerdict
+            tempC >= 12 + comfortOffset -> Pools.lightJacketVerdict
+            tempC >= 5  + comfortOffset -> Pools.jacketVerdict
+            else                        -> Pools.bundleUpVerdict
         }
         return pick(pool, zone)
     }
@@ -250,13 +276,13 @@ class VerdictGenerator {
         comfortOffset: Double,
         zone: ClimateZone
     ): List<String> {
-        val peakTempC = hourlyData.maxOf { it.temperatureC }
+        val tempC = planningTempC(hourlyData, comfortOffset)
         val pool = when {
-            peakTempC >= 28 + comfortOffset -> Pools.hotVerdict
-            peakTempC >= 20 + comfortOffset -> Pools.warmVerdict
-            peakTempC >= 12 + comfortOffset -> Pools.lightJacketVerdict
-            peakTempC >= 5  + comfortOffset -> Pools.jacketVerdict
-            else                            -> Pools.bundleUpVerdict
+            tempC >= 28 + comfortOffset -> Pools.hotVerdict
+            tempC >= 20 + comfortOffset -> Pools.warmVerdict
+            tempC >= 12 + comfortOffset -> Pools.lightJacketVerdict
+            tempC >= 5  + comfortOffset -> Pools.jacketVerdict
+            else                        -> Pools.bundleUpVerdict
         }
         return getCandidates(pool, zone)
     }
@@ -320,13 +346,13 @@ class VerdictGenerator {
         comfortOffset: Double,
         zone: ClimateZone
     ): List<String> {
-        val peakTempC = hourlyData.maxOf { it.temperatureC }
+        val tempC = planningTempC(hourlyData, comfortOffset)
         val pool = when {
-            peakTempC >= 28 + comfortOffset -> p.hotVerdict
-            peakTempC >= 20 + comfortOffset -> p.warmVerdict
-            peakTempC >= 12 + comfortOffset -> p.lightJacketVerdict
-            peakTempC >= 5  + comfortOffset -> p.jacketVerdict
-            else                            -> p.bundleUpVerdict
+            tempC >= 28 + comfortOffset -> p.hotVerdict
+            tempC >= 20 + comfortOffset -> p.warmVerdict
+            tempC >= 12 + comfortOffset -> p.lightJacketVerdict
+            tempC >= 5  + comfortOffset -> p.jacketVerdict
+            else                        -> p.bundleUpVerdict
         }
         return getCandidates(pool, zone)
     }
@@ -835,9 +861,9 @@ private object Pools : PoolSet {
         TE to listOf(
             "Light layers, if anything.",
             "Thin layer, or don't. You'll survive either way.",
-            "That annoying in-between temperature. Have fun deciding.",
-            "Technically you could skip the jacket. Technically.",
-            "Not cold enough to complain about. Not warm enough to be happy."
+            "Nice out. Nothing to overthink here.",
+            "No jacket needed. Enjoy the rare simplicity.",
+            "Genuinely comfortable. Take the win."
         ),
         OC to listOf(
             "Light layers. It's pleasant but don't push it.",
@@ -857,9 +883,9 @@ private object Pools : PoolSet {
 
     override val lightJacketVerdict: ZonedPool = mapOf(
         T  to listOf(
-            "Cold day. Jacket or at least layers.",
+            "Cold for you. Grab a jacket.",
             "Chilly for you. Don't underestimate it.",
-            "This is cold. Bring a proper jacket.",
+            "This is cold here. Bring a jacket.",
             "Surprisingly cold today. Take it seriously.",
             "You'll want a jacket. Yes, really."
         ),
@@ -886,10 +912,10 @@ private object Pools : PoolSet {
         ),
         NO to listOf(
             "Light jacket at most. Not that cold.",
-            "Jacket if you want. You'll probably be fine without.",
-            "Mild enough. Something light if it makes you feel better.",
-            "Not exactly warm, but hardly jacket-mandatory.",
-            "A layer or two. This barely qualifies as cold."
+            "Jacket. Nordic wind is going to have opinions about any bare skin.",
+            "Mild for here, but still jacket weather.",
+            "It'll feel colder than it looks. Grab a light jacket.",
+            "A layer or two. Light jacket territory for anyone."
         )
     )
 

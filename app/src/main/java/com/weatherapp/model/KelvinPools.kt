@@ -242,27 +242,27 @@ internal object KelvinPools : PoolSet {
 
     override val hotVerdict: ZonedPool = mapOf(
         TR to listOf(
-            "Tropical heat. 30°C+ with 70-90% humidity. Heat index 40°C+.",
-            "Extreme heat index. Tropical temp and humidity crush evaporative.",
-            "High heat and humidity. Wet-bulb near danger zone. Drink water.",
-            "Tropical thermal load: 32°C+, extreme humidity. Water essential."
+            "Tropical heat. Extreme humidity crushes evaporative cooling. Water essential.",
+            "Extreme heat index. Tropical temperature and humidity combined. Water.",
+            "High heat and humidity. Wet-bulb approaching danger zone. Drink water.",
+            "Tropical thermal load: extreme humidity amplifies felt temperature. Water essential."
         ),
         ST to listOf(
             "Subtropical heat. High UV from Hadley cell descending dry air.",
             "Dry heat from subtropical high. UV extreme. Sunscreen mandatory.",
-            "High solar irradiance. 35°C possible. SPF, hat, hydration needed.",
+            "High solar irradiance. Intense insolation today. SPF, hat, hydration needed.",
             "Subtropical heat: extreme UV, intense insolation. Protect."
         ),
         TE to listOf(
-            "Above 28°C. UV index elevated. Sunscreen is not optional.",
+            "Anomalously warm. UV index elevated. Sunscreen is not optional.",
             "Significant thermal load. Hydrate more than you think you need.",
             "Dry heat, elevated UV. Light breathable layers and SPF.",
-            "Upper 20s. Your cooling mechanisms will be active all day."
+            "Peak thermal load today. Your cooling mechanisms will be active all day."
         ),
         OC to listOf(
             "Maritime heatwave. Blocking high suppressed Atlantic cooling.",
             "Anomalously warm. Anticyclone removed maritime cooling. SPF.",
-            "Warm maritime day, 28°C+. High UV under clear skies. Sunscreen.",
+            "Warm maritime day. High UV under clear skies. Sunscreen needed.",
             "Oceanic heat. Maritime moderation absent today. Water and SPF."
         ),
         NO to listOf(
@@ -277,24 +277,24 @@ internal object KelvinPools : PoolSet {
         TR to listOf(
             "Moderate tropical conditions. Brief window before heat builds.",
             "Trade wind cooling keeping temps comfortable. Enjoy moderation.",
-            "20-27°C in tropics: pleasant shoulder before the heat. All good.",
+            "Pleasant shoulder before the heat resumes. All clear.",
             "Comfortable tropical conditions. Heat index manageable right now."
         ),
         ST to listOf(
-            "Optimal subtropical. 20-27°C under the high. Clean day.",
+            "Optimal subtropical. Comfortable under the high. Clean day.",
             "Warm and clear. Subtropical atmosphere in its best configuration.",
             "Ideal subtropical: comfortable, manageable UV, no rain today.",
-            "20-27°C, low humidity under subtropical high. Excellent."
+            "Comfortable, low humidity under subtropical high. Excellent."
         ),
         TE to listOf(
-            "20-27°C: squarely in the human thermoneutral zone. Ideal.",
-            "Mild thermal conditions, clear sky. The met word is fine.",
-            "Optimal temperature range. Body handles this effortlessly.",
+            "Squarely in the human thermoneutral zone. Body handles this effortlessly.",
+            "Mild thermal conditions, clear sky. The meteorological word is fine.",
+            "Optimal temperature range. No jacket needed, no excessive heat.",
             "Clean forecast. Comfortable thermal conditions. No drama."
         ),
         OC to listOf(
             "Warm maritime day. Atlantic airflow providing moderated warmth.",
-            "Good oceanic conditions. 20-27°C, no active fronts. Uncommon.",
+            "Good oceanic conditions. No active fronts. Uncommon but welcome.",
             "Warm and clear. Maritime atmosphere cooperating. No layers.",
             "Optimal oceanic conditions. Atlantic moderation. No rain."
         ),
@@ -309,99 +309,99 @@ internal object KelvinPools : PoolSet {
     override val lightJacketVerdict: ZonedPool = mapOf(
         TR to listOf(
             "Cool by tropical standards. Unusual cold intrusion. Light layer.",
-            "Sub-20°C in tropics: genuine cold anomaly. Light jacket needed.",
+            "Genuinely cold for this latitude. Light jacket warranted.",
             "Tropical cool spell. Anomalously cold air mass. Light layer.",
-            "12-19°C at tropical latitude: cold intrusion. Light jacket."
+            "Below tropical comfort threshold. Cold intrusion event. Light jacket."
         ),
         ST to listOf(
-            "Cool subtropical day. 12-19°C is the cool end here. Light jacket.",
-            "Subtropical cool spell. Cold advection from higher latitudes.",
-            "12-19°C in subtropical zone. Cooler than average. Light jacket.",
+            "Cool subtropical day. Below thermoneutral for this latitude. Light jacket.",
+            "Subtropical cool spell. Cold advection from higher latitudes. Light jacket.",
+            "Below subtropical comfort threshold. Cooler than average. Light jacket.",
             "Cool subtropical air mass. Below thermoneutral zone. Layer."
         ),
         TE to listOf(
-            "12-19°C. Crossover point where jacket becomes advisable.",
+            "Crossover point where heat conservation becomes advisable. Light jacket.",
             "Cool ambient conditions. The physiology recommends a light layer.",
-            "Mild but cool. Heat conservation starts below 18°C. Light jacket.",
-            "12-19°C with light wind. Wind chill will make it feel cooler."
+            "Mild but cool. A light jacket is the physiologically correct call.",
+            "Cool with any wind. Wind chill will make it feel a few degrees colder."
         ),
         OC to listOf(
-            "Cool maritime day. 12-19°C is jacket territory here.",
+            "Cool maritime day. Atlantic cool air. Light jacket warranted.",
             "Maritime cool. Atlantic mild-but-cool conditions. Light jacket.",
-            "12-19°C oceanic. Dampness adds chill. Light waterproof layer.",
-            "Cool oceanic conditions. Light layer warranted at 12-19°C."
+            "Cool oceanic conditions. Dampness amplifies chill. Light waterproof layer.",
+            "Cool maritime air mass. Light waterproof layer recommended."
         ),
         NO to listOf(
-            "Mild Nordic day. 12-19°C with wind feels 3-5°C colder. Jacket.",
+            "Mild by Nordic standards. Wind chill still adds several degrees. Jacket.",
             "Cool to the Nordic baseline. Light jacket is routine here.",
-            "12-19°C in Nordic zone. Wind chill makes it feel colder. Layer.",
-            "Light jacket weather. Nordic wind chill makes temp optimistic."
+            "Moderate Nordic cold. Wind chill makes it feel several degrees colder. Layer.",
+            "Light jacket weather. Nordic wind chill makes the thermometer optimistic."
         )
     )
 
     override val jacketVerdict: ZonedPool = mapOf(
         TR to listOf(
             "Cold by tropical standards. Cold intrusion or elevation. Jacket.",
-            "5-11°C in tropics: anomalous cold or elevation. Full jacket.",
+            "Anomalously cold for this latitude. Cold air mass intruded. Full jacket.",
             "Unusually cold tropical day. Cold air mass outside zone. Jacket.",
-            "Sub-12°C at tropical latitude. Cold intrusion. Jacket required."
+            "Below cold threshold for tropical latitude. Cold intrusion. Jacket required."
         ),
         ST to listOf(
-            "Cold subtropical day. 5-11°C means Arctic outbreak reached here.",
+            "Cold subtropical day. Arctic outbreak penetrating this far. Jacket.",
             "Subtropical cold snap. Polar air advection into jacket territory.",
-            "Cold: 5-11°C in subtropical climate. Notable. Jacket needed.",
-            "Polar outbreak to subtropical latitude. 5-11°C. Jacket needed."
+            "Cold for this climate. Arctic outbreak reached subtropical latitude. Jacket.",
+            "Polar outbreak to subtropical latitude. Jacket needed."
         ),
         TE to listOf(
-            "5-11°C. Wind chill pushes felt temperature 3-5°C lower. Jacket.",
+            "Wind chill pushes felt temperature several degrees lower. Jacket.",
             "Single digits. Body works harder to stay warm. Let jacket help.",
-            "Below 12°C. Jacket and layers if you're out for a while.",
-            "Temperature 5-11°C. Core temperature management is relevant."
+            "Cold ambient. Jacket and layers if you're out for a while.",
+            "Below comfort threshold. Core temperature management is relevant."
         ),
         OC to listOf(
-            "Cold maritime day. 5-11°C plus humidity feels colder. Jacket.",
+            "Cold maritime day. Humidity amplifies cold significantly. Jacket.",
             "Oceanic single digits. Maritime dampness amplifies cold. Jacket.",
-            "Jacket weather. 5-11°C with Atlantic wind is cold. Layer up.",
-            "Maritime cold. 5-11°C with Atlantic wind. Jacket is essential."
+            "Jacket weather. Atlantic wind amplifies the cold. Layer up.",
+            "Maritime cold. Atlantic wind and humidity combined. Jacket essential."
         ),
         NO to listOf(
-            "5-11°C: mild by Nordic standards. Jacket. Wind may need more.",
-            "Nordic moderate cold. 5-11°C plus wind drops felt temp. Jacket.",
-            "Cold but manageable. 5-11°C here is unremarkable. Jacket still.",
-            "Jacket weather. Wind chill brings felt temp 5-8°C below air temp."
+            "Mild by Nordic standards. Still jacket territory. Wind may require more.",
+            "Nordic moderate cold. Wind chill drops felt temperature. Jacket.",
+            "Cold but unremarkable here. Jacket still required.",
+            "Jacket weather. Wind chill brings felt temperature well below ambient."
         )
     )
 
     override val bundleUpVerdict: ZonedPool = mapOf(
         TR to listOf(
-            "Sub-5°C at tropical latitude: severe cold event. Layer up.",
-            "Extreme cold anomaly. Sub-5°C. Full thermal system. Body unready.",
-            "Near-freezing tropical temps. Full layering. Infra unready.",
-            "Sub-5°C in tropics: remarkable cold outbreak. Full winter layers."
+            "Near-freezing at tropical latitude: severe cold event. Layer up.",
+            "Extreme cold anomaly for this zone. Full thermal system. Body unready.",
+            "Near-freezing tropical temps. Full layering. Infrastructure unready.",
+            "Remarkable cold outbreak at tropical latitude. Full winter layers."
         ),
         ST to listOf(
-            "Severe subtropical cold. Sub-5°C hits harder with low adaptation.",
+            "Severe subtropical cold. Low cold-adaptation amplifies effect. Layer up.",
             "Near-freezing subtropical. Base, insulation, outer shell.",
-            "Cold snap at sub-5°C. Infrastructure not designed for it. Layer.",
-            "Extreme cold for this latitude. Sub-5°C with wind. Bundle up."
+            "Cold snap well below norm. Infrastructure not designed for it. Layer.",
+            "Extreme cold for this latitude. Wind amplifies severely. Bundle up."
         ),
         TE to listOf(
-            "Sub-5°C. Vasoconstriction fast. Base, mid layer, outer shell.",
-            "Near-freezing. Wind chill 5-8°C lower. Every layer you own.",
+            "Near-freezing. Vasoconstriction immediate. Base, mid layer, outer shell.",
+            "Near-freezing. Wind chill significantly below ambient. Every layer you own.",
             "Cold. Genuinely cold. Base, mid, outer shell. Full system.",
-            "Below 5°C: the physiology earns it. Layer up comprehensively."
+            "Below comfort threshold: the physiology demands it. Layer up comprehensively."
         ),
         OC to listOf(
-            "Cold maritime sub-5°C. Atlantic dampness amplifies cold. Layer.",
+            "Cold maritime near-freezing. Atlantic dampness amplifies cold severely. Layer.",
             "Near-freezing oceanic. Cold and wet demands complete layering.",
-            "Sub-5°C with maritime air. Humidity drives chill. Bundle up.",
+            "Near-freezing with maritime air. Humidity drives chill. Bundle up.",
             "Freezing maritime. Wind, cold, moisture. Full thermal protection."
         ),
         NO to listOf(
-            "Sub-5°C: standard Nordic winter. Base, mid, insulation, shell.",
+            "Standard Nordic winter cold. Base, mid, insulation, shell.",
             "Cold Nordic day. Wind chill significant. Full thermal system.",
-            "Polar baseline. Sub-5°C with any wind is dangerous. Full kit.",
-            "Deep cold. Nordic winters require complete layering. Today."
+            "Polar baseline. Any wind at these temperatures is dangerous. Full kit.",
+            "Deep cold. Nordic winters require complete layering. Today qualifies."
         )
     )
 
