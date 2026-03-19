@@ -67,13 +67,21 @@ class LocationRepository @Inject constructor(
     )
 
     suspend fun getSnappedLocation(): Pair<Double, Double>? {
+        // If the user has set a city, always use it — it's an intentional choice, not a fallback
+        val prefs = dataStore.data.first()
+        val savedCity = prefs[PreferenceKeys.KEY_MANUAL_LOCATION]
+        if (!savedCity.isNullOrEmpty()) {
+            Timber.d("Manual city set ('$savedCity') — using it, skipping GPS")
+            return getManualLocationFallback()
+        }
+
         val permissionResult = ContextCompat.checkSelfPermission(
             context,
             Manifest.permission.ACCESS_COARSE_LOCATION
         )
         if (permissionResult != PermissionChecker.PERMISSION_GRANTED) {
-            Timber.d("Location permission not granted — checking manual location fallback")
-            return getManualLocationFallback()
+            Timber.d("Location permission not granted and no city set — returning null")
+            return null
         }
 
         return try {

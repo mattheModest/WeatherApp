@@ -70,6 +70,11 @@ class OnboardingViewModel @Inject constructor(
         updateState { it.copy(step = OnboardingStep.MANUAL_LOCATION, locationDenied = true) }
     }
 
+    fun onCityChosen() {
+        Timber.d("OnboardingViewModel: user chose to enter city manually")
+        updateState { it.copy(step = OnboardingStep.MANUAL_LOCATION) }
+    }
+
     fun onManualLocationEntered(location: String) {
         Timber.d("OnboardingViewModel: manual location entered: $location")
         updateState { it.copy(manualLocation = location, step = OnboardingStep.CALENDAR_RATIONALE) }

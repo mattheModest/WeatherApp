@@ -124,6 +124,16 @@ class SettingsViewModel @Inject constructor(
         }
     }
 
+    fun onManualLocationCleared() {
+        viewModelScope.launch {
+            dataStore.edit { prefs ->
+                prefs[PreferenceKeys.KEY_MANUAL_LOCATION] = ""
+            }
+            workManager.enqueue(OneTimeWorkRequestBuilder<ForecastRefreshWorker>().build())
+            Timber.d("SettingsViewModel: manual location cleared — will use GPS")
+        }
+    }
+
     fun onUpgradeTapped(activity: Activity) {
         viewModelScope.launch {
             billingRepository.launchPurchaseFlow(activity)

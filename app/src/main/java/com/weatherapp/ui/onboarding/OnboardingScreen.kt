@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
@@ -82,6 +83,7 @@ fun OnboardingScreen(
                         onLocationPermissionRequest = {
                             locationPermissionLauncher.launch(Manifest.permission.ACCESS_COARSE_LOCATION)
                         },
+                        onCityChosen = { viewModel.onCityChosen() },
                         onCalendarRationaleAcknowledged = { viewModel.onCalendarRationaleAcknowledged() },
                         onCalendarPermissionLaunch = {
                             calendarPermissionLauncher.launch(Manifest.permission.READ_CALENDAR)
@@ -101,6 +103,7 @@ fun OnboardingScreen(
 private fun OnboardingStepContent(
     state: OnboardingState,
     onLocationPermissionRequest: () -> Unit,
+    onCityChosen: () -> Unit,
     onCalendarRationaleAcknowledged: () -> Unit,
     onCalendarPermissionLaunch: () -> Unit,
     onManualLocationEntered: (String) -> Unit,
@@ -113,19 +116,28 @@ private fun OnboardingStepContent(
                     .fillMaxWidth()
                     .padding(horizontal = 24.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(16.dp)
+                verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
                 Text(
-                    text = "Allow location access to get weather for your area.",
-                    fontSize = 16.sp
+                    text = "How should we find your weather?",
+                    fontSize = 18.sp
                 )
+                Spacer(modifier = Modifier.height(4.dp))
                 Button(
                     onClick = onLocationPermissionRequest,
                     modifier = Modifier
                         .fillMaxWidth()
                         .heightIn(min = 48.dp)
                 ) {
-                    Text(text = "Grant Location Access", fontSize = 16.sp)
+                    Text(text = "Use my location", fontSize = 16.sp)
+                }
+                OutlinedButton(
+                    onClick = onCityChosen,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .heightIn(min = 48.dp)
+                ) {
+                    Text(text = "Enter my city instead", fontSize = 16.sp)
                 }
             }
         }

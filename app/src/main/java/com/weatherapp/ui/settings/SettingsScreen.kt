@@ -103,6 +103,7 @@ fun SettingsScreen(
                         onPersonalitySelected = { viewModel.onPersonalitySelected(it) },
                         onThemeSelected = { viewModel.onThemeSelected(it) },
                         onManualLocationSaved = { viewModel.onManualLocationSaved(it) },
+                        onManualLocationCleared = { viewModel.onManualLocationCleared() },
                         onNavigateToPremium = onNavigateToPremium,
                         onUpgradeTapped = { viewModel.onUpgradeTapped(context as Activity) },
                         onShareMoodCard = {
@@ -130,6 +131,7 @@ private fun SettingsContent(
     onPersonalitySelected: (PersonalityCore) -> Unit,
     onThemeSelected: (VisualTheme) -> Unit,
     onManualLocationSaved: (String) -> Unit,
+    onManualLocationCleared: () -> Unit,
     onNavigateToPremium: () -> Unit,
     onUpgradeTapped: () -> Unit,
     onShareMoodCard: () -> Unit
@@ -299,31 +301,49 @@ private fun SettingsContent(
             }
         }
 
-        // Manual city fallback
+        // Location mode
         Spacer(modifier = Modifier.height(12.dp))
         Text(
-            text = "GPS not working?",
+            text = "Location",
             style = MaterialTheme.typography.titleSmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
             modifier = Modifier.padding(bottom = 4.dp)
         )
-        Text(
-            text = "Set a city name to use as a fallback when location is unavailable.",
-            fontSize = 13.sp,
-            color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f),
-            modifier = Modifier.padding(bottom = 8.dp)
-        )
+        if (state.manualLocation.isNotEmpty()) {
+            Text(
+                text = "Using city: ${state.manualLocation}",
+                fontSize = 14.sp,
+                color = MaterialTheme.colorScheme.onSurface,
+                modifier = Modifier.padding(bottom = 4.dp)
+            )
+            TextButton(
+                onClick = onManualLocationCleared,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .heightIn(min = 48.dp)
+            ) {
+                Text("Switch to GPS instead", fontSize = 14.sp)
+            }
+        } else {
+            Text(
+                text = "Using GPS",
+                fontSize = 14.sp,
+                color = MaterialTheme.colorScheme.onSurface,
+                modifier = Modifier.padding(bottom = 8.dp)
+            )
+        }
         var cityText by remember(state.manualLocation) { mutableStateOf(state.manualLocation) }
         OutlinedTextField(
             value = cityText,
             onValueChange = { cityText = it },
-            label = { Text("City name") },
+            label = { Text(if (state.manualLocation.isEmpty()) "Switch to city instead" else "Change city") },
             singleLine = true,
             modifier = Modifier.fillMaxWidth()
         )
         Spacer(modifier = Modifier.height(4.dp))
         TextButton(
             onClick = { onManualLocationSaved(cityText) },
+            enabled = cityText.isNotBlank() && cityText != state.manualLocation,
             modifier = Modifier
                 .fillMaxWidth()
                 .heightIn(min = 48.dp)
