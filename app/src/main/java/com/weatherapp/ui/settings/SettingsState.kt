@@ -11,7 +11,6 @@ enum class TempUnit {
 data class SettingsState(
     val tempUnit: TempUnit,
     val notificationsEnabled: Boolean,
-    val isPremium: Boolean,
     val moodLine: String,
     val shareText: String,
     val personality: PersonalityCore = PersonalityCore.FRANK,

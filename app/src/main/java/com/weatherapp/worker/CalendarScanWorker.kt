@@ -54,13 +54,6 @@ class CalendarScanWorker @AssistedInject constructor(
     override suspend fun doWork(): Result {
         Timber.d("CalendarScanWorker started")
 
-        // Defense in depth — check premium status first
-        val isPremium = dataStore.data.first()[PreferenceKeys.KEY_IS_PREMIUM] ?: false
-        if (!isPremium) {
-            Timber.d("CalendarScanWorker: not premium — exiting immediately")
-            return Result.success()
-        }
-
         return try {
             val nowEpoch = System.currentTimeMillis() / 1000L
 

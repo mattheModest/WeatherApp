@@ -32,11 +32,12 @@ class VerdictGenerator {
         val condition = detectCondition(hourlyData)
         val bringList = evaluateBringList(hourlyData)
         val bestWindow = calculateBestWindow(hourlyData)
+        val planTemp = planningTempC(hourlyData, comfortOffset)
         val isAllClear = bringList.isEmpty() && bestWindow != null &&
             condition !in setOf(
                 WeatherCondition.STORM, WeatherCondition.HEAVY_RAIN,
                 WeatherCondition.SNOW, WeatherCondition.VERY_WINDY
-            )
+            ) && planTemp >= 20 + comfortOffset
         val verdictText = generateVerdictText(condition, hourlyData, comfortOffset, climateZone, isAllClear)
         val moodLine = generateMoodLine(condition, isAllClear, hourlyData, comfortOffset, climateZone)
         return VerdictResult(verdictText, bringList, bestWindow, isAllClear, moodLine)
@@ -220,11 +221,12 @@ class VerdictGenerator {
         val condition = detectCondition(hourlyData)
         val bringList = evaluateBringList(hourlyData)
         val bestWindow = calculateBestWindow(hourlyData)
+        val planTemp = planningTempC(hourlyData, comfortOffset)
         val isAllClear = bringList.isEmpty() && bestWindow != null &&
             condition !in setOf(
                 WeatherCondition.STORM, WeatherCondition.HEAVY_RAIN,
                 WeatherCondition.SNOW, WeatherCondition.VERY_WINDY
-            )
+            ) && planTemp >= 20 + comfortOffset
         return when (condition) {
             WeatherCondition.STORM      -> getCandidates(Pools.stormVerdict, climateZone)
             WeatherCondition.HEAVY_RAIN -> getCandidates(Pools.heavyRainVerdict, climateZone)
@@ -322,11 +324,12 @@ class VerdictGenerator {
         val condition = detectCondition(hourlyData)
         val bringList = evaluateBringList(hourlyData)
         val bestWindow = calculateBestWindow(hourlyData)
+        val planTemp = planningTempC(hourlyData, comfortOffset)
         val isAllClear = bringList.isEmpty() && bestWindow != null &&
             condition !in setOf(
                 WeatherCondition.STORM, WeatherCondition.HEAVY_RAIN,
                 WeatherCondition.SNOW, WeatherCondition.VERY_WINDY
-            )
+            ) && planTemp >= 20 + comfortOffset
         return when (condition) {
             WeatherCondition.STORM      -> getCandidates(p.stormVerdict, climateZone)
             WeatherCondition.HEAVY_RAIN -> getCandidates(p.heavyRainVerdict, climateZone)
@@ -883,23 +886,23 @@ private object Pools : PoolSet {
 
     override val lightJacketVerdict: ZonedPool = mapOf(
         T  to listOf(
-            "Cold for you. Grab a jacket.",
+            "Cold for you. This isn't normal — grab a jacket.",
             "Chilly for you. Don't underestimate it.",
-            "This is cold here. Bring a jacket.",
+            "Genuinely cold here. Bring a jacket.",
             "Surprisingly cold today. Take it seriously.",
             "You'll want a jacket. Yes, really."
         ),
         ST to listOf(
-            "Light jacket weather.",
+            "Cold for this region. Jacket required.",
             "That thin jacket in the back of the closet? Today's its day.",
-            "Jacket optional, but you'll want it.",
-            "Cool enough to feel crisp. Grab a light layer.",
-            "Not cold, not warm. Jacket territory."
+            "Cool enough to feel wrong. Grab a jacket.",
+            "This is cold here. Don't leave without a jacket.",
+            "Cool enough to feel crisp. Jacket territory."
         ),
         TE to listOf(
-            "Light jacket weather.",
+            "Cold enough to need a jacket. Don't argue with the forecast.",
             "That jacket you forgot you owned? Today's its moment.",
-            "Grab something light. You'll be smug later.",
+            "It's cold out there. Grab something.",
             "Cool, crisp, and slightly judging you if you underdress.",
             "Jacket weather. Not negotiating on this one."
         ),
@@ -912,9 +915,9 @@ private object Pools : PoolSet {
         ),
         NO to listOf(
             "Light jacket at most. Not that cold.",
-            "Jacket. Nordic wind is going to have opinions about any bare skin.",
+            "Light jacket. Nordic standard.",
             "Mild for here, but still jacket weather.",
-            "It'll feel colder than it looks. Grab a light jacket.",
+            "Mild out there. Light jacket if anything.",
             "A layer or two. Light jacket territory for anyone."
         )
     )

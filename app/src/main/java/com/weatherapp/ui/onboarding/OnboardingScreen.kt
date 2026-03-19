@@ -4,20 +4,20 @@ import android.Manifest
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts.RequestPermission
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -26,7 +26,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -39,180 +39,147 @@ fun OnboardingScreen(
     onOnboardingComplete: () -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-    val context = LocalContext.current
 
     val locationPermissionLauncher = rememberLauncherForActivityResult(RequestPermission()) { granted ->
-        if (granted) {
-            viewModel.onLocationGranted()
-        } else {
-            viewModel.onLocationDenied()
-        }
+        if (granted) viewModel.onLocationGranted() else viewModel.onLocationDenied()
     }
 
     val calendarPermissionLauncher = rememberLauncherForActivityResult(RequestPermission()) { granted ->
-        if (granted) {
-            viewModel.onCalendarGranted()
-        } else {
-            viewModel.onCalendarDenied()
-        }
+        if (granted) viewModel.onCalendarGranted() else viewModel.onCalendarDenied()
     }
 
-    Scaffold { innerPadding ->
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding),
-            contentAlignment = Alignment.Center
-        ) {
-            when (val state = uiState) {
-                is UiState.Loading -> {
-                    CircularProgressIndicator()
-                }
-
-                is UiState.Error -> {
-                    Text(
-                        text = state.message,
-                        fontSize = 16.sp,
-                        modifier = Modifier.padding(horizontal = 24.dp)
+    when (val state = uiState) {
+        is UiState.Loading -> Unit
+        is UiState.Error   -> Unit
+        is UiState.Success -> {
+            when (state.data.step) {
+                OnboardingStep.LOCATION_PERMISSION -> {
+                    AlertDialog(
+                        onDismissRequest = { /* not dismissible */ },
+                        title = {
+                            Text(
+                                text = "Where are you?",
+                                style = MaterialTheme.typography.headlineSmall
+                            )
+                        },
+                        text = {
+                            Text(
+                                text = "WeatherApp needs to know your location to give you accurate weather. Your location stays on your device.",
+                                fontSize = 14.sp
+                            )
+                        },
+                        confirmButton = {
+                            Column(
+                                modifier = Modifier.fillMaxWidth(),
+                                verticalArrangement = Arrangement.spacedBy(8.dp)
+                            ) {
+                                Button(
+                                    onClick = {
+                                        locationPermissionLauncher.launch(Manifest.permission.ACCESS_COARSE_LOCATION)
+                                    },
+                                    modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp)
+                                ) {
+                                    Text("Use my location")
+                                }
+                                OutlinedButton(
+                                    onClick = { viewModel.onCityChosen() },
+                                    modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp)
+                                ) {
+                                    Text("Enter my city instead")
+                                }
+                            }
+                        },
+                        dismissButton = null
                     )
                 }
 
-                is UiState.Success -> {
-                    OnboardingStepContent(
-                        state = state.data,
-                        onLocationPermissionRequest = {
-                            locationPermissionLauncher.launch(Manifest.permission.ACCESS_COARSE_LOCATION)
+                OnboardingStep.MANUAL_LOCATION -> {
+                    var cityText by remember { mutableStateOf("") }
+                    AlertDialog(
+                        onDismissRequest = { /* not dismissible */ },
+                        title = {
+                            Text(
+                                text = "Your city",
+                                style = MaterialTheme.typography.headlineSmall
+                            )
                         },
-                        onCityChosen = { viewModel.onCityChosen() },
-                        onCalendarRationaleAcknowledged = { viewModel.onCalendarRationaleAcknowledged() },
-                        onCalendarPermissionLaunch = {
-                            calendarPermissionLauncher.launch(Manifest.permission.READ_CALENDAR)
+                        text = {
+                            Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                                Text(
+                                    text = "Enter your city name and we'll fetch local weather for you.",
+                                    fontSize = 14.sp
+                                )
+                                OutlinedTextField(
+                                    value = cityText,
+                                    onValueChange = { cityText = it },
+                                    label = { Text("City name") },
+                                    modifier = Modifier.fillMaxWidth(),
+                                    singleLine = true
+                                )
+                            }
                         },
-                        onManualLocationEntered = { location -> viewModel.onManualLocationEntered(location) },
-                        onOnboardingComplete = {
-                            onOnboardingComplete()
-                        }
+                        confirmButton = {
+                            Button(
+                                onClick = { viewModel.onManualLocationEntered(cityText) },
+                                enabled = cityText.isNotBlank(),
+                                modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp)
+                            ) {
+                                Text("Continue")
+                            }
+                        },
+                        dismissButton = null
                     )
                 }
-            }
-        }
-    }
-}
 
-@Composable
-private fun OnboardingStepContent(
-    state: OnboardingState,
-    onLocationPermissionRequest: () -> Unit,
-    onCityChosen: () -> Unit,
-    onCalendarRationaleAcknowledged: () -> Unit,
-    onCalendarPermissionLaunch: () -> Unit,
-    onManualLocationEntered: (String) -> Unit,
-    onOnboardingComplete: () -> Unit
-) {
-    when (state.step) {
-        OnboardingStep.LOCATION_PERMISSION -> {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 24.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(12.dp)
-            ) {
-                Text(
-                    text = "How should we find your weather?",
-                    fontSize = 18.sp
-                )
-                Spacer(modifier = Modifier.height(4.dp))
-                Button(
-                    onClick = onLocationPermissionRequest,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .heightIn(min = 48.dp)
-                ) {
-                    Text(text = "Use my location", fontSize = 16.sp)
+                OnboardingStep.CALENDAR_RATIONALE -> {
+                    AlertDialog(
+                        onDismissRequest = { /* not dismissible */ },
+                        title = {
+                            Text(
+                                text = "Add calendar?",
+                                style = MaterialTheme.typography.headlineSmall
+                            )
+                        },
+                        text = {
+                            Text(
+                                text = "WeatherApp can check your calendar for outdoor plans — picnics, hikes, sports — and tell you the weather for those events specifically.",
+                                fontSize = 14.sp
+                            )
+                        },
+                        confirmButton = {
+                            Column(
+                                modifier = Modifier.fillMaxWidth(),
+                                verticalArrangement = Arrangement.spacedBy(8.dp)
+                            ) {
+                                Button(
+                                    onClick = { viewModel.onCalendarRationaleAcknowledged() },
+                                    modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp)
+                                ) {
+                                    Text("Yes, check my calendar")
+                                }
+                                TextButton(
+                                    onClick = { viewModel.onCalendarDenied() },
+                                    modifier = Modifier.fillMaxWidth().heightIn(min = 48.dp)
+                                ) {
+                                    Text("Skip for now")
+                                }
+                            }
+                        },
+                        dismissButton = null
+                    )
                 }
-                OutlinedButton(
-                    onClick = onCityChosen,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .heightIn(min = 48.dp)
-                ) {
-                    Text(text = "Enter my city instead", fontSize = 16.sp)
+
+                OnboardingStep.CALENDAR_PERMISSION -> {
+                    LaunchedEffect(Unit) {
+                        calendarPermissionLauncher.launch(Manifest.permission.READ_CALENDAR)
+                    }
                 }
-            }
-        }
 
-        OnboardingStep.CALENDAR_RATIONALE -> {
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 24.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(16.dp)
-            ) {
-                Text(
-                    text = "We use your calendar to tell you when weather matters to your plans.",
-                    fontSize = 16.sp
-                )
-                Button(
-                    onClick = onCalendarRationaleAcknowledged,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .heightIn(min = 48.dp)
-                ) {
-                    Text(text = "Continue", fontSize = 16.sp)
+                OnboardingStep.COMPLETE -> {
+                    LaunchedEffect(Unit) {
+                        onOnboardingComplete()
+                    }
                 }
-            }
-        }
-
-        OnboardingStep.CALENDAR_PERMISSION -> {
-            LaunchedEffect(Unit) {
-                onCalendarPermissionLaunch()
-            }
-            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                CircularProgressIndicator()
-            }
-        }
-
-        OnboardingStep.MANUAL_LOCATION -> {
-            var cityText by remember { mutableStateOf("") }
-
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 24.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.spacedBy(16.dp)
-            ) {
-                Text(
-                    text = "Enter your city to get local weather.",
-                    fontSize = 16.sp
-                )
-                OutlinedTextField(
-                    value = cityText,
-                    onValueChange = { cityText = it },
-                    label = { Text("City name") },
-                    modifier = Modifier.fillMaxWidth(),
-                    singleLine = true
-                )
-                Button(
-                    onClick = { onManualLocationEntered(cityText) },
-                    enabled = cityText.isNotBlank(),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .heightIn(min = 48.dp)
-                ) {
-                    Text(text = "Continue", fontSize = 16.sp)
-                }
-            }
-        }
-
-        OnboardingStep.COMPLETE -> {
-            LaunchedEffect(Unit) {
-                onOnboardingComplete()
-            }
-            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                CircularProgressIndicator()
             }
         }
     }

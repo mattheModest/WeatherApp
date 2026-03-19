@@ -1,6 +1,5 @@
 package com.weatherapp.ui.settings
 
-import android.app.Activity
 import android.appwidget.AppWidgetManager
 import android.content.ComponentName
 import android.content.Intent
@@ -54,7 +53,6 @@ import com.weatherapp.util.UiState
 @Composable
 fun SettingsScreen(
     viewModel: SettingsViewModel = hiltViewModel(),
-    onNavigateToPremium: () -> Unit = {},
     onNavigateBack: () -> Unit = {}
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -104,8 +102,6 @@ fun SettingsScreen(
                         onThemeSelected = { viewModel.onThemeSelected(it) },
                         onManualLocationSaved = { viewModel.onManualLocationSaved(it) },
                         onManualLocationCleared = { viewModel.onManualLocationCleared() },
-                        onNavigateToPremium = onNavigateToPremium,
-                        onUpgradeTapped = { viewModel.onUpgradeTapped(context as Activity) },
                         onShareMoodCard = {
                             val shareIntent = Intent(Intent.ACTION_SEND).apply {
                                 type = "text/plain"
@@ -132,8 +128,6 @@ private fun SettingsContent(
     onThemeSelected: (VisualTheme) -> Unit,
     onManualLocationSaved: (String) -> Unit,
     onManualLocationCleared: () -> Unit,
-    onNavigateToPremium: () -> Unit,
-    onUpgradeTapped: () -> Unit,
     onShareMoodCard: () -> Unit
 ) {
     val context = LocalContext.current
@@ -215,57 +209,6 @@ private fun SettingsContent(
             )
             Spacer(modifier = Modifier.height(6.dp))
         }
-
-        // Premium card (calm, informational — not a locked door)
-        Spacer(modifier = Modifier.height(8.dp))
-        Card(
-            modifier = Modifier.fillMaxWidth(),
-            colors = CardDefaults.cardColors(
-                containerColor = MaterialTheme.colorScheme.surfaceVariant
-            )
-        ) {
-            Column(modifier = Modifier.padding(16.dp)) {
-                if (state.isPremium) {
-                    Text(
-                        text = "WeatherApp Premium",
-                        style = MaterialTheme.typography.titleSmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                    Spacer(modifier = Modifier.height(4.dp))
-                    Text(
-                        text = "Thank you for supporting WeatherApp.",
-                        fontSize = 14.sp,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                } else {
-                    Text(
-                        text = "WeatherApp Premium",
-                        style = MaterialTheme.typography.titleSmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                    Spacer(modifier = Modifier.height(4.dp))
-                    Text(
-                        text = "Event-specific forecasts, change-triggered alerts, and more.",
-                        fontSize = 14.sp,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                    Spacer(modifier = Modifier.height(8.dp))
-                    TextButton(
-                        onClick = onNavigateToPremium,
-                        modifier = Modifier.heightIn(min = 48.dp)
-                    ) {
-                        Text("Learn more — \$7.99/year", fontSize = 14.sp)
-                    }
-                    TextButton(
-                        onClick = onUpgradeTapped,
-                        modifier = Modifier.heightIn(min = 48.dp)
-                    ) {
-                        Text("Upgrade to Premium", fontSize = 14.sp)
-                    }
-                }
-            }
-        }
-        Spacer(modifier = Modifier.height(8.dp))
 
         // Share Today's Mood
         TextButton(

@@ -1,6 +1,5 @@
 package com.weatherapp.ui.settings
 
-import android.app.Activity
 import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
@@ -9,7 +8,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
-import com.weatherapp.data.billing.BillingRepository
 import com.weatherapp.data.datastore.PreferenceKeys
 import com.weatherapp.model.PersonalityCore
 import com.weatherapp.model.VisualTheme
@@ -32,7 +30,6 @@ import javax.inject.Inject
 @HiltViewModel
 class SettingsViewModel @Inject constructor(
     private val dataStore: DataStore<Preferences>,
-    private val billingRepository: BillingRepository,
     private val workManager: WorkManager,
     @ApplicationContext private val appContext: Context
 ) : ViewModel() {
@@ -42,7 +39,6 @@ class SettingsViewModel @Inject constructor(
             val tempUnitStr = prefs[PreferenceKeys.KEY_TEMP_UNIT] ?: "celsius"
             val tempUnit = if (tempUnitStr == "fahrenheit") TempUnit.FAHRENHEIT else TempUnit.CELSIUS
             val notificationsEnabled = prefs[PreferenceKeys.KEY_NOTIFICATIONS_ENABLED] ?: true
-            val isPremium = prefs[PreferenceKeys.KEY_IS_PREMIUM] ?: false
             val moodLine = prefs[PreferenceKeys.KEY_MOOD_LINE] ?: ""
             val shareText = "\"$moodLine\"\n\nWeatherApp — daily weather in plain language"
             val personality = personalityCoreFromString(prefs[PreferenceKeys.KEY_PERSONALITY_CORE])
@@ -53,7 +49,6 @@ class SettingsViewModel @Inject constructor(
                 SettingsState(
                     tempUnit = tempUnit,
                     notificationsEnabled = notificationsEnabled,
-                    isPremium = isPremium,
                     moodLine = moodLine,
                     shareText = shareText,
                     personality = personality,
@@ -134,10 +129,4 @@ class SettingsViewModel @Inject constructor(
         }
     }
 
-    fun onUpgradeTapped(activity: Activity) {
-        viewModelScope.launch {
-            billingRepository.launchPurchaseFlow(activity)
-                .onFailure { e -> Timber.e(e, "SettingsViewModel: launchPurchaseFlow failed") }
-        }
-    }
 }
